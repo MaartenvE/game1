@@ -1,6 +1,6 @@
 game1
 =====
 
-AR SDK: http://www.metaio.com/
+AR SDK: http://developer.vuforia.com/
 
-Android SDK: http://developer.android.com/
+Unity3d: http://www.unity3d.com
