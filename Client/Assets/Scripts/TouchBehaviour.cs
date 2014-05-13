@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
 
 public class TouchBehaviour : MonoBehaviour 
 {
@@ -14,45 +15,51 @@ public class TouchBehaviour : MonoBehaviour
 	private Transform pickedObject = null;
 
 	//move object to vector distance from localObject in the localObjects own space
-	GameObject moveObjectToSide(Transform localObject, Vector3 vector, GameObject movedObject){
-		Vector3 oldPos = localObject.transform.position;
-		
-		Debug.Log (movedObject.transform.position+" "+vector);
-		
+	Vector3 calculateSide(Transform localObject, RaycastHit hit){
+		Vector3 res = localObject.position;
+
 		//bring the vector into the movedObjects own localspace
-		Vector3 localizedVector = movedObject.transform.InverseTransformPoint (vector);
+		Vector3 localizedVector = localObject.InverseTransformPoint (hit.point);
 		
 		Debug.Log (localizedVector);
 
 		//the localizedvector ranges represent the sides of a square (if x=0.5, it half the distance of a square from the center of the square to the x dimension. so it hits the x side of the square)
 		if (localizedVector.x >lowerBoundary && localizedVector.x<upperBoundary) {
-			movedObject.transform.position = localObject.transform.TransformPoint(new Vector3(1,0,0));
+			res = localObject.TransformPoint(new Vector3(1,0,0));
+			Debug.Log("Right");
 		}
 		if (localizedVector.y >lowerBoundary && localizedVector.y<upperBoundary) {
-			movedObject.transform.position = localObject.transform.TransformPoint(new Vector3(0,1,0));
+			res = localObject.TransformPoint(new Vector3(0,1,0));
+			Debug.Log("Above");
 		}
 		if (localizedVector.z >lowerBoundary && localizedVector.z<upperBoundary) {
-			movedObject.transform.position = localObject.transform.TransformPoint(new Vector3(0,0,1));
+			res = localObject.TransformPoint(new Vector3(0,0,1));
+			Debug.Log("In Front");
 		}
 		if (localizedVector.x <-lowerBoundary && localizedVector.x>-upperBoundary) {
-			movedObject.transform.position = localObject.transform.TransformPoint(new Vector3(-1,0,0));
+			res = localObject.TransformPoint(new Vector3(-1,0,0));
+			Debug.Log("Left");
 		}
 		if (localizedVector.y <-lowerBoundary && localizedVector.y>-upperBoundary) {
-			movedObject.transform.position = localObject.transform.TransformPoint(new Vector3(0,-1,0));
+			res = localObject.TransformPoint(new Vector3(0,-1,0));
+			Debug.Log("Below");
 		}
 		if (localizedVector.z <-lowerBoundary && localizedVector.z>-upperBoundary) {
-			movedObject.transform.position = localObject.transform.TransformPoint(new Vector3(0,0,-1));
+			res = localObject.TransformPoint(new Vector3(0,0,-1));
+			Debug.Log("Behind");
 		}
 		
-		Debug.Log ("current square is at "+oldPos+"the new square will be located at: "+movedObject.transform.position);
-		return movedObject;
+		return res;
 	}
 
 	//places a square at the exact coordinates of the cubefinger
 	void placeSquareAtFinger(){
+		this.networkView.RPC ("PlaceBlock", RPCMode.Server, cubeFinger.transform.position);
+		/*
 		GameObject square =  Instantiate(cubePrefab, cubeFinger.transform.position, cubeFinger.transform.rotation) as GameObject;
 		square.transform.parent = this.transform;
 		square.transform.localScale = cubeFinger.transform.localScale;
+		*/
 	}
 
 	/*
@@ -78,19 +85,8 @@ public class TouchBehaviour : MonoBehaviour
 		{ 
 			//retrieve the object that was hit
 			pickedObject = hit.transform;
-			Vector3 pos = hit.point;
-
-			//place the cubeFinger at the correct location (or remove it if it shouldn t be seen)
-			if(pickedObject.Equals(cubeFinger.transform)){
-				//if the objects hits the cubeFinger, it is in the right place already.
-				//so don t do anything
-			}
-			else{
-				//if it hits a new block, move the blockfinger there
-				cubeFinger.SetActive(true);
-				moveObjectToSide(pickedObject, pos, cubeFinger);
-			}
-
+			cubeFinger.transform.position = calculateSide(pickedObject, hit);
+			cubeFinger.SetActive(true);
 			//if a build action is given, place the block at the cubefinger location
 			if (Input.GetMouseButtonDown (0) && cubeFinger.activeInHierarchy) {
 				placeSquareAtFinger();
@@ -106,4 +102,9 @@ public class TouchBehaviour : MonoBehaviour
 			pickedObject = null;
 		}
 	}
+	[RPC]
+	BlockError PlaceBlock(Vector3 location){
+		return null;
+	}
+
 }

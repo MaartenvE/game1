@@ -9,7 +9,7 @@ public class PrefabInstantiate : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		this.transform.parent = GameObject.Find ("ImageTarget").transform as Transform;
-		this.transform.localScale = GameObject.Find ("Cube").transform.localScale;
+		this.transform.localScale = GameObject.Find ("Cube").transform.lossyScale;
 	}
 	
 	// Update is called once per frame
