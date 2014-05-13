@@ -4,13 +4,17 @@ using AssemblyCSharp;
 
 
 public class Client : MonoBehaviour {
-	
+
+	public string ip = "127.0.0.1";
+	public int port = 3825;
+
+
 	void Start (){
 		ConnectToServer ();
 	}
 	
 	void ConnectToServer() {
-		Network.Connect("127.0.0.1", 3825);
+		Network.Connect(ip, port);
 
 	}
 	

@@ -2,8 +2,7 @@
   <MonoDevelop.Ide.Workspace />
   <MonoDevelop.Ide.Workbench ActiveDocument="..\Server\Assets\Scripts\PrefabInstantiate.cs">
     <Files>
-      <File FileName="..\Server\Assets\Scripts\Server.cs" Line="14" Column="3" />
-      <File FileName="..\Server\Assets\Scripts\PrefabInstantiate.cs" Line="12" Column="1" />
+      <File FileName="..\Server\Assets\Scripts\PrefabInstantiate.cs" Line="19" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
