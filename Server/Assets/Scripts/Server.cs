@@ -6,13 +6,15 @@ using AssemblyCSharp;
 public class Server : MonoBehaviour {
 	
 	public GameObject prefab;
+	public int port = 3825;
+
 	
 	void Start (){
 		LaunchServer ();
 	}
 	
 	void LaunchServer() {
-		Network.InitializeServer(32, 3825, false);
+		Network.InitializeServer(32, port, false);
 		
 	}
 	
