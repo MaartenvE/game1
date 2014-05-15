@@ -1,0 +1,141 @@
+\documentclass[a4paper,titlepage]{scrartcl}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{eurosym}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{hyperref}
+\usepackage{fancyref}
+\usepackage{cite}
+
+\title{Building Blocks Design}
+\subtitle{TI2805 Context Project, Computer Games, Group 1}
+
+\author{Gert Spek \\ gspek \\ 4216806 \and Niels Bakker \\ ncbakker \\ 4161394 \and Jehan da Camara \\ jdacamara \\ 4207858 \and Maarten van Elsas \\ mvanelsas \\ 4176898 \and Leon Helsloot \\ lhelsloot \\ 4235991}
+
+
+\date{May 2014}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document describes choices made by the authors during the design of the game \textit{Building Blocks}. After a quick overview of the game concept and the context it will be placed in, customer needs and how the product fulfils those needs will be addressed. Furthermore, an assessment of related existing products will be made, as well the costs in both time and money of developing such a game.
+\end{abstract}
+
+
+\tableofcontents
+
+
+
+\section{Product context}
+The game described in this document is specifically designed for scenarios in which groups of mostly unrelated people are waiting at the same location for a timespan of at least ten minutes, for instance at an airport.
+
+According to Van den Berkhof, stress is an emotion likely to be encountered at airports and it should be taken away as fast as possible~\cite{berkhof}. Furthermore, people generally experience waiting alone to feel longer than waiting in a group context, and occupied time feels shorter than unoccupied time~\cite{maister}. Since many people play games to counter boredom, out of loneliness or to relieve stress~\cite{wack}, an interactive multiplayer game can be used to relieve the negative emotions associated with waiting.
+
+
+%As already mentioned the \textit{Building Blocks} smart-phone game is an interactive game. Which means that the person would like to take part in a game would have to be in relatively close proximity with one another. And because each round would require a certain amount of time, approximately 5 minutes or more.The game is aimed more for people who would stay at a place for a given time. For example a group of people at an airport or a train station. Also because the game will be aided with augmented reality it would also be wise that there would be at least a small area where people could walk around marker and object to place more blocks.
+
+
+
+\section{Concept description}
+\textit{Building Blocks} is a highly interactive multiplayer smartphone game in which players cooperatively create a virtual structure of blocks in an augmented reality environment. It makes use of the many sensors on modern smartphones to allow players to interact with people around them and with their environment.
+
+\subsection{Team play}
+The game is controlled by a central server, to which players in its vicinity can connect by scanning a QR code displayed on a screen managed by the server. Connected players are divided into teams of two to seven players, depending on the number of connected players and the maximum number of teams supported by the environment.
+
+The maximum number of teams on a given location is limited by the number of \textit{team tags} present. These tags are physical markers placed on e.g. tables or the ground, around which teams have to build their virtual structure using augmented reality.
+
+\subsection{Blocks and Buildings}
+Each player receives a \textit{block part} from the server, a triangular prism of a certain colour. Two players on the same team can merge their block parts by bumping their phones back to back, causing one of these players to receive a \textit{building block} of the additive combination of the block parts' colours. The player not receiving the building block will get a new block part.
+
+The newly formed building block can be used in the \textit{team building}, a virtual structure of building blocks that can be modified by all members of the team to which the structure belongs. Every player connected to the server can view all buildings, including those not created by their own team, by aiming their phone towards a team tag. The structure built by the team with that tag will then be shown on the player's phone screen using augmented reality, i.e. as if the virtual structure is physically present at the location of the team tag.
+
+In the center of the phone screen, a crosshair is displayed, indicating where the building block would be placed in the structure. By moving the phone around, viewing the structure from different angles, a player can select where to place the block. Blocks can only be placed next to an existing block. If it is possible to place a block, a semi-transparent, highlighted block is drawn at the place the block would be placed. If the player taps their screen, the block is placed in the structure and the player will receive a new block part.
+
+When a block is placed incorrectly, a player may want to remove that block. Any player can remove any block, however, a penalty is attached to removing a block in the form of not being able to place or remove any blocks for one minute. If the block was placed incorrectly, the player who placed the block will be penalized. If, on the other hand, the block was placed correctly, the player removing the block will be penalized.
+
+\subsection{Balancing teams}
+Since players may join and leave an active game at any moment, a mechanism for balancing teams is necessary. If a player joins and one or more of the teams have less than the maximum number of players, the new player is assigned to the team with either the least number of players or, if all teams have an equal number of players, to the team with the least progress.
+
+If all existing teams are full and a player wants to join, this player cannot join a team and must spectate the game (see also \ref{subsec:spectators}). Once a player leaves from a game, spectators are asked to join the game. 
+
+Players may also leave an active game at any moment. If a leaving player has an unused building block in their posession, the block is lost. If the leaving player causes an imbalance of more than one player between teams, spectators are asked to join. If no spectators are present or if none of them wants to join the game, a player from the team with most players will be transferred to the team with least players.
+
+
+\subsection{Competitive play}
+To introduce competitivity between teams, each team has to create the same structure generated by the server. To view the goal structure, players can choose between different views on their phone screen by swiping from side to side. The default view shows the goal structure semi-transparent, with the current state of the team building overlayed fully opaque. Other views show only the goal structure or only the current structure.
+
+The team that completes the goal structure first wins the game. Since the possibility exists that a new player has to wait because all teams are full, a time limit of at most fifteen minutes is set, depending on the size and complexity of the goal structure. Once one team finished their structure, new teams are formed and a new goal structure is generated, after which a new game starts.
+
+\subsection{Spectators}
+\label{subsec:spectators}
+Naturally, when there is a game in progress this will attract the attention of people passing by. However, if the buildings created by the teams are only visible on the phone screens of players, bystanders will soon lose interest and move on. Therefore, two possibilities are provided to spectate the game.
+
+The first possibility is to connect to the game server without joining a game. This would allow a person to aim their phone at a team tag, at which moment the building of that team would be drawn on that individual's screen. The second, more apparent and thus engaging possibility is to display all buildings on a larger screen, making the teams' progress visible to all passers by.
+
+
+
+
+\section{The target customer}
+Naturally a game like \textit{Building Blocks} would require some time. So with that in mind the \textit{Building Blocks} is more target toward people would stay at a location for 5 or more minutes. Besides the time constraint the location well require a little space for the marker and so the people can move around to completely visualize the structure. An example of an good location would be an airport or at a train station.The game will also be  available for IOS and Andriod. To join the game these phone will first have to scan a QR code.
+
+If time permits us the \textit{Building Blocks} game would also incorporate a creative feature where users can either work collaboratively or individually to create a shape using blocks without the goal to mimic a structure and without a time constraint. This additional feature would be more appealing to more creative users whom could create spectacular shapes in an augmented reality. 
+
+\section{The customer's needs}
+The customer's needs are based on the point that they are waiting and do not wish to be bored, but entertained instead for a short to medium length of time. 
+Additionally there is the need of not wanting to go through a lot of trouble for this entertainment.
+Furthermore — as any healthy human being — our customer prefers social activities over non-social endeavours.
+
+
+\section{Satisfying the customer's needs}
+Our game tries to satisfy the customer's needs by bringing a game that is both quick to get into and out of, you can join a game by quickly scanning the game's QR code present on the scene, and fun to play for a longer timespan. Since we have the interaction between competitors to form the needed colour we make sure that our customers are socializing during the game. With augmented reality we hope to bring a new way to entertain the customer, bringing a "real world" experience to the smart-phone. Furthermore, by bringing a team-based versus mode we make sure the game is fun to play by bringing out the competitive side of our customers.
+
+ 
+\section{Existing products}
+The \textit{Building Blocks} smart-phone game is based on the wooden (or nowadays plastic) coloured building blocks that many of us have played with as a kid. Many games exist for smart-phones or other devices in which the player can either freely build or recreate an existing structure using virtual building blocks \cite{blocksworldhd}\cite{minecraft}, as well as an increasing amount of games utilizing augmented reality \cite{ohan}\cite{zombierun}\cite{coderunner}. One game called \textit{Minecraft Reality} is particularly interesting as it combines block structures with augmented reality \cite{minecraftreality}. This game, however, only allows placement of static structures that were uploaded by the creator of the game; modifying structures in an augmented environment is not possible.
+
+Compared to \textit{Minecraft Reality}, which only allows rudimentary interaction with the player's environment by showing a static structure in the outside world, \textit{Building Blocks} provides a much larger amount of interaction, not only because players are able to change the structure they are building, but also because they have to do this collaboratively.
+
+Although advanced sandbox games such as \textit{Minecraft} allow much more complex creations than \textit{Building Blocks}, the latter excels at the social aspect of gaming that is often lost when people are only focused on their own screen. 
+
+\textit{Building Blocks} is a unique product in that it forces its players to cooperate in order to finish an otherwise fairly simple task: building with blocks. The use of augmented reality and team play provide for a very high level of interaction, not only between players but also with a player's surroundings. Furthermore, the aspect of having to mix colours between players to create a suitable building block provides a real challenge in terms of communication and cooperation.
+
+
+\section{Time and budget}
+The project duration is ten weeks, during this time we have five developers working 28 hours a week each. The first two weeks have been used for the project set-up. The remaining eight weeks until the project deadline on June 26th will be used for the development of \textit{Building Blocks}.
+
+Unfortunately, we have no budget for this project. The developers all work on this project as an obligatory part of their bachelor's degree.
+
+\newpage
+
+\begin{thebibliography}{1}
+
+\bibitem{minecraft} Dashevsky, E. (2014, April 30). \textit{Minecraft: A Guide for `Old' People}. Retrieved from \url{http://www.pcmag.com/article2/0,2817,2457234,00.asp}.
+
+\bibitem{minecraftreality} Flaherty, J. (2012, November 27). \textit{Augmented `Minecraft Reality' Distorts Virtual Bricks and Real-Life Spaces}. Retrieved from \url{http://www.wired.com/2012/11/augmented-minecraft-reality/}
+
+\bibitem{blocksworldhd} Hodgkins, K. (2013, August 26). \textit{Daily iPad App: Blocksworld HD lets you build and play with 3D blocks}. Retrieved from \url{http://www.tuaw.com/2013/08/26/daily-ipad-app-blocksworld-hd-lets-you-build-and-play-with-3d-b/}.
+
+\bibitem{maister} Maister, D. H. (1985). The psychology of waiting lines. In J. A. Czepiel, M. R. Solomon and C. F. Surprenant (Eds.) \textit{The Service Encounter} (pp. 113--123). Lexington, MA: Lexington Books.
+
+\bibitem{zombierun} Moses, T. (2012, March 25). \textit{Zombies, Run! - review}. Retrieved from \url{http://www.theguardian.com/technology/2012/mar/25/zombies-run-naomi-alderman-app}.
+
+\bibitem{ohan} Ohan, O., Lister, L. J., White, S. \& Feiner, S. (2008). \textit{Developing an Augmented Reality Racing Game.} Proceedings of the second international conference on intelligent technologies for interactive entertainment. Retrieved from \url{http://www.cs.columbia.edu/~ohan/oda08.pdf}
+
+\bibitem{berkhof} Van den Berkhof, F. W. (2008). \textit{Beleving van lounges op Amsterdam Airport Schiphol: Vormgevingsvoorkeuren van reizigers}. TU Delft, Delft.
+
+
+\bibitem{wack} Wack, E. and Tantleff-Dunn, S. (2009). Relationships between electronic game play, obesity, and psychosocial functioning in young men. \textit{CyberPsychology \& Behavior, 12}(2), 241--244. doi:10.1089/cpb.2008.0151.
+
+
+
+
+\bibitem{coderunner} Schramm, M. (2012, March 13). \textit{CodeRunner chases the location-based dream}. Retrieved from \url{http://www.tuaw.com/2012/03/13/coderunner-chases-the-location-based-dream/}.
+
+
+\end{thebibliography}
+
+
+\end{document}
