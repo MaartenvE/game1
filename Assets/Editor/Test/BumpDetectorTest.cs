@@ -145,6 +145,11 @@ namespace BuildingBlocksTest
 				.SetName("TiltedBZFZ")
 				.Returns(false),
 
+			new TestCaseData(new[] { tiltedBack, tiltedZero, tiltedForward, 
+				tiltedZero })
+			.SetName("FailingTiltedBZFZ")
+			.Returns(true),
+
 		};
 		#endregion
 	}
