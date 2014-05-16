@@ -15,7 +15,7 @@ public class TouchBehaviour : MonoBehaviour
 	private Transform pickedObject = null;
 
 	//move object to vector distance from localObject in the localObjects own space
-	Vector3 calculateSide(Transform localObject, RaycastHit hit){
+	Vector3 CalculateSide(Transform localObject, RaycastHit hit){
 		Vector3 res = localObject.position;
 
 		//bring the vector into the movedObjects own localspace
@@ -53,26 +53,9 @@ public class TouchBehaviour : MonoBehaviour
 	}
 
 	//places a square at the exact coordinates of the cubefinger
-	void placeSquareAtFinger(){
+	void PlaceSquareAtFinger(){
 		this.networkView.RPC ("PlaceBlock", RPCMode.Server, cubeFinger.transform.position);
-		/*
-		GameObject square =  Instantiate(cubePrefab, cubeFinger.transform.position, cubeFinger.transform.rotation) as GameObject;
-		square.transform.parent = this.transform;
-		square.transform.localScale = cubeFinger.transform.localScale;
-		*/
 	}
-
-	/*
-	//creates a square and puts it on the correct side (as determined by vector from the center of the cube)
-	GameObject BuildObjectOnSide(Transform localObject, Vector3 vector){
-		GameObject square =  Instantiate(cubePrefab, localObject.transform.position, localObject.transform.rotation) as GameObject;
-		square.transform.parent = this.transform;
-		square.transform.localScale = localObject.localScale;
-		//moved the created object to the correct side
-		square = moveObjectToSide (localObject, vector, square);
-
-		return square;
-		}*/
 
 	// Update is called once per frame
 	void Update () 
@@ -86,10 +69,11 @@ public class TouchBehaviour : MonoBehaviour
 			//retrieve the object that was hit
 			pickedObject = hit.transform;
 			cubeFinger.transform.position = calculateSide(pickedObject, hit);
+			cubeFinger.transform.localScale = pickedObject.localScale;
 			cubeFinger.SetActive(true);
 			//if a build action is given, place the block at the cubefinger location
 			if (Input.GetMouseButtonDown (0) && cubeFinger.activeInHierarchy) {
-				placeSquareAtFinger();
+				PlaceSquareAtFinger();
 				//disable cubefinger, so it is placed in it s shiny new good position on next update
 				cubeFinger.SetActive(false);
 			}
