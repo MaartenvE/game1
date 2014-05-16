@@ -68,7 +68,7 @@ public class TouchBehaviour : MonoBehaviour
 		{ 
 			//retrieve the object that was hit
 			pickedObject = hit.transform;
-			cubeFinger.transform.position = calculateSide(pickedObject, hit);
+			cubeFinger.transform.position = CalculateSide(pickedObject, hit);
 			cubeFinger.transform.localScale = pickedObject.localScale;
 			cubeFinger.SetActive(true);
 			//if a build action is given, place the block at the cubefinger location
