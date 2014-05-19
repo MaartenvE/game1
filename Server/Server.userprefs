@@ -1,8 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PrefabInstantiate.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\InstantiateBehaviour.cs">
     <Files>
-      <File FileName="Assets\Scripts\PrefabInstantiate.cs" Line="19" Column="3" />
+      <File FileName="Assets\Scripts\Server.cs" Line="51" Column="15" />
+      <File FileName="Assets\Scripts\NetworkWrapper.cs" Line="8" Column="3" />
+      <File FileName="Assets\Scripts\ServerLoader.cs" Line="27" Column="2" />
+      <File FileName="Assets\Scripts\PrefabInstantiate.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\INetwork.cs" Line="11" Column="16" />
+      <File FileName="Assets\Scripts\InstantiateBehaviour.cs" Line="8" Column="50" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
