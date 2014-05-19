@@ -15,6 +15,7 @@ public class Server : MonoBehaviour{
 		set { _prefab = value; }
 	}
 
+	public BlockMatrix blockMatrix = new BlockMatrix();
 	public int port{
 		set { _port = value; }
 	}
@@ -45,16 +46,21 @@ public class Server : MonoBehaviour{
 	/// <returns>The blockerror.</returns>
 	/// <param name="location">Location.</param>
 	[RPC]
-	public BlockError PlaceBlock(Vector3 location){
+	void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI){
 		GameObject prefab = Resources.Load ("TestCube") as GameObject;
-		_network.Instantiate (prefab, location, prefab.transform.rotation, 1);
-		return null;
+		GameObject block = (GameObject)Network.Instantiate (prefab, location, prefab.transform.rotation, 1);
+
+		GameObject sideBlock = NetworkView.Find (NVI).gameObject;
+
+		block.GetComponent<location> ().index = sideBlock.GetComponent<location> ().index + matrixLocation;
+
+		Debug.Log (block.GetComponent<location> ().index);
 	}
 
 	//stubs
 	[RPC]
-	BlockError RemoveBlock(Vector3 location){	
-		return null;
+	void RemoveBlock(NetworkViewID NVI){	
+		Network.Destroy (NVI);
 	}
 	
 	[RPC]
