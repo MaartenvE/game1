@@ -34,7 +34,9 @@ public class ServerTest {
 	[Test]
 	public void TestInstantiation(){
 		Vector3 location = new Vector3 (1, 1, 1);
-		testServer.PlaceBlock (location);
+		Vector3 matrixLocation = new Vector3 (2, 2, 2);
+		NetworkViewID test = new NetworkViewID ();
+		testServer.PlaceBlock (location, matrixLocation, test);
 		network.Verify (net => net.Instantiate (It.IsAny <UnityEngine.Object>(), location, It.IsAny <Quaternion>(), It.IsAny<int> ()));
 	}
 }

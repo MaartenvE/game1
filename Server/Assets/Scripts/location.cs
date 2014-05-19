@@ -14,4 +14,9 @@ public class location : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	[RPC]
+	void UpdateLocation(Vector3 newLocation){
+		index = newLocation;
+	}
 }

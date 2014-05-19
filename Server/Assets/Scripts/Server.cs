@@ -46,9 +46,9 @@ public class Server : MonoBehaviour{
 	/// <returns>The blockerror.</returns>
 	/// <param name="location">Location.</param>
 	[RPC]
-	void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI){
+	public void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI){
 		GameObject prefab = Resources.Load ("TestCube") as GameObject;
-		GameObject block = (GameObject)Network.Instantiate (prefab, location, prefab.transform.rotation, 1);
+		GameObject block = Network.Instantiate (prefab, location, prefab.transform.rotation, 1) as GameObject;
 
 		GameObject sideBlock = NetworkView.Find (NVI).gameObject;
 
