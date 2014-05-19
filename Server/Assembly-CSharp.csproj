@@ -39,15 +39,18 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>E:/Apps/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>E:/Apps/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Block.cs" />
+     <Compile Include="Assets\Scripts\BlockMatrix.cs" />
      <Compile Include="Assets\Scripts\PrefabInstantiate.cs" />
      <Compile Include="Assets\Scripts\Server.cs" />
+     <Compile Include="Assets\Scripts\location.cs" />
      <Compile Include="Assets\Structures\Block.cs" />
      <Compile Include="Assets\Structures\BlockError.cs" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using AssemblyCSharp;
 
@@ -7,6 +7,8 @@ public class Server : MonoBehaviour {
 	
 	public GameObject prefab;
 	public int port = 3825;
+
+	public BlockMatrix blockMatrix = new BlockMatrix();
 
 	
 	void Start (){
@@ -29,14 +31,20 @@ public class Server : MonoBehaviour {
 	
 	
 	[RPC]
-	BlockError PlaceBlock(Vector3 location){
-		Network.Instantiate (prefab, location, prefab.transform.rotation, 1);
-		return null;
+	void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI){
+
+		GameObject block = (GameObject)Network.Instantiate (prefab, location, prefab.transform.rotation, 1);
+
+		GameObject sideBlock = NetworkView.Find (NVI).gameObject;
+
+		block.GetComponent<location> ().index = sideBlock.GetComponent<location> ().index + matrixLocation;
+
+		Debug.Log (block.GetComponent<location> ().index);
 	}
 	
 	[RPC]
-	BlockError RemoveBlock(Vector3 location){	
-		return null;
+	void RemoveBlock(NetworkViewID NVI){	
+		Network.Destroy (NVI);
 	}
 	
 	[RPC]

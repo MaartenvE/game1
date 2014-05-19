@@ -27,7 +27,14 @@ public class Client : MonoBehaviour {
 	}
 
 	[RPC]
-	BlockError PlaceBlock(Vector3 location){
-		return null;
+	void PlaceBlock(Vector3 location, Vector3 relativeLocation, NetworkViewID NVI){
+		//return null;
 	}
+
+	[RPC]
+	void RemoveBlock(NetworkViewID NVI){
+
+	}
+
+
 }

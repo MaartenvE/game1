@@ -1,8 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TouchBehaviour.cs">
     <Files>
-      <File FileName="Assets\Scripts\TouchBehaviour.cs" Line="72" Column="45" />
+      <File FileName="Assets\Scripts\TouchBehaviour.cs" Line="127" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
