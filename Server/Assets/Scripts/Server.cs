@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using AssemblyCSharp;
 
 
 public class Server : MonoBehaviour {
+
+    const float MAX_BUMP_TIME = 2.0f;
 	
 	public GameObject prefab;
 	public int port = 3825;
+
+
+    LinkedList<Bump> bumpHistory = new LinkedList<Bump>();
 
 	
 	void Start (){
@@ -50,7 +55,31 @@ public class Server : MonoBehaviour {
 	
 	[RPC] 
 	//Decide: magnetic or true heading. Is compas heading already contained in the attitude from gyro?
-	Block Tap(double networkTime, float compasHeading, Quaternion attitude){
+	Block Tap(float networkTime, float compassHeading, Quaternion attitude, NetworkMessageInfo info){
+		Debug.Log ("Received Bump Detection");
+        Bump bump = new Bump(networkTime, compassHeading, attitude);
+
+        // Iterate through previous bumps
+        LinkedListNode<Bump> node = bumpHistory.First;
+        while (node != null)
+        {
+            var next = node.Next;
+			var oldBump = node.Value;
+			Debug.Log ("Received time: " + networkTime + "; Current time: " + Network.time + "; Relative time: " + info.timestamp);
+            if (oldBump.Time < Network.time - MAX_BUMP_TIME)
+            {
+				Debug.Log ("Removed old bump");
+                bumpHistory.Remove(oldBump);
+            }
+            else
+            {
+                Debug.Log("Bump detected!");
+				bumpHistory.Remove (oldBump);
+            }
+            node = next;
+        }
+
+		bumpHistory.AddFirst(bump);
 		return null;
 	}
 	

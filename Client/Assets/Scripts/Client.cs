@@ -5,8 +5,23 @@ using AssemblyCSharp;
 
 public class Client : MonoBehaviour {
 
-	public string ip = "127.0.0.1";
-	public int port = 3825;
+	public string ip = "145.94.197.173";
+	public int port = 36963;
+
+	bool failed = false;
+	bool ready  = false;
+
+	void OnGUI() {
+		if (failed) {
+			GUI.Label (new Rect(10, 10, 100, 20), "Failed to connect");
+		}
+
+		if (ready) {
+			if (GUI.Button (new Rect(10, 30, 100, 20), "Click to send bump!")) {
+				networkView.RPC ("Tap", RPCMode.Server, (float) Network.time, 0.0f, Quaternion.identity);
+			}
+		}
+	}
 
 
 	void Start (){
@@ -16,6 +31,17 @@ public class Client : MonoBehaviour {
 	void ConnectToServer() {
 		Network.Connect(ip, port);
 
+	}
+
+	void OnConnectedToServer() {
+		BumpDetectorLoader.Detector.OnBump += 
+			(Bump bump) => networkView.RPC ("Tap", RPCMode.Server, (float) Network.time, 0.0f, Quaternion.identity);
+
+		ready = true;
+	}
+
+	void OnFailedToConnect() {
+		failed = true;
 	}
 	
 	void Update ()
@@ -28,6 +54,13 @@ public class Client : MonoBehaviour {
 
 	[RPC]
 	BlockError PlaceBlock(Vector3 location){
+		return null;
+	}
+
+	[RPC]
+	Block Tap(float networkTime, float compassHeading, Quaternion attitude)
+	{
+		Debug.Log (networkTime);
 		return null;
 	}
 }
