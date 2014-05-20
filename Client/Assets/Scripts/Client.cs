@@ -8,7 +8,6 @@ public class Client : MonoBehaviour {
 	public string ip = "127.0.0.1";
 	public int port = 3825;
 
-
 	void Start (){
 		ConnectToServer ();
 	}
@@ -16,14 +15,6 @@ public class Client : MonoBehaviour {
 	void ConnectToServer() {
 		Network.Connect(ip, port);
 
-	}
-	
-	void Update ()
-	{
-		if (false) {
-						Vector3 location = new Vector3 (1, 1, 1);
-						networkView.RPC ("PlaceBlock", RPCMode.Server, location);
-				}
 	}
 
 	[RPC]
@@ -35,6 +26,13 @@ public class Client : MonoBehaviour {
 	void RemoveBlock(NetworkViewID NVI){
 
 	}
+
+    [RPC]
+    public void ColorBlock(NetworkViewID NVI, float r, float g, float b)
+    {
+        GameObject block = NetworkView.Find(NVI).gameObject;
+        block.renderer.material.color = new Color(r, g, b);
+    }
 
 
 }

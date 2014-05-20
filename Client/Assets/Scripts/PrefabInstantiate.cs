@@ -9,13 +9,15 @@ public class PrefabInstantiate : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		this.transform.parent = GameObject.Find ("ImageTarget").transform as Transform;
-        this.renderer.material.color = new Color((float)(Random.Range(0, 1000) / 1000.0), 
+        /*this.renderer.material.color = new Color((float)(Random.Range(0, 1000) / 1000.0), 
             (float)(Random.Range(0, 1000) / 1000.0), 
             (float)(Random.Range(0, 1000) / 1000.0));
+         */
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+        Vector3 location = this.transform.position;
+        this.transform.position = new Vector3(Mathf.Round(location.x), Mathf.Round(location.y), Mathf.Round(location.z));	
 	}
 }
