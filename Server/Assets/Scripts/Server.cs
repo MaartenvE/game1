@@ -7,15 +7,10 @@ using AssemblyCSharp;
  */
 public class Server : MonoBehaviour{
 
-    private GameObject _prefab;
-	private int _port = 3825;
+    private int _port = 3825;
 	private INetwork _network;
 	private INetworkView _networkView;
-		
-	public GameObject prefab{
-		set { _prefab = value; }
-	}
-
+	
 	public BlockMatrix blockMatrix = new BlockMatrix();
 	public int port{
 		set { _port = value; }
@@ -24,7 +19,7 @@ public class Server : MonoBehaviour{
 		set { _network = value; }
 	}
 
-	public INetworkView networkView{
+	public new INetworkView networkView{
 		set { _networkView = value; }
 		get { return _networkView; }
 	}
@@ -41,15 +36,6 @@ public class Server : MonoBehaviour{
 	/// </summary>
 	public void LaunchServer() {
 		_network.InitializeServer(32, _port, false);
-	}
-
-	/// <summary>
-	/// Prints the text to console.
-	/// </summary>
-	/// <param name="text">Text.</param> The text passed as string
-	[RPC] 
-	void PrintText (string text) {
-		Debug.Log(text);
 	}
 	
 	/// <summary>
@@ -85,7 +71,8 @@ public class Server : MonoBehaviour{
 
 
 	[RPC]
-	public void RemoveBlock(NetworkViewID NVI){	
+	public void RemoveBlock(NetworkViewID NVI){
+        Network.RemoveRPCs(NVI);
 		Network.Destroy (NVI);
 	}
 

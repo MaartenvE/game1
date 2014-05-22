@@ -2,7 +2,7 @@
 using System.Collections;
 
 //goal of this class is for it to be able to build a block locally from the data contained in here
-public class Block : MonoBehaviour {
+public class Block {
 
 	GameObject cube;
 	Vector3 location;
@@ -12,13 +12,4 @@ public class Block : MonoBehaviour {
 		this.location = location;
 	}
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
