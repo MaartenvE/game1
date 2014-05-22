@@ -56,7 +56,7 @@ public class ServerTest {
 		networkView.Setup(netV => netV.gameObject()).Returns(block);
 
 		testServer.ColorBlock (block.networkView.viewID, color);
-		Assert.AreEqual (block.renderer.material.color, new Color (color.x, color.y, color.z));
+		Assert.AreEqual (block.renderer.sharedMaterial.color, new Color (color.x, color.y, color.z));
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class ServerTest {
 
 		network.Verify (net => net.Instantiate (It.IsAny <UnityEngine.Object>(), location, block.transform.rotation, It.IsAny<int>()));
 
-		//Assert.AreEqual(location,sideBlock.GetComponent<location> ().index + matrixLocation);
+		//Assert.AreEqual(block.GetComponent<location> ().index,sideBlock.GetComponent<location> ().index + matrixLocation);
 
 	}
 
