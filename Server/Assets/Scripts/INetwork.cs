@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
 /// INetwork interface used to enable implementing a mock network.
 /// </summary>
 public interface INetwork {
+
 
 	/// <summary>
 	/// Instantiate the specified prefab at location with the rotation for the group.

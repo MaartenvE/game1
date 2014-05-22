@@ -10,7 +10,7 @@ public class Server : MonoBehaviour{
     private GameObject _prefab;
 	private int _port = 3825;
 	private INetwork _network;
-    
+	private INetworkView _networkView;
 		
 	public GameObject prefab{
 		set { _prefab = value; }
@@ -24,14 +24,16 @@ public class Server : MonoBehaviour{
 		set { _network = value; }
 	}
 
-    void Start()
+	public INetworkView networkView{
+		set { _networkView = value; }
+		get { return _networkView; }
+	}
+
+    public void Start()
     {
-        GameObject prefab = Resources.Load("TestCube") as GameObject;
-        GameObject block = Network.Instantiate(prefab, new Vector3(0,0,0), prefab.transform.rotation, 1) as GameObject;
-        this.networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID,
-            (float)(Random.Range(0, 1000) / 1000.0),
-            (float)(Random.Range(0, 1000) / 1000.0),
-            (float)(Random.Range(0, 1000) / 1000.0));
+		GameObject prefab = Resources.Load("TestCube") as GameObject;
+		GameObject block = _network.Instantiate(prefab, new Vector3(0,0,0), prefab.transform.rotation, 1) as GameObject;
+		networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor());
     }
 
 	/// <summary>
@@ -58,32 +60,36 @@ public class Server : MonoBehaviour{
 	[RPC]
 	public void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI){
 		GameObject prefab = Resources.Load ("TestCube") as GameObject;
-        location = new Vector3(Mathf.Round(location.x), Mathf.Round(location.y), Mathf.Round(location.z));
-		GameObject block = Network.Instantiate (prefab, location, prefab.transform.rotation, 1) as GameObject;
-        this.networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, 
-            (float)(Random.Range(0, 1000) / 1000.0), 
-            (float)(Random.Range(0, 1000) / 1000.0), 
-            (float)(Random.Range(0, 1000) / 1000.0));
-        
-		GameObject sideBlock = NetworkView.Find (NVI).gameObject;
 
+		location = roundLocation (location);
+
+		GameObject block = _network.Instantiate (prefab, location, prefab.transform.rotation, 1) as GameObject;
+
+
+		_networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor ());
+        
+		GameObject sideBlock = _networkView.Find (NVI).gameObject();
+		
 		block.GetComponent<location> ().index = sideBlock.GetComponent<location> ().index + matrixLocation;
 
 		Debug.Log (block.GetComponent<location> ().index);
 	}
 
-    [RPC]
-    public void ColorBlock(NetworkViewID NVI, float r, float g, float b){
-            GameObject block = NetworkView.Find(NVI).gameObject;
-            block.renderer.material.color = new Color(r, g, b);   
+
+
+	[RPC]
+	public void ColorBlock(NetworkViewID NVI, Vector3 color){
+            GameObject block = _networkView.Find(NVI).gameObject();
+            block.renderer.material.color = new Color(color.x, color.y, color.z);   
     }
 
-	//stubs
+
 	[RPC]
-	void RemoveBlock(NetworkViewID NVI){	
+	public void RemoveBlock(NetworkViewID NVI){	
 		Network.Destroy (NVI);
 	}
-	
+
+	//stubs
 	[RPC]
 	Block RequestBlock(){
 		return null;
@@ -97,6 +103,25 @@ public class Server : MonoBehaviour{
 	//Decide: magnetic or true heading. Is compas heading already contained in the attitude from gyro?
 	Block Tap(double networkTime, float compasHeading, Quaternion attitude){
 		return null;
+	}
+
+	/// <summary>
+	/// Rounds the location to the nearest int
+	/// </summary>
+	/// <returns>The roundedlocation.</returns>
+	/// <param name="location">Location.</param>
+	private Vector3 roundLocation(Vector3 location){
+		return new Vector3(Mathf.Round(location.x), Mathf.Round(location.y), Mathf.Round(location.z));
+	}
+
+	/// <summary>
+	/// Generates a random colour as Vector3 to enable using it in RPC call.
+	/// </summary>
+	/// <returns>The color (all values between 0 and 1).</returns>
+	private Vector3 randomColor(){
+		return new Vector3 ((float)(Random.Range (0, 1000) / 1000.0), 
+		                    (float)(Random.Range (0, 1000) / 1000.0), 
+		                    (float)(Random.Range (0, 1000) / 1000.0));
 	}
 
 	/// <summary>
