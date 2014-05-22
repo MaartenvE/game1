@@ -10,8 +10,8 @@ public class TouchBehaviour : MonoBehaviour
 	private float maxPickingDistance = 200000;// increase if needed, depending on your scene size
 
 	//gives the boundarys deciding what side of a square is a square (needed due to double roundoff errors)
-	private readonly double LOWER_BOUNDARY = 0.4999;
-	private readonly double UPPER_BOUNDARY = 0.5001;
+	private static readonly double LOWER_BOUNDARY = 0.4999;
+	private static readonly double UPPER_BOUNDARY = 0.5001;
 
 	//this is the clicker for recognizing single/double click
 	private ClickEventHandler clicker;
@@ -20,13 +20,9 @@ public class TouchBehaviour : MonoBehaviour
 	private Transform pickedObject = null;
 
 	//calculate which side of the cube (i.e. localObject) the RayCastHit hits
-	Vector3 calculateSide(Transform localObject, RaycastHit hit){
-		//Vector3 res = localObject.position;
-		
+	public static Vector3 CalculateSide(Transform localObject, Vector3 hit){
 		//bring the vector into the movedObjects own localspace
-		Vector3 localizedVector = localObject.InverseTransformPoint (hit.point);
-		
-		Debug.Log (localizedVector);
+		Vector3 localizedVector = localObject.InverseTransformPoint (hit);
 		
 		//this is the vector that says in which direction the 
 		Vector3 displacement = new Vector3 (0, 0, 0);
@@ -34,27 +30,21 @@ public class TouchBehaviour : MonoBehaviour
 		//the localizedvector ranges represent the sides of a square (if x=0.5, it half the distance of a square from the center of the square to the x dimension. so it hits the x side of the square)
 		if (localizedVector.x >LOWER_BOUNDARY && localizedVector.x<UPPER_BOUNDARY) {
 			displacement = new Vector3(1,0,0);
-			Debug.Log("Right");
 		}
-		if (localizedVector.y >LOWER_BOUNDARY && localizedVector.y<UPPER_BOUNDARY) {
+		else if (localizedVector.y >LOWER_BOUNDARY && localizedVector.y<UPPER_BOUNDARY) {
 			displacement = new Vector3(0,1,0);
-			Debug.Log("Above");
 		}
-		if (localizedVector.z >LOWER_BOUNDARY && localizedVector.z<UPPER_BOUNDARY) {
+		else if (localizedVector.z >LOWER_BOUNDARY && localizedVector.z<UPPER_BOUNDARY) {
 			displacement = new Vector3(0,0,1);
-			Debug.Log("In Front");
 		}
-		if (localizedVector.x <-LOWER_BOUNDARY && localizedVector.x>-UPPER_BOUNDARY) {
+		else if (localizedVector.x <-LOWER_BOUNDARY && localizedVector.x>-UPPER_BOUNDARY) {
 			displacement = new Vector3(-1,0,0);
-			Debug.Log("Left");
 		}
-		if (localizedVector.y <-LOWER_BOUNDARY && localizedVector.y>-UPPER_BOUNDARY) {
+		else if (localizedVector.y <-LOWER_BOUNDARY && localizedVector.y>-UPPER_BOUNDARY) {
 			displacement = new Vector3(0,-1,0);
-			Debug.Log("Below");
 		}
-		if (localizedVector.z <-LOWER_BOUNDARY && localizedVector.z>-UPPER_BOUNDARY) {
+		else if (localizedVector.z <-LOWER_BOUNDARY && localizedVector.z>-UPPER_BOUNDARY) {
 			displacement = new Vector3(0,0,-1);
-			Debug.Log("Behind");
 		}
 		
 		return displacement;
@@ -63,7 +53,7 @@ public class TouchBehaviour : MonoBehaviour
 	//updates object position, and location index
 	void moveFingerToSide(Transform finger, RaycastHit hit){
 		pickedObject = hit.transform;
-		Vector3 displacement = calculateSide (pickedObject, hit);
+		Vector3 displacement = CalculateSide (pickedObject, hit.point);
 
 		//transform the displacement from localobject to the new coords to which the movedObject should go
 		finger.transform.position = pickedObject.TransformPoint (displacement);
@@ -72,13 +62,13 @@ public class TouchBehaviour : MonoBehaviour
 	}
 
 	//places a square at the exact coordinates of the cubefinger
-	void PlaceSquareAtFinger(){
-		this.networkView.RPC ("PlaceBlock", RPCMode.Server, cubeFinger.transform.position, cubeFinger.GetComponent<location>().index, pickedObject.networkView.viewID);
+	void PlaceSquareAtFinger(Vector3 fingerPosition, Vector3 locationIndex, NetworkViewID networkViewID){
+		this.networkView.RPC ("PlaceBlock", RPCMode.Server, fingerPosition, locationIndex, networkViewID);
 	}
 
 	//calls to remove the current pickedobject to server (assumes it has a networkview)
-	void RemovePickedObject(){
-		this.networkView.RPC ("RemoveBlock", RPCMode.Server, pickedObject.networkView.viewID);
+	void RemovePickedObject(NetworkViewID networkViewID){
+		this.networkView.RPC ("RemoveBlock", RPCMode.Server, networkViewID);
 	}
 
 	//Start is called at start
@@ -107,13 +97,13 @@ public class TouchBehaviour : MonoBehaviour
 
 			//if a build action is given, place the block at the cubefinger location
 			if (clicker.SingleClick() && cubeFinger.activeInHierarchy) {
-				PlaceSquareAtFinger();
+                PlaceSquareAtFinger(cubeFinger.transform.position, cubeFinger.GetComponent<location>().index, pickedObject.networkView.viewID);
 				//disable cubefinger, so it is placed in it s shiny new good position on next update
 				cubeFinger.SetActive(false);
 			}
 			//if a remove action is given, remove the block pointed to by the raycast
 			if(clicker.DoubleClick() && cubeFinger.activeInHierarchy){
-				RemovePickedObject();
+				RemovePickedObject(pickedObject.networkView.viewID);
 				cubeFinger.SetActive(false);
 			}
 

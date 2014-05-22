@@ -23,7 +23,6 @@ public class ServerLoader : MonoBehaviour {
 		networkView.SetNativeNetworkView (nativeNetworkView);
 		server = gameObject.AddComponent<Server>();
 		server.port = port;
-		server.prefab = Prefab;
 		server.network = network;
 		server.networkView = networkView;
 		server.LaunchServer ();

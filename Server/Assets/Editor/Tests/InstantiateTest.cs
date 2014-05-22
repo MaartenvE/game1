@@ -19,7 +19,6 @@ public class ServerTest {
 		networkView = new Mock <INetworkView> ();
 		testServer.network = network.Object;
 		testServer.networkView = networkView.Object;
-		testServer.prefab = new GameObject();
 		testServer.LaunchServer ();
 	}
 
