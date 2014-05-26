@@ -35,8 +35,8 @@ public class ClickEventHandler : MonoBehaviour {
 								clicked = true;
 								timePassed = Time.time;
 						}
-			//it is now officially a double click
-			else {
+			            //it is now officially a double click
+			            else {
 								clicked = false;
 								doubleClick = true;
 						}

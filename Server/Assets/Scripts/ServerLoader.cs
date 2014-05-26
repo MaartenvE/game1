@@ -16,10 +16,15 @@ public class ServerLoader : MonoBehaviour {
 	/// </summary>
 	void Start () {
 		INetwork network = new NetworkWrapper ();
+		INetworkView networkView = new NetworkViewWrapper ();
+
+		NetworkView nativeNetworkView = this.GetComponent<NetworkView> ();
+		
+		networkView.SetNativeNetworkView (nativeNetworkView);
 		server = gameObject.AddComponent<Server>();
 		server.port = port;
-		server.prefab = Prefab;
 		server.network = network;
+		server.networkView = networkView;
 		server.LaunchServer ();
 	}
 

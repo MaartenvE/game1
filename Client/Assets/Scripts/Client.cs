@@ -10,21 +10,12 @@ public class Client : MonoBehaviour {
 	bool failed = false;
 	bool ready  = false;
 
-	void OnGUI() {
-		if (failed) {
-			GUI.Label (new Rect(10, 10, 500, 20), "Failed to connect");
-		} else {
-			GUI.Label (new Rect(10, 10, 500, 20), "Magnetometer: " + Input.compass.rawVector.magnitude);
-		}
-	}
-
-
 	void Start (){
 		Input.compass.enabled = true;
-		ConnectToServer ();
+		ConnectToServer (ip, port);
 	}
 	
-	void ConnectToServer() {
+	void ConnectToServer(string ip, int port) {
 		Network.Connect(ip, port);
 
 	}
@@ -41,14 +32,20 @@ public class Client : MonoBehaviour {
 	void OnFailedToConnect() {
 		failed = true;
 	}
-	
-	void Update ()
-	{
-		if (false) {
-						Vector3 location = new Vector3 (1, 1, 1);
-						networkView.RPC ("PlaceBlock", RPCMode.Server, location);
-				}
-	}
+
+    void OnGUI()
+    {
+        GUI.Box(new Rect(5, 5, Screen.width / 5, Screen.height / 4),"Server information");
+        GUI.Label(new Rect(10, 30, Screen.width / 10, 20), "IP: ");
+        GUI.Label(new Rect(10, 70, Screen.width / 10, 20), "Port: ");
+        ip = GUI.TextField(new Rect(50, 30, Screen.width / 7,20), ip);
+        port = int.Parse(GUI.TextField(new Rect(50, 70, Screen.width / 7, 20), ""+port));
+
+        if(GUI.Button(new Rect(20, 110, Screen.width / 8, 20), "Connect")) {
+            Network.Disconnect();
+            ConnectToServer(ip, port);
+        }
+    }
 
 	[RPC]
 	void PlaceBlock(Vector3 location, Vector3 relativeLocation, NetworkViewID NVI){
@@ -61,7 +58,10 @@ public class Client : MonoBehaviour {
 		return null;
 	}
 
-	void RemoveBlock(NetworkViewID NVI){
-
-	}
+    [RPC]
+    public void ColorBlock(NetworkViewID NVI, float r, float g, float b)
+    {
+        GameObject block = NetworkView.Find(NVI).gameObject;
+        block.renderer.material.color = new Color(r, g, b);
+    }
 }
