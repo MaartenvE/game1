@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-
+using System.Linq;
+using System.Collections.Generic;
 
 /// <summary>
 /// Use the accelerometer to detect phones being bumped together. A bump is
@@ -19,35 +20,16 @@ public class BumpDetector
 	/// EventHandler to be called when a bump is detected.
 	/// </summary>
 	public event BumpEventHandler OnBump;
-	
-	/// <summary>
-	/// The accelerometer implementation to be used by the BumpDetector.
-	/// </summary>
+
 	private readonly IAccelerometer accelerometer;
+	private readonly IMagnetometer  magnetometer;
 	
 	//---------------- BUMP DETECTION PARAMETERS ----------------//
 	// These values can be modified to finetune the forces the   //
 	// device must encounter for a bump to be registered.        //
 	//-----------------------------------------------------------//
 	#region Detection parameters
-	/// <summary>
-	/// The threshold above which the negative acceleration initiating a bump
-	/// should lie.
-	/// </summary>
-	private const float ACCELERATION_THRESHOLD = -0.2f;
-	
-	/// <summary>
-	/// The threshold above which the positive acceleration progressing the bump
-	/// should lie.
-	/// </summary>
-	private const float DECELERATION_THRESHOLD = 0.2f;
-	
-	/// <summary>
-	/// The threshold below which the total acceleration on all three axes 
-	/// combined should lie after completing the bump.
-	/// </summary>
-	private const float STATIONARY_THRESHOLD = 0.08f;
-	
+
 	/// <summary>
 	/// The maximum allowed timespan between the acceleration initiating a bump
 	/// and the deceleration progressing the bump.
@@ -58,19 +40,15 @@ public class BumpDetector
 	/// The maximum allowed timespan between the deceleration progressing a bump
 	/// and the phone being held still completing the bump.
 	/// </summary>
-	private const float DECELERATE_DELTATIME = 0.05f;
+	private const float DECELERATE_DELTATIME = 0.1f;
+
 	#endregion
 	
 	//---------------- BUMP DETECTION VARIABLES -----------------//
 	// These values keep track of the bump detection state, such //
 	// as forces and timing.                                     //
 	//-----------------------------------------------------------//
-	#region Detection variables
-	/// <summary>
-	/// The acceleration along the Z-axis measured during the previous update.
-	/// </summary>
-	private float previousAcceleration = 0.0f;
-	
+	#region Detection variables	
 	/// <summary>
 	/// The time the last negative acceleration greater than the threshold was
 	/// measured, initiating a possible bump.
@@ -97,77 +75,49 @@ public class BumpDetector
 	/// Check if a possible bump has progressed to its deceleration phase.
 	/// </summary>
 	private bool hasBumpProgressed = false;
+
+	/// <summary>
+	/// The acceleration measured during the decelerating phase of the bump.
+	/// </summary>
+	private Vector3 bumpAcceleration = Vector3.zero;
 	#endregion
 	
 	/// <summary>
-	/// Create a new BumpDetector, with the provided accelerometer 
-	/// implementation.
+	/// Create a new BumpDetector, with the provided accelerometer and 
+	/// magnetometer implementations.
 	/// </summary>
-	public BumpDetector(IAccelerometer accelerometer)
+	public BumpDetector(IAccelerometer accelerometer, IMagnetometer magnetometer)
 	{
 		this.accelerometer = accelerometer;
+		this.magnetometer  = magnetometer;
 	}
 	
 	/// <summary>
-	/// Update accelerometer readings.
+	/// Update accelerometer and magnetometer readings.
 	/// </summary>
 	public void DetectBump()
 	{
-		if (IsAccelerating())
+		if (accelerometer.IsAccelerating())
 		{
 			StartBump();
 		}
 		
-		else if (hasBumpStarted && IsDecelerating())
+		else if (hasBumpStarted && accelerometer.IsDecelerating() 
+		         && magnetometer.IsChanging())
 		{
 			ProgressBump();
 		}
 		
-		else if (hasBumpProgressed && IsStationary())
+		else if (hasBumpProgressed && accelerometer.IsStationary() 
+		         && accelerometer.IsUpright())
 		{
 			CompleteBump();
 		}
-		
-		previousAcceleration = accelerometer.Acceleration.z;
+
+		accelerometer.Update();
+		magnetometer.Update();
 	}
-	
-	/// <summary>
-	/// Determines whether the phone is accelerating.
-	/// </summary>
-	/// <returns><c>true</c> if this instance is accelerating; otherwise, 
-	///     <c>false</c>.</returns>
-	private bool IsAccelerating()
-	{
-		return accelerometer.Acceleration.z - previousAcceleration 
-			< ACCELERATION_THRESHOLD;
-	}
-	
-	/// <summary>
-	/// Determines whether the phone is decelerating.
-	/// </summary>
-	/// <returns><c>true</c> if this instance is decelerating; otherwise, 
-	///     <c>false</c>.</returns>
-	private bool IsDecelerating()
-	{
-		return accelerometer.Acceleration.z - previousAcceleration
-			> DECELERATION_THRESHOLD;
-	}
-	
-	/// <summary>
-	/// Determines whether the phone is stationary (held still on all three 
-	/// axes).
-	/// </summary>
-	/// <returns><c>true</c> if this instance is stationary; otherwise, 
-	/// <c>false</c>.</returns>
-	private bool IsStationary()
-	{
-		// Since the phone's accelerometer measures gravitational forces, 
-		// 1g should be subtracted from the total acceleration magnitude to get 
-		// user acceleration.
-		return Mathf.Abs(accelerometer.Acceleration.magnitude - 1)
-			< STATIONARY_THRESHOLD;
-	}
-	
+
 	/// <summary>
 	/// Initiate a new bump detection.
 	/// </summary>
@@ -185,6 +135,7 @@ public class BumpDetector
 		if (Time.time - bumpStartTime <= ACCELERATE_DELTATIME) {
 			hasBumpProgressed = true;
 			bumpProgressTime = Time.time;
+			bumpAcceleration = accelerometer.Acceleration;
 		} else {
 			EndBump();
 		}
@@ -201,7 +152,7 @@ public class BumpDetector
 		EndBump();
 		
 		if (OnBump != null) {
-			OnBump(new Bump(bumpStartTime, bumpEndTime));
+			OnBump(new Bump(bumpStartTime, bumpEndTime, bumpAcceleration.magnitude));
 		}
 	}
 	

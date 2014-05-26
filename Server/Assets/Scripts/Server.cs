@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using AssemblyCSharp;
 
@@ -14,13 +15,12 @@ public class Server : MonoBehaviour{
 	public GameObject prefab{
 		set { _prefab = value; }
 	}
-
-    const float MAX_BUMP_TIME = 2.0f;
-    LinkedList<Bump> bumpHistory = new LinkedList<Bump>();
-
+	
+	BumpMatcher bumpMatcher = new BumpMatcher();
 
     void Start()
     {
+		bumpMatcher.OnBumpMatch += (Bump bump1, Bump bump2) => Debug.Log ("Detected bump between players " + bump1.Sender + " and " + bump2.Sender);
         LaunchServer();
     }
 
@@ -83,31 +83,8 @@ public class Server : MonoBehaviour{
 	
 	[RPC] 
 	//Decide: magnetic or true heading. Is compas heading already contained in the attitude from gyro?
-	Block Tap(float networkTime, float compassHeading, Quaternion attitude, NetworkMessageInfo info){
-		Debug.Log ("Received Bump Detection");
-        Bump bump = new Bump(networkTime, compassHeading, attitude);
-
-        // Iterate through previous bumps
-        LinkedListNode<Bump> node = bumpHistory.First;
-        while (node != null)
-        {
-            var next = node.Next;
-			var oldBump = node.Value;
-			Debug.Log ("Received time: " + networkTime + "; Current time: " + Network.time + "; Relative time: " + info.timestamp);
-            if (oldBump.Time < Network.time - MAX_BUMP_TIME)
-            {
-				Debug.Log ("Removed old bump");
-                bumpHistory.Remove(oldBump);
-            }
-            else
-            {
-                Debug.Log("Bump detected!");
-				bumpHistory.Remove (oldBump);
-            }
-            node = next;
-        }
-
-		bumpHistory.AddFirst(bump);
+	Block Tap(float force, NetworkMessageInfo info){
+		bumpMatcher.Add(new Bump(info.timestamp, force, info.sender));
 		return null;
 	}
 

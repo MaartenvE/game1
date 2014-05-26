@@ -2,15 +2,15 @@
 
 class Bump
 {
-    public readonly float Time;
-    public readonly float Heading;
-    public readonly Quaternion Attitude;
+    public readonly double Time;
+    public readonly float Force;
+	public readonly NetworkPlayer Sender;
 
-    public Bump(float time, float heading, Quaternion attitude)
+    public Bump(double time, float force, NetworkPlayer sender)
     {
         Time = time;
-        Heading = heading;
-        Attitude = attitude;
+        Force = force;
+		Sender = sender;
     }
 }
 

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using AssemblyCSharp;
 
 
@@ -13,18 +12,15 @@ public class Client : MonoBehaviour {
 
 	void OnGUI() {
 		if (failed) {
-			GUI.Label (new Rect(10, 10, 100, 20), "Failed to connect");
-		}
-
-		if (ready) {
-			if (GUI.Button (new Rect(10, 30, 100, 20), "Click to send bump!")) {
-				networkView.RPC ("Tap", RPCMode.Server, (float) Network.time, 0.0f, Quaternion.identity);
-			}
+			GUI.Label (new Rect(10, 10, 500, 20), "Failed to connect");
+		} else {
+			GUI.Label (new Rect(10, 10, 500, 20), "Magnetometer: " + Input.compass.rawVector.magnitude);
 		}
 	}
 
 
 	void Start (){
+		Input.compass.enabled = true;
 		ConnectToServer ();
 	}
 	
@@ -34,8 +30,10 @@ public class Client : MonoBehaviour {
 	}
 
 	void OnConnectedToServer() {
+		BumpDetectorLoader.Detector.OnBump +=
+			(bump) => Handheld.Vibrate();
 		BumpDetectorLoader.Detector.OnBump += 
-			(Bump bump) => networkView.RPC ("Tap", RPCMode.Server, (float) Network.time, 0.0f, Quaternion.identity);
+			(Bump bump) => networkView.RPC ("Tap", RPCMode.Server, bump.Force);
 
 		ready = true;
 	}
@@ -58,9 +56,8 @@ public class Client : MonoBehaviour {
 	}
 
 	[RPC]
-	Block Tap(float networkTime, float compassHeading, Quaternion attitude)
+	Block Tap(float force)
 	{
-		Debug.Log (networkTime);
 		return null;
 	}
 
