@@ -2,9 +2,6 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 
-/// <summary>
-/// Default magnetometer implementation (using unity's Input.compass).
-/// </summary>
 public class Magnetometer : IMagnetometer
 {
 	/// <summary>
@@ -35,6 +32,10 @@ public class Magnetometer : IMagnetometer
 		}
 	}
 
+
+    /// <summary>
+    /// Update magnetometer readings. Should be called at the end of each frame.
+    /// </summary>
 	public void Update()
 	{
 		if (magnetometerHistory.Count == MAGNETOMETER_HISTORY_SIZE) {
@@ -43,15 +44,22 @@ public class Magnetometer : IMagnetometer
 		magnetometerHistory.Enqueue(Magnetisation.magnitude);
 	}
 
+    /// <summary>
+    /// Checks if a change is detected in the magnetometer readings.
+    /// </summary>
 	public bool IsChanging()
 	{
-		float average = magnetometerHistory.Average();
+        if (magnetometerHistory.Count > 0)
+        {
+            float average = magnetometerHistory.Average();
 
-		float min = magnetometerHistory.Min();
-		float max = magnetometerHistory.Max();
+            float min = magnetometerHistory.Min();
+            float max = magnetometerHistory.Max();
 
-		return (min - average <= -CHANGING_THRESHOLD
-		        || max - average >= CHANGING_THRESHOLD);
+            return (min - average <= -CHANGING_THRESHOLD
+                    || max - average >= CHANGING_THRESHOLD);
+        }
+        return false;
 	}
 
 }
