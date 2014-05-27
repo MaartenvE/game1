@@ -10,10 +10,6 @@ public class PrefabInstantiate : MonoBehaviour {
 	void Start () {
 		this.transform.parent = GameObject.Find ("ImageTarget").transform as Transform;
         this.tag = "block";
-        /*this.renderer.material.color = new Color((float)(Random.Range(0, 1000) / 1000.0), 
-            (float)(Random.Range(0, 1000) / 1000.0), 
-            (float)(Random.Range(0, 1000) / 1000.0));
-         */
 	}
 	
 	// Update is called once per frame
