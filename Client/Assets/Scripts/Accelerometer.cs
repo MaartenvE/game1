@@ -40,21 +40,33 @@ public class Accelerometer : IAccelerometer
 		}
 	}
 
+    /// <summary>
+    /// Update accelerometer readings. Should be called at the end of each frame.
+    /// </summary>
 	public void Update()
 	{
 		previousAcceleration = Acceleration.z;
 	}
 
+    /// <summary>
+    /// Checks if the phone is moved in the direction of its back.
+    /// </summary>
 	public bool IsAccelerating()
 	{
 		return Acceleration.z - previousAcceleration < ACCELERATION_THRESHOLD;
 	}
 
+    /// <summary>
+    /// Checks if the phone is moved in the direction of its front.
+    /// </summary>
 	public bool IsDecelerating()
 	{
 		return Acceleration.z - previousAcceleration > DECELERATION_THRESHOLD;
 	}
 
+    /// <summary>
+    /// Checks if the phone is held still in the air.
+    /// </summary>
 	public bool IsStationary()
 	{
 		// Since the phone's accelerometer measures gravitational forces, 
@@ -63,6 +75,9 @@ public class Accelerometer : IAccelerometer
 		return Mathf.Abs(Acceleration.magnitude - 1) < STATIONARY_THRESHOLD;
 	}
 
+    /// <summary>
+    /// Checks if the phone is held upright (bottom down).
+    /// </summary>
 	public bool IsUpright()
 	{
 		// Since the phone's accelerometer measures gravitational forces, 
