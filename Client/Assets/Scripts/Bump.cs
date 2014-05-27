@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-
+﻿
 public class Bump
 {
 	/// <summary>
@@ -23,6 +22,7 @@ public class Bump
 	/// </summary>
 	/// <param name="startTime">Start time.</param>
 	/// <param name="endTime">End time.</param>
+	/// <param name="force">Force of the bump (magnitude).</param> 
 	public Bump(float startTime, float endTime, float force)
 	{
 		StartTime = startTime;
