@@ -9,6 +9,7 @@ public class TouchBehaviourTest {
     private GameObject testObject;
     private Vector3 hit;
 
+
     [SetUp]
     public void SetUp()
     {
@@ -16,47 +17,19 @@ public class TouchBehaviourTest {
         testObject.transform.position = new Vector3(0, 0, 0);
     }
 
-    [Test]
-    public void CalculateSideTestLeft()
-    {
-        hit = new Vector3(-0.5f, 0, 0);
-        Assert.AreEqual(TouchBehaviour.CalculateSide(testObject.transform, hit), new Vector3(-1, 0, 0));
-    }
+	static object[] Sides = {
+		new object[] { new Vector3 (-0.5f, 0, 0), new Vector3 (-1, 0, 0)},
+		new object[] { new Vector3 (0.5f, 0, 0), new Vector3 (1, 0, 0)},
+		new object[] { new Vector3 (0, -0.5f, 0), new Vector3 (0, -1, 0)},
+		new object[] { new Vector3 (0, 0.5f, 0), new Vector3 (0, 1, 0)},
+		new object[] { new Vector3 (0, 0, -0.5f), new Vector3 (0, 0, -1)},
+		new object[] { new Vector3 (0, 0, 0.5f), new Vector3 (0, 0, 1)}
+	};
 
-    [Test]
-    public void CalculateSideTestRight()
+	[Test, TestCaseSource("Sides")]
+	public void CalculateSideTest(Vector3 hit, Vector3 result)
     {
-        hit = new Vector3(0.5f, 0, 0);
-        Assert.AreEqual(TouchBehaviour.CalculateSide(testObject.transform, hit), new Vector3(1, 0, 0));
+        Assert.AreEqual(TouchBehaviour.CalculateSide(testObject.transform, hit), result);
     }
-
-    [Test]
-    public void CalculateSideTestAbove()
-    {
-        hit = new Vector3(0, 0.5f, 0);
-        Assert.AreEqual(TouchBehaviour.CalculateSide(testObject.transform, hit), new Vector3(0, 1, 0));
-    }
-
-    [Test]
-    public void CalculateSideTestBelow()
-    {
-        hit = new Vector3(0, -0.5f, 0);
-        Assert.AreEqual(TouchBehaviour.CalculateSide(testObject.transform, hit), new Vector3(0, -1, 0));
-    }
-
-    [Test]
-    public void CalculateSideTestFront()
-    {
-        hit = new Vector3(0, 0, 0.5f);
-        Assert.AreEqual(TouchBehaviour.CalculateSide(testObject.transform, hit), new Vector3(0, 0, 1));
-    }
-
-    [Test]
-    public void CalculateSideTestBehind()
-    {
-        hit = new Vector3(0, 0, -0.5f);
-        Assert.AreEqual(TouchBehaviour.CalculateSide(testObject.transform, hit), new Vector3(0, 0, -1));
-    }
-
 
 }

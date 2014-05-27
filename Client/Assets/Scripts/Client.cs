@@ -42,8 +42,17 @@ public class Client : MonoBehaviour {
         port = int.Parse(GUI.TextField(new Rect(50, 70, Screen.width / 7, 20), ""+port));
 
         if(GUI.Button(new Rect(20, 110, Screen.width / 8, 20), "Connect")) {
-            Network.Disconnect();
-            ConnectToServer(ip, port);
+                Network.Disconnect();
+                DestroyAllBlocks();
+                ConnectToServer(ip, port);
+         
+        }
+    }
+
+    void DestroyAllBlocks()
+    {
+        foreach(GameObject g in GameObject.FindGameObjectsWithTag("block")){
+            Destroy(g);
         }
     }
 
