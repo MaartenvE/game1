@@ -51,7 +51,6 @@ public class Server : MonoBehaviour{
 
 		GameObject block = _network.Instantiate (prefab, location, prefab.transform.rotation, 1) as GameObject;
 
-
 		_networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor ());
         
 		GameObject sideBlock = _networkView.Find (NVI).gameObject();
