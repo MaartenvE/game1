@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 /// <summary>
 /// Use the accelerometer to detect phones being bumped together. A bump is
@@ -31,16 +32,16 @@ public class BumpDetector
 	#region Detection parameters
 
 	/// <summary>
-	/// The maximum allowed timespan between the acceleration initiating a bump
-	/// and the deceleration progressing the bump.
+	/// The maximum allowed timespan in millisecondsbetween the acceleration 
+    /// initiating a bump and the deceleration progressing the bump.
 	/// </summary>
-	private const float ACCELERATE_DELTATIME = 0.1f;
+	private const long ACCELERATE_DELTATIME = 100;
 	
 	/// <summary>
-	/// The maximum allowed timespan between the deceleration progressing a bump
-	/// and the phone being held still completing the bump.
+	/// The maximum allowed timespan in milliseconds between the deceleration 
+    /// progressing a bump and the phone being held still completing the bump.
 	/// </summary>
-	private const float DECELERATE_DELTATIME = 0.1f;
+	private const long DECELERATE_DELTATIME = 100;
 
 	#endregion
 	
@@ -75,6 +76,9 @@ public class BumpDetector
 	/// Check if a possible bump has progressed to its deceleration phase.
 	/// </summary>
 	private bool hasBumpProgressed = false;
+
+    private Stopwatch accelerationStopwatch = new Stopwatch();
+    private Stopwatch decelerationStopwatch = new Stopwatch();
 
 	/// <summary>
 	/// The acceleration measured during the decelerating phase of the bump.
@@ -125,6 +129,8 @@ public class BumpDetector
 	{
 		bumpStartTime = Time.time;
 		hasBumpStarted = true;
+        accelerationStopwatch.Reset();
+        accelerationStopwatch.Start();
 	}
 	
 	/// <summary>
@@ -132,11 +138,17 @@ public class BumpDetector
 	/// </summary>
 	private void ProgressBump()
 	{
-		if (Time.time - bumpStartTime <= ACCELERATE_DELTATIME) {
+        if (accelerationStopwatch.ElapsedMilliseconds <= ACCELERATE_DELTATIME)
+        {
+            accelerationStopwatch.Reset();
 			hasBumpProgressed = true;
 			bumpProgressTime = Time.time;
 			bumpAcceleration = accelerometer.Acceleration;
-		} else {
+            decelerationStopwatch.Reset();
+            decelerationStopwatch.Start();
+		} 
+        else
+        {
 			EndBump();
 		}
 	}
@@ -146,14 +158,15 @@ public class BumpDetector
 	/// </summary>
 	private void CompleteBump()
 	{
-		if (Time.time - bumpProgressTime <= DECELERATE_DELTATIME) {
+		if (decelerationStopwatch.ElapsedMilliseconds <= DECELERATE_DELTATIME) {
 			bumpEndTime = Time.time;
+
+            if (OnBump != null)
+            {
+                OnBump(new Bump(bumpStartTime, bumpEndTime, bumpAcceleration.magnitude));
+            }
 		}
 		EndBump();
-		
-		if (OnBump != null) {
-			OnBump(new Bump(bumpStartTime, bumpEndTime, bumpAcceleration.magnitude));
-		}
 	}
 	
 	/// <summary>
@@ -165,5 +178,7 @@ public class BumpDetector
 		hasBumpProgressed = false;
 		bumpStartTime     = -1.0f;
 		bumpProgressTime  = -1.0f;
+        accelerationStopwatch.Reset();
+        decelerationStopwatch.Reset();
 	}
 }
