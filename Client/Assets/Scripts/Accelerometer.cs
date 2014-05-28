@@ -27,6 +27,7 @@ public class Accelerometer : IAccelerometer
 	private IAccelerometerInput input;
 
 	private float previousAcceleration = 0.0f;
+    private float currentAcceleration = 0.0f;
 
 	public Accelerometer(IAccelerometerInput accelerometerInput)
 	{
@@ -45,7 +46,8 @@ public class Accelerometer : IAccelerometer
     /// </summary>
 	public void Update()
 	{
-		previousAcceleration = Acceleration.z;
+        previousAcceleration = currentAcceleration;
+		currentAcceleration = Acceleration.z;
 	}
 
     /// <summary>

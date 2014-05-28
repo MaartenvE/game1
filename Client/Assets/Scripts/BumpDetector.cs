@@ -101,6 +101,9 @@ public class BumpDetector
 	/// </summary>
 	public void DetectBump()
 	{
+        magnetometer.Update();
+        accelerometer.Update();
+
 		if (accelerometer.IsAccelerating())
 		{
 			StartBump();
@@ -117,9 +120,6 @@ public class BumpDetector
 		{
 			CompleteBump();
 		}
-
-		accelerometer.Update();
-		magnetometer.Update();
 	}
 
 	/// <summary>

@@ -26,8 +26,8 @@ public class AccelerometerTest
         foreach (Vector3 value in inputs)
         {
             current = value;
-            result = action();
             accelerometer.Update();
+            result = action();
         }
 
         return result;
