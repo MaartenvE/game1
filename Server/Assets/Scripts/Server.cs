@@ -90,7 +90,7 @@ public class Server : MonoBehaviour{
 	[RPC] 
 	//Decide: magnetic or true heading. Is compas heading already contained in the attitude from gyro?
 	Block Tap(float force, NetworkMessageInfo info){
-		bumpMatcher.Add(new Bump(info.timestamp, force, info.sender));
+		bumpMatcher.Add(new Bump(info.timestamp, force, new NetworkPlayerWrapper(info.sender)));
 		return null;
 	}
 

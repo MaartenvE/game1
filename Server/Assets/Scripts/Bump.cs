@@ -4,9 +4,9 @@ public struct Bump
 {
     public readonly double Time;
     public readonly float Force;
-	public readonly NetworkPlayer Sender;
+	public readonly INetworkPlayer Sender;
 
-    public Bump(double time, float force, NetworkPlayer sender)
+    public Bump(double time, float force, INetworkPlayer sender)
     {
         Time = time;
         Force = force;

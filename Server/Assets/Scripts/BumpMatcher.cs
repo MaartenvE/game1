@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class BumpMatcher
 {
-	const float BUMP_BACKLOG_TIME = 5.0f;
-	const float MAX_BUMP_TIME = 0.1f;
-
-	const float VERTICAL_BUMP_THRESHOLD   = 0.3f;
+	const double BUMP_BACKLOG_TIME = 3.0;
+	const double MAX_BUMP_TIME = 0.1;
 
 	LinkedList<Bump> bumpHistory = new LinkedList<Bump>();
 
@@ -16,27 +14,28 @@ public class BumpMatcher
 
 	public void Add(Bump newBump)
 	{
-
 		LinkedList<Bump> matches = findMatches(newBump);
 
 		// If no matches were found, add the bump to the bump history so it can be matched to future incoming bumps.
-		if (matches.Count == 0) {
+		if (matches.Count == 0)
+        {
 			bumpHistory.AddFirst (newBump);
 		}
 
 		// If exactly one match was found, assume the match is correct. Remove the matched bump from the history to 
 		// prevent re-matching.
-		else if (matches.Count == 1) {
-			if (OnBumpMatch != null) {
+		else if (matches.Count == 1)
+        {
+			if (OnBumpMatch != null)
+            {
 				OnBumpMatch(matches.First.Value, newBump);
 			}
-
 		}
 
 		// If more than one match was found, discard all matches.
-		foreach (Bump match in matches) {
+		foreach (Bump match in matches)
+        {
 			bumpHistory.Remove (match);
-
 		}
 	}
 
@@ -58,7 +57,8 @@ public class BumpMatcher
 			}
 			
 			// Remove all old entries from this sender.
-			else if (oldBump.Sender == bump.Sender) {
+			else if (oldBump.Sender.Equals(bump.Sender))
+            {
 				bumpHistory.Remove(oldBump);
 			}
 			

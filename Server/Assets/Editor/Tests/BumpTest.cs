@@ -4,18 +4,24 @@ using Moq;
 
 
 [TestFixture]
-public class BumpTest {
+public class BumpTest
+{
+    private INetworkPlayer sender = new NetworkPlayerWrapper(new NetworkPlayer());
+	private Bump target;
 
-	//private Mock <NetworkPlayer> sender = new Mock <NetworkPlayer> ();
-	//private NetworkPlayer sender = new NetworkPlayer();
-	NetworkPlayer sender = new NetworkPlayer();
-	Bump target;
 	[SetUp]
 	public void BumpSetup()
 	{
-		NetworkPlayer sender = new NetworkPlayer();
-		target = new Bump(23.86, 8.95f,sender);
+		INetworkPlayer sender = new NetworkPlayerWrapper(new NetworkPlayer());
+		target = new Bump(23.86, 8.95f, sender);
 	}
+
+    [Test]
+    public void NetworkPlayerTest()
+    {
+       Assert.AreEqual(new NetworkPlayerWrapper(new NetworkPlayer()), new NetworkPlayerWrapper(new NetworkPlayer()));
+    }
+
 	[Test]
 	public void BumpTimeTest()
 	{
