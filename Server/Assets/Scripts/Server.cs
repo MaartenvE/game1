@@ -10,6 +10,7 @@ public class Server : MonoBehaviour{
     private int _port = 3825;
 	private INetwork _network;
 	private INetworkView _networkView;
+    private ArrayList _playerList = new ArrayList<IPlayer>();
 	
 	public BlockMatrix blockMatrix = new BlockMatrix();
 	public int port{
@@ -116,6 +117,8 @@ public class Server : MonoBehaviour{
 	/// </summary>
 	/// <param name="player">Player.</param>
 	void OnPlayerConnected(NetworkPlayer player) {
+        Player tempPlayer = new Player(_network, _networkView, player);
+        _playerList.Add(tempPlayer);
 		Debug.Log("Player connected from " + player.ipAddress);
 	}
 
