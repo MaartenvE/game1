@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-class Bump
+public struct Bump
 {
     public readonly double Time;
     public readonly float Force;
