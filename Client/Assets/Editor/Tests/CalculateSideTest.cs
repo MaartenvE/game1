@@ -8,12 +8,14 @@ public class TouchBehaviourTest {
     
     private GameObject testObject;
     private Vector3 hit;
-
-
+    private TouchBehaviour touchBehaviour;
+    
     [SetUp]
     public void SetUp()
     {
+        touchBehaviour = new TouchBehaviour();
         testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        testObject.tag = "testObject";
         testObject.transform.position = new Vector3(0, 0, 0);
     }
 
@@ -29,7 +31,17 @@ public class TouchBehaviourTest {
 	[Test, TestCaseSource("Sides")]
 	public void CalculateSideTest(Vector3 hit, Vector3 result)
     {
-        Assert.AreEqual(TouchBehaviour.CalculateSide(testObject.transform, hit), result);
+        Assert.AreEqual(touchBehaviour.CalculateSide(testObject.transform, hit), result);
+    }
+
+    [TearDown]
+    public void CleanUp()
+    {
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("testObject");
+        foreach (GameObject g in objects)
+        {
+            GameObject.DestroyImmediate(g);
+        }
     }
 
 }

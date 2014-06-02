@@ -7,6 +7,7 @@ public class TouchBehaviour : MonoBehaviour
 
 	public GameObject cubePrefab;
 	public GameObject cubeFinger;
+    private INetworkView _networkView;
 	private float maxPickingDistance = 200000;// increase if needed, depending on your scene size
 
 	//gives the boundarys deciding what side of a square is a square (needed due to double roundoff errors)
@@ -17,10 +18,16 @@ public class TouchBehaviour : MonoBehaviour
 	private ClickEventHandler clicker;
 
 	//this is the currently selected object (i.e. hit by a raytrace from the center of the screen into the scene)
-	private Transform pickedObject = null;
+	private static Transform pickedObject = null;
+
+    public INetworkView networkView
+    {
+        set { _networkView = value; }
+        get { return _networkView; }
+    }
 
 	//calculate which side of the cube (i.e. localObject) the RayCastHit hits
-	public static Vector3 CalculateSide(Transform localObject, Vector3 hit){
+	public Vector3 CalculateSide(Transform localObject, Vector3 hit){
 		//bring the vector into the movedObjects own localspace
 		Vector3 localizedVector = localObject.InverseTransformPoint (hit);
 		
@@ -51,9 +58,9 @@ public class TouchBehaviour : MonoBehaviour
 	}
 	
 	//updates object position, and location index
-	void moveFingerToSide(Transform finger, RaycastHit hit){
-		pickedObject = hit.transform;
-		Vector3 displacement = CalculateSide (pickedObject, hit.point);
+	public void MoveFingerToSide(Transform finger, IRaycastHit hit){
+		pickedObject = hit.transform();
+		Vector3 displacement = CalculateSide (pickedObject, hit.point());
 
 		//transform the displacement from localobject to the new coords to which the movedObject should go
 		finger.transform.position = pickedObject.TransformPoint (displacement);
@@ -62,24 +69,24 @@ public class TouchBehaviour : MonoBehaviour
 	}
 
 	//places a square at the exact coordinates of the cubefinger
-	void PlaceSquareAtFinger(Vector3 fingerPosition, Vector3 locationIndex, NetworkViewID networkViewID){
-		this.networkView.RPC ("PlaceBlock", RPCMode.Server, fingerPosition, locationIndex, networkViewID);
+	public void PlaceSquareAtFinger(Vector3 fingerPosition, Vector3 locationIndex, NetworkViewID networkViewID){
+		this._networkView.RPC ("PlaceBlock", RPCMode.Server, fingerPosition, locationIndex, networkViewID);
 	}
 
 	//calls to remove the current pickedobject to server (assumes it has a networkview)
-	void RemovePickedObject(NetworkViewID networkViewID){
-		this.networkView.RPC ("RemoveBlock", RPCMode.Server, networkViewID);
+	public void RemovePickedObject(NetworkViewID networkViewID){
+		this._networkView.RPC ("RemoveBlock", RPCMode.Server, networkViewID);
 	}
 
 	//Start is called at start
-	void Start(){
+	public void Start(){
 		//give the clicker the correct clicking component
 		clicker = gameObject.GetComponent<ClickEventHandler> ();
 	}
 
 
 	// Update is called once per frame
-	void Update () 
+	public void Update () 
 	{
 
 		//send a ray from the center of the screen to the object
@@ -91,8 +98,10 @@ public class TouchBehaviour : MonoBehaviour
 			//retrieve the object that was hit
 			pickedObject = hit.transform;
 
+            IRaycastHit raycastHitWrapper = new RaycastHitWrapper();
+            raycastHitWrapper.SetNativeRaycastHit(hit);
 			//move the finger to correct position and show it
-			moveFingerToSide(cubeFinger.transform, hit);
+			MoveFingerToSide(cubeFinger.transform, raycastHitWrapper);
 			cubeFinger.SetActive(true);
 
 			//if a build action is given, place the block at the cubefinger location

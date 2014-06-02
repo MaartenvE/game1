@@ -7,9 +7,7 @@ using AssemblyCSharp;
 /// </summary>
 public class ServerLoader : MonoBehaviour {
 
-	private Server server;
-	public GameObject Prefab; 
-	public int port = 3825;
+    public int port = 3825;
 
 	/// <summary>
 	/// Start this instance.
@@ -21,7 +19,7 @@ public class ServerLoader : MonoBehaviour {
 		NetworkView nativeNetworkView = this.GetComponent<NetworkView> ();
 		
 		networkView.SetNativeNetworkView (nativeNetworkView);
-		server = gameObject.AddComponent<Server>();
+		Server server = gameObject.AddComponent<Server>();
 		server.port = port;
 		server.network = network;
 		server.networkView = networkView;
