@@ -43,7 +43,6 @@ public class ClickEventHandler : MonoBehaviour {
 		}
 
 		if(clicked){
-				Debug.Log (Time.time);
 				if((Time.time - timePassed) > doubleClickDelay){
 					clicked = false;
 					singleClick = true;

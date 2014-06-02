@@ -64,7 +64,7 @@ public class TouchBehaviour : MonoBehaviour
 
 		//transform the displacement from localobject to the new coords to which the movedObject should go
 		finger.transform.position = pickedObject.TransformPoint (displacement);
-		finger.GetComponent<location> ().index = pickedObject.GetComponent<location> ().index + displacement;
+		finger.GetComponent<Location> ().index = pickedObject.GetComponent<Location> ().index + displacement;
 		
 	}
 
@@ -106,7 +106,7 @@ public class TouchBehaviour : MonoBehaviour
 
 			//if a build action is given, place the block at the cubefinger location
 			if (clicker.SingleClick() && cubeFinger.activeInHierarchy) {
-                PlaceSquareAtFinger(cubeFinger.transform.position, cubeFinger.GetComponent<location>().index, pickedObject.networkView.viewID);
+                PlaceSquareAtFinger(cubeFinger.transform.position, cubeFinger.GetComponent<Location>().index, pickedObject.networkView.viewID);
 				//disable cubefinger, so it is placed in it s shiny new good position on next update
 				cubeFinger.SetActive(false);
 			}

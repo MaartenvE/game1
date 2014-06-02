@@ -325,7 +325,7 @@ public class BumpDetectorTest
         bumpDetector.DetectBump();
         bumpDetector.DetectBump();
 
-        Thread.Sleep(110);
+        Thread.Sleep(200);
 
         bumpDetector.DetectBump();
         bumpDetector.DetectBump();

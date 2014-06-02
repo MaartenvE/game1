@@ -15,7 +15,7 @@ public class MoveFingerToSideTest
         raycastHit = new Mock<IRaycastHit>();
         touchBehaviour = new TouchBehaviour();
         touchBehaviour.cubeFinger = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        touchBehaviour.cubeFinger.AddComponent<location>();
+        touchBehaviour.cubeFinger.AddComponent<Location>();
         touchBehaviour.cubeFinger.tag = "testObject";
     }
 
@@ -24,7 +24,7 @@ public class MoveFingerToSideTest
     {
         GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
         gameObject.tag = "testObject";
-        gameObject.AddComponent <location>();
+        gameObject.AddComponent <Location>();
         gameObject.transform.position = new Vector3(0, 0, 0);
         raycastHit.Setup(ray => ray.transform()).Returns(gameObject.transform);
         raycastHit.Setup(ray => ray.point()).Returns(new Vector3(0.5f, 0, 0));
@@ -35,7 +35,7 @@ public class MoveFingerToSideTest
         raycastHit.Verify(ray => ray.point());
 
         Assert.AreEqual(touchBehaviour.cubeFinger.transform.position, new Vector3(1, 0, 0));
-        Assert.AreEqual(touchBehaviour.cubeFinger.GetComponent<location>().index, new Vector3(1, 0, 0));
+        Assert.AreEqual(touchBehaviour.cubeFinger.GetComponent<Location>().index, new Vector3(1, 0, 0));
 
     }
 

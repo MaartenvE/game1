@@ -41,24 +41,40 @@ public class Client : MonoBehaviour {
 
     public void OnGUI()
     {
-        GUI.Box(new Rect(5, 5, Screen.width / 5, Screen.height / 4),"Server information");
-        GUI.Label(new Rect(10, 30, Screen.width / 10, 20), "IP: ");
-        GUI.Label(new Rect(10, 70, Screen.width / 10, 20), "Port: ");
-        ip = GUI.TextField(new Rect(50, 30, Screen.width / 7,20), ip);
-        port = int.Parse(GUI.TextField(new Rect(50, 70, Screen.width / 7, 20), ""+port));
+		//Create a GUI box to enable manually entiring the server IP and port
+		CreateConnectionBox ();
 
+		ReadConnectionBoxInput();
+
+
+		//If the button is pressed change the connection.
         if(GUI.Button(new Rect(20, 110, Screen.width / 8, 20), "Connect")) {
-                _network.Disconnect();
-                DestroyAllBlocks();
-                ConnectToServer(ip, port);
-         
+
+			ChangeConnection();
         }
     }
+
+	public void ReadConnectionBoxInput(){
+		ip = GUI.TextField (new Rect (50, 30, Screen.width / 7, 20), ip);
+		port = int.Parse (GUI.TextField (new Rect (50, 70, Screen.width / 7, 20), "" + port));
+	}
+
+	public void CreateConnectionBox (){
+		GUI.Box(new Rect(5, 5, Screen.width / 5, Screen.height / 4),"Server information");
+		GUI.Label(new Rect(10, 30, Screen.width / 10, 20), "IP: ");
+		GUI.Label(new Rect(10, 70, Screen.width / 10, 20), "Port: ");
+	}
+
+	public void ChangeConnection(){
+		_network.Disconnect();
+		DestroyAllBlocks();
+		ConnectToServer(ip, port);
+	}
 
     public void DestroyAllBlocks()
     {
         foreach(GameObject g in GameObject.FindGameObjectsWithTag("block")){
-            Destroy(g);
+            DestroyImmediate(g);
         }
     }
 

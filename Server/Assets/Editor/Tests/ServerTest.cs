@@ -83,8 +83,7 @@ public class ServerTest {
 
 		network.Verify (net => net.Instantiate (It.IsAny <UnityEngine.Object>(), location, block.transform.rotation, It.IsAny<int>()));
 
-		//Assert.AreEqual(block.GetComponent<location> ().index,sideBlock.GetComponent<location> ().index + matrixLocation);
-
 	}
+
 
 }

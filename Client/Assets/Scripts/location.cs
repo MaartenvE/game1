@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class location : MonoBehaviour {
+public class Location : MonoBehaviour {
 
 	public Vector3 index = new Vector3(0,0,0);
 
