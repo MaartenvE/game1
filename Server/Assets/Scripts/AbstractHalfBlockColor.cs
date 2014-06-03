@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class AbstractHalfBlockColor : IEquatable<AbstractHalfBlockColor>
 {
-	private string _color;
+	private Color _color;
 
-	public string color {
+	public Color color {
 		get{ return _color;}
 		protected set{ _color = value;}
 	}
@@ -21,5 +21,4 @@ public abstract class AbstractHalfBlockColor : IEquatable<AbstractHalfBlockColor
 
 	public abstract AbstractHalfBlockColor CombineColor(AbstractHalfBlockColor other);
 
-	//IHalfBlockColor CombineColor(IHalfBlockColor other);
 }

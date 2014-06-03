@@ -16,10 +16,16 @@ public class SubtractiveHalfBlockColorBehaviour : IHalfBlockColorBehaviour {
 	}	
 
 	public void SetMapping(){
-		AddMapping (new ColorPair (CreateColor ("yellow"), CreateColor ("blue")), CreateColor ("green"));
+		AddMapping (new ColorPair (CreateColor (ColorModel.RED), CreateColor (ColorModel.RED)), CreateColor (ColorModel.RED));
+        AddMapping(new ColorPair(CreateColor(ColorModel.YELLOW), CreateColor(ColorModel.YELLOW)), CreateColor(ColorModel.YELLOW));
+        AddMapping(new ColorPair(CreateColor(ColorModel.BLUE), CreateColor(ColorModel.BLUE)), CreateColor(ColorModel.BLUE));
+
+        AddMapping(new ColorPair(CreateColor(ColorModel.RED), CreateColor(ColorModel.BLUE)), CreateColor(ColorModel.PURPLE));
+        AddMapping(new ColorPair(CreateColor(ColorModel.RED), CreateColor(ColorModel.YELLOW)), CreateColor(ColorModel.ORANGE));
+        AddMapping(new ColorPair(CreateColor(ColorModel.YELLOW), CreateColor(ColorModel.BLUE)), CreateColor(ColorModel.GREEN));
 	}
 
-	private HalfBlockColor CreateColor(string _color){
+	private HalfBlockColor CreateColor(Color _color){
 		return new HalfBlockColor (_color);
 	}
 

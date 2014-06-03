@@ -7,7 +7,7 @@ public class HalfBlockColor : AbstractHalfBlockColor, IEquatable<HalfBlockColor>
 
 	private static IHalfBlockColorBehaviour _colorBehaviour = null;
 
-	public HalfBlockColor(string color)
+	public HalfBlockColor(Color color)
 	{
 		this.color = color;
 		if (_colorBehaviour == null) {
@@ -17,7 +17,7 @@ public class HalfBlockColor : AbstractHalfBlockColor, IEquatable<HalfBlockColor>
 	}
 
 	public override int GetHashCode() {
-		return color.GetHashCode ();
+		return this.color.GetHashCode ();
 	}
 	
 	public bool Equals(HalfBlockColor other){
