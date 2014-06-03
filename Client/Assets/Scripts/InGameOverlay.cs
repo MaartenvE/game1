@@ -3,17 +3,20 @@ using System.Collections.Generic;
 
 public class InGameOverlay : MonoBehaviour
 {
-    private const int TRASHCAN_SIZE = 48;
-    private const int TRASHCAN_SELECTED_SIZE = 64;
-    private const int TRASHCAN_PADDING = 3;
+    private const float TRASHCAN_SIZE          = .1f;
+    private const float TRASHCAN_SELECTED_SIZE = .12f;
+    private const float TRASHCAN_PADDING       = .01f;
 
-    private const int VIEW_SELECTOR_SIZE    = 48;
-    private const int VIEW_SELECTOR_TOP     = 3;
-    private const int VIEW_SELECTOR_PADDING = 13;
+    private const float VIEW_SELECTOR_SIZE          = .1f;
+    private const float VIEW_SELECTOR_SELECTED_SIZE = .12f;
+    private const float VIEW_SELECTOR_TOP           = .01f;
+    private const float VIEW_SELECTOR_PADDING       = .03f;
 
-    private const int PROGRESSBAR_WIDTH   = 50;
-    private const int PROGRESSBAR_HEIGHT  = 12;
-    private const int PROGRESSBAR_PADDING = 5;
+    private const float PROGRESSBAR_WIDTH   = .15f;
+    private const float PROGRESSBAR_HEIGHT  = .03f;
+    private const float PROGRESSBAR_PADDING = .01f;
+
+    private float progress = 0.4f;
 
     public Texture2D TrashcanIcon;
     public Texture2D ConstructionIcon;
@@ -38,8 +41,8 @@ public class InGameOverlay : MonoBehaviour
 
         views = new LinkedList<GuiView>();
         InGameOverlay.AddView(new GuiView("game1scene", ConstructionIcon));
-        InGameOverlay.AddView(new GuiView("game1scene", HouseIcon));
-        InGameOverlay.AddView(new GuiView("game1scene", BlocksIcon));
+        InGameOverlay.AddView(new GuiView("s", HouseIcon));
+        InGameOverlay.AddView(new GuiView("b", BlocksIcon));
     }
 
     void OnGUI()
@@ -58,39 +61,65 @@ public class InGameOverlay : MonoBehaviour
 
     private void drawTrashcanIcon()
     {
+        float size = Screen.width * (trashcanSelected ? TRASHCAN_SELECTED_SIZE : TRASHCAN_SIZE);
+        float padding = Screen.width * TRASHCAN_PADDING;
+        
+        // Draw shadow
+        GUI.color = Color.gray;
+        GUI.DrawTexture(new Rect(padding, padding, size * 1.01f, size * 1.01f), TrashcanIcon);
+
+        // Draw button
         GUI.color = trashcanSelected ? Color.red : Color.white;
-        int size = trashcanSelected ? TRASHCAN_SELECTED_SIZE : TRASHCAN_SIZE;
-        if (GUI.Button(new Rect(TRASHCAN_PADDING, TRASHCAN_PADDING, size, size), TrashcanIcon, GUIStyle.none))
+        if (GUI.Button(new Rect(padding, padding, size, size), TrashcanIcon, GUIStyle.none))
         {
             trashcanSelected = !trashcanSelected;
             TouchBehaviour.DeleteMode = trashcanSelected;
-            Debug.Log("Clicked trashcan icon");
         }
     }
 
     private void drawViewIcons()
     {
-        GUI.color = Color.white;
-        int totalWidth = views.Count * VIEW_SELECTOR_SIZE + (views.Count - 1) * VIEW_SELECTOR_PADDING;
-        int x = Screen.width / 2 - totalWidth / 2;
+        float totalWidth = Screen.width * ((views.Count - 1) * VIEW_SELECTOR_SIZE + views.Count * VIEW_SELECTOR_PADDING + VIEW_SELECTOR_SELECTED_SIZE);
+        float padding = Screen.width * VIEW_SELECTOR_TOP;
+        float x = Screen.width / 2 - totalWidth / 2;
 
         foreach (GuiView view in views)
         {
-            if (GUI.Button(new Rect(x, VIEW_SELECTOR_TOP, VIEW_SELECTOR_SIZE, VIEW_SELECTOR_SIZE), view.Icon, GUIStyle.none))
+            float size = Screen.width * (Application.loadedLevelName == view.SceneName ? VIEW_SELECTOR_SELECTED_SIZE : VIEW_SELECTOR_SIZE);
+
+            // Draw shadow
+            GUI.color = Color.gray;
+            GUI.DrawTexture(new Rect(x, padding, size * 1.005f, size * 1.005f), view.Icon);
+
+            // Draw button
+            GUI.color = Color.white;
+            if (GUI.Button(new Rect(x, padding, size, size), view.Icon, GUIStyle.none))
             {
-                Debug.Log("Clicked " + view.SceneName);
                 Application.LoadLevel(view.SceneName);
             }
-            x += VIEW_SELECTOR_SIZE + VIEW_SELECTOR_PADDING;
+            x += size + Screen.width * VIEW_SELECTOR_PADDING;
         }
     }
 
     private void drawProgressBar()
     {
+        // Draw progress bar background
         GUI.color = Color.gray;
-        GUI.Box(new Rect(Screen.width - PROGRESSBAR_WIDTH - PROGRESSBAR_PADDING, PROGRESSBAR_PADDING, PROGRESSBAR_WIDTH, PROGRESSBAR_HEIGHT), GUIContent.none, progressStyle);
+        GUI.Box(new Rect(
+                (1f - PROGRESSBAR_WIDTH - PROGRESSBAR_PADDING) * Screen.width, 
+                Screen.width * PROGRESSBAR_PADDING, 
+                Screen.width * PROGRESSBAR_WIDTH, 
+                Screen.width * PROGRESSBAR_HEIGHT
+            ), GUIContent.none, progressStyle);
+
+        // Draw progress
         GUI.color = Color.yellow;
-        GUI.Box(new Rect(Screen.width - 25, PROGRESSBAR_PADDING, 20, PROGRESSBAR_HEIGHT), GUIContent.none, progressStyle);
+        GUI.Box(new Rect(
+                (1f - PROGRESSBAR_WIDTH * progress - PROGRESSBAR_PADDING) * Screen.width, 
+                Screen.width * PROGRESSBAR_PADDING, 
+                Screen.width * PROGRESSBAR_WIDTH * progress, 
+                Screen.width * PROGRESSBAR_HEIGHT
+            ), GUIContent.none, progressStyle);
     }
 
     public static void AddView(GuiView view)
