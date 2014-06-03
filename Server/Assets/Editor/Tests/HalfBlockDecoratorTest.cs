@@ -3,8 +3,8 @@ using System.Collections;
 using NUnit.Framework;
 
 [TestFixture]
-public class HalfBlockColorDecoratorTest {
-
+public class HalfBlockDecoratorTest
+{
     static object[] Colors = 
     {
         new object[] {ColorModel.RED, null, ColorModel.RED},
@@ -24,12 +24,15 @@ public class HalfBlockColorDecoratorTest {
     [Test, TestCaseSource("Colors")]
     public void CalculateUnityColorTest(Color firstColor, Color secondColor, Color expectedColor)
     {
+        HalfBlockDecorator halfBlockDecorator = new HalfBlockDecorator();
+        
         HalfBlockColorDecorator first = new HalfBlockColorDecorator(new HalfBlockColor(firstColor));
         HalfBlockColorDecorator second = null;
         if (!secondColor.Equals(new Color()))
         {
             second = new HalfBlockColorDecorator(new HalfBlockColor(secondColor));
         }
+        halfBlockDecorator.wrappedObject = first;
         first.wrappedObject = second;
 
         Color result = first.CalculateUnityColor();

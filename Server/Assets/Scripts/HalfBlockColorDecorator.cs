@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HalfBlockColorDecorator {
-    private HalfBlockDecorator _wrappedObject;
+public class HalfBlockColorDecorator : HalfBlockDecorator {
+    private HalfBlockColorDecorator _wrappedObject;
     private AbstractHalfBlockColor _color;
 
-    public HalfBlockDecorator wrappedObject
+    public AbstractHalfBlockColor color
+    {
+        get { return _color;}
+    }
+
+    public HalfBlockColorDecorator wrappedObject
     {
         get { return _wrappedObject; }
         set { _wrappedObject = value; }
@@ -16,18 +21,17 @@ public class HalfBlockColorDecorator {
         this._color = color;
     }
 
-    public Color CalculateUnityColor()
+    public override Color CalculateUnityColor()
     {
-        Color blue1 = Color.blue;
-        Color blue2 = Color.blue;
-
-        Debug.Log(blue1.Equals(blue2));
-        Debug.Log(blue1.GetHashCode() == blue2.GetHashCode());
-        return Color.red;
+        return CalculateColor().color;
     }
 
-    private HalfBlockColor CalculateColor()
+    private AbstractHalfBlockColor CalculateColor()
     {
-        return null;
+        if (wrappedObject == null)
+        {
+            return color;
+        }
+        return color.CombineColor(wrappedObject.color);
     }
 }

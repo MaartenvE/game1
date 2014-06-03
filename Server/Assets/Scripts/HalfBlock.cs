@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HalfBlock : MonoBehaviour {
+public class HalfBlock {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    private HalfBlockDecorator _wrappedObject;
+
+    public HalfBlockDecorator wrappedObject
+    {
+        get { return _wrappedObject; }
+        set { _wrappedObject = value; }
+    }
+
+    public virtual Color CalculateUnityColor()
+    {
+        return wrappedObject.CalculateUnityColor();
+    }
 }
