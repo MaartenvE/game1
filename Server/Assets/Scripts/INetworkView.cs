@@ -8,6 +8,8 @@ public interface INetworkView {
 	void RPC(string name, RPCMode mode, params object[] args);
 	void RPC(string name, INetworkPlayer player, params object[] args);
 
+	void RPC(string name, NetworkPlayer player, params object[] args);
+
 	GameObject gameObject();
 
 	NetworkViewID getNetworkViewID();

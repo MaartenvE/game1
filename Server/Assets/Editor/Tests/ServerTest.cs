@@ -38,7 +38,7 @@ public class ServerTest {
 
 		Vector3 location = new Vector3 (0, 0, 0);
 		network.Verify (net => net.Instantiate (It.IsAny <UnityEngine.Object>(), location, It.IsAny <Quaternion>(), It.IsAny<int> ()));
-		networkView.Verify( netV => netV.RPC ("ColorBlock", RPCMode.AllBuffered, It.IsAny<object[]>()));
+		networkView.Verify( netV => netV.RPC ("ColorBlock", RPCMode.AllBuffered, It.IsAny<object[]>()),Times.Once());
 	}
 
 
