@@ -21,6 +21,10 @@ public class NetworkViewWrapper :INetworkView{
 		nativeNetworkView.RPC(name, mode, args);
 	}
 
+	public void RPC(string name, INetworkPlayer player, params object[] args){
+		nativeNetworkView.RPC (name, player.getNetworkPlayer(), args);
+	}
+
 	public INetworkView Find(NetworkViewID viewID){
 		INetworkView networkView = new NetworkViewWrapper ();
 		networkView.SetNativeNetworkView(NetworkView.Find(viewID));

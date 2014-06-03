@@ -10,6 +10,8 @@ public class Server : MonoBehaviour{
     private int _port = 3825;
 	private INetwork _network;
 	private INetworkView _networkView;
+
+	private ArrayList players = new ArrayList ();
 	
 	public BlockMatrix blockMatrix = new BlockMatrix();
 	public int port{
@@ -45,18 +47,23 @@ public class Server : MonoBehaviour{
 	/// <param name="location">Location.</param>
 	[RPC]
 	public void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI){
+		PlaceColoredBlock (location, matrixLocation, NVI, randomColor());
+	}
+
+	[RPC]
+	public void PlaceColoredBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI, Vector3 color){
 		GameObject prefab = Resources.Load ("TestCube") as GameObject;
-
+		
 		location = roundLocation (location);
-
+		
 		GameObject block = _network.Instantiate (prefab, location, prefab.transform.rotation, 1) as GameObject;
-
-		_networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor ());
-        
+		
+		_networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, color);
+		
 		GameObject sideBlock = _networkView.Find (NVI).gameObject();
 		
 		block.GetComponent<Location> ().index = sideBlock.GetComponent<Location> ().index + matrixLocation;
-
+		
 		Debug.Log (block.GetComponent<Location> ().index);
 	}
 
@@ -71,9 +78,47 @@ public class Server : MonoBehaviour{
 
 	[RPC]
 	public void RemoveBlock(NetworkViewID NVI){
-        Network.RemoveRPCs(NVI);
-		Network.Destroy (NVI);
+		GameObject cube = _networkView.Find (NVI).gameObject();
+
+		Debug.Log ("tried to remove id "+NVI.ToString());
+
+		//check if the cube is not to be removed (as it is a raytrace immune block)
+		if (cube.layer != 2) {
+			Debug.Log ("removed id "+NVI.ToString());
+						Network.RemoveRPCs (NVI);
+						Network.Destroy (NVI);
+				}
 	}
+
+	[RPC]
+	public void MoveServerFinger(NetworkViewID networkViewID, Vector3 coords, Vector3 location, int visible){
+
+		GameObject finger = _networkView.Find (networkViewID).gameObject();
+		finger.transform.position = coords;
+		finger.GetComponent<Location> ().index = location;
+
+		if (visible == 1) {
+			finger.renderer.enabled = true;
+		} else {
+			finger.renderer.enabled = false;
+		}
+		_networkView.RPC ("MoveClientFinger", RPCMode.OthersBuffered, networkViewID, coords, location, visible);
+	}
+
+	[RPC]
+	public void MoveClientFinger(NetworkViewID networkViewID, Vector3 coords, Vector3 location, int visible){
+
+	}
+
+	[RPC]
+	public void InstantiateFinger(NetworkViewID networkViewID, Vector3 color){
+
+	}
+	[RPC]
+	public void InstantiatePersonalFinger(NetworkViewID networkViewID){
+		
+	}
+	//networkView.RPC ("MoveFinger", RPCMode.Server, cubeFinger.networkView.viewID, pickedObject.TransformPoint (displacement), pickedObject.GetComponent<Location> ().index+displacement);
 
 	//stubs
 	[RPC]
@@ -115,6 +160,8 @@ public class Server : MonoBehaviour{
 	/// </summary>
 	/// <param name="player">Player.</param>
 	void OnPlayerConnected(NetworkPlayer player) {
+		Player newPlayer = new Player(_networkView, _network, new NetworkPlayerWrapper(player));
+		players.Add( newPlayer);
 		Debug.Log("Player connected from " + player.ipAddress);
 	}
 

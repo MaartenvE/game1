@@ -6,6 +6,7 @@ public interface INetworkView {
 	void SetNativeNetworkView(NetworkView nativeNetworkView);
 
 	void RPC(string name, RPCMode mode, params object[] args);
+	void RPC(string name, INetworkPlayer player, params object[] args);
 
 	GameObject gameObject();
 

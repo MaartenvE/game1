@@ -78,6 +78,9 @@ public class Client : MonoBehaviour {
 	[RPC]
 	public void RemoveBlock(NetworkViewID NVI){
 	}
+	[RPC]
+	public void MoveServerFinger(NetworkViewID networkViewID, Vector3 coords, Vector3 location, int visible){
+		}
 
     [RPC]
     public void ColorBlock(NetworkViewID NVI, Vector3 color)
