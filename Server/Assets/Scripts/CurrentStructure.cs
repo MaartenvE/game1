@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//remembers and checks the goalstructure with rbg vector3's
 public class CurrentStructure {
 
 	private Vector3[,,] _GoalStructure; 
@@ -22,7 +23,7 @@ public class CurrentStructure {
 		for(int i = 0; i<MaxSize; i++){
 			for(int j = 0; j<MaxSize; j++){
 				for(int k = 0; k<MaxSize; k++){
-					if(_GoalStructure[i,j,k] == null){
+					if(_GoalStructure[i,j,k] == new Vector3(0,0,0)){
 						currentCorrectness++;
 						_CorrectStructure[i,j,k] = true;
 					}
@@ -55,12 +56,12 @@ public class CurrentStructure {
 	public bool getCorrectness(Vector3 location){
 		return _CorrectStructure [(int)location.x, (int)location.y, (int)location.z];
 	}
-	public void setCorrectness(Vector3 location, bool newCorrectness){
+	private void setCorrectness(Vector3 location, bool newCorrectness){
 		_CorrectStructure [(int)location.x, (int)location.y, (int)location.z] = newCorrectness;
 	}
 
-	public float getCurrentCorrectnessPercentage(){
-		return currentCorrectness / fullyCorrect;
+	public float getCurrentCorrectnessFraction(){
+		return (float)currentCorrectness / (float)fullyCorrect;
 	}
 
 	public bool isCorrect(){

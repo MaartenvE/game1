@@ -10,6 +10,7 @@ public class Server : MonoBehaviour{
     private int _port = 3825;
 	private INetwork _network;
 	private INetworkView _networkView;
+	private CurrentStructure _currentStructure;
 
 	private ArrayList players = new ArrayList ();
 
@@ -31,6 +32,9 @@ public class Server : MonoBehaviour{
 		GameObject prefab = Resources.Load("TestCube") as GameObject;
 		GameObject block = _network.Instantiate(prefab, new Vector3(0,0,0), prefab.transform.rotation, 1) as GameObject;
 		networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor());
+		initializeCurrentStructure ();
+		Vector3 color = new Vector3 (block.renderer.material.color.r, block.renderer.material.color.b, block.renderer.material.color.g);
+		_currentStructure.updateCorrectness (block.GetComponent<Location> ().index, color);
     }
 
 	/// <summary>
@@ -47,7 +51,9 @@ public class Server : MonoBehaviour{
 	/// <param name="location">Location.</param>
 	[RPC]
 	public void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI){
-		PlaceColoredBlock (location, matrixLocation, NVI, randomColor());
+		Vector3 color = randomColor ();
+		PlaceColoredBlock (location, matrixLocation, NVI, color);
+		_currentStructure.updateCorrectness (matrixLocation, color);
 	}
 
 	[RPC]
@@ -57,7 +63,7 @@ public class Server : MonoBehaviour{
 		location = roundLocation (location);
 		
 		GameObject block = _network.Instantiate (prefab, location, prefab.transform.rotation, 1) as GameObject;
-		
+		_currentStructure.updateCorrectness (block.GetComponent<Location> ().index, color);;//save to the model
 		_networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, color);
 		
 		GameObject sideBlock = _networkView.Find (NVI).gameObject();
@@ -72,6 +78,7 @@ public class Server : MonoBehaviour{
 	[RPC]
 	public void ColorBlock(NetworkViewID NVI, Vector3 color){
             GameObject block = _networkView.Find(NVI).gameObject();
+			_currentStructure.updateCorrectness (block.GetComponent<Location> ().index, color);
             block.renderer.material.color = new Color(color.x, color.y, color.z);   
     }
 
@@ -84,6 +91,7 @@ public class Server : MonoBehaviour{
 
 		//check if the cube is not to be removed (as it is a raytrace immune block)
 		if (cube.layer != 2) {
+			_currentStructure.updateCorrectness (cube.GetComponent<Location> ().index, new Vector3(0,0,0));
 			Debug.Log ("removed id "+NVI.ToString());
 						Network.RemoveRPCs (NVI);
 						Network.Destroy (NVI);
@@ -118,7 +126,6 @@ public class Server : MonoBehaviour{
 	public void InstantiatePersonalFinger(NetworkViewID networkViewID){
 		
 	}
-	//networkView.RPC ("MoveFinger", RPCMode.Server, cubeFinger.networkView.viewID, pickedObject.TransformPoint (displacement), pickedObject.GetComponent<Location> ().index+displacement);
 
 	//stubs
 	[RPC]
@@ -143,6 +150,11 @@ public class Server : MonoBehaviour{
 	/// <param name="location">Location.</param>
 	private Vector3 roundLocation(Vector3 location){
 		return new Vector3(Mathf.Round(location.x), Mathf.Round(location.y), Mathf.Round(location.z));
+	}
+
+	public void initializeCurrentStructure(){
+		//dummy code
+		_currentStructure = new CurrentStructure (2, new Vector3[2, 2, 2]);
 	}
 
 	/// <summary>
