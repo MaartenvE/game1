@@ -12,13 +12,8 @@ public interface IPlayer {
 
 	void DestroyInventoryBlock();
 
-<<<<<<< HEAD
-	//[RPC]
-	//void UpdateFinger(Vector3 newLocation);
-=======
-	[RPC]
-	void UpdateFinger(Vector3 newLocation);
->>>>>>> 505cab0c1b03405b9bb5caa0a05db20c3762f808
+
+
 
 	[RPC]
 	void GiveServerAnError(string errorMessage);

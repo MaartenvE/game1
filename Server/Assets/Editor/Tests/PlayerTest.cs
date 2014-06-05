@@ -8,7 +8,7 @@ public class PlayerTest {
 	private Mock<INetworkView> _NetworkView;
 	private Mock<INetwork> _Network;
 	private Mock<IInstantiatedBlock> _Finger;
-	//private Mock<NetworkPlayer> _NetworkPlayer;
+	private Mock<INetworkPlayer> _NetworkPlayer;
 
 	private Player _TestPlayer;
 	
@@ -21,12 +21,12 @@ public class PlayerTest {
 		_Network = new Mock<INetwork> ();
 		_Finger = new Mock<IInstantiatedBlock> ();
 
-	//	_NetworkPlayer = new Mock<NetworkPlayer> ();
+		_NetworkPlayer = new Mock<INetworkPlayer> ();
 
-		_NetworkView.Setup (Mock => Mock.RPC ("GivePlayerAnError", It.IsAny<NetworkPlayer> (), It.IsAny<Object[]> ())).Verifiable();
-		//_NetworkView.Setup (Mock => Mock.RPC ("UpdateFinger", It.IsAny<NetworkPlayer> (), It.IsAny<Object[]> ())).Verifiable();
+		_NetworkView.Setup (Mock => Mock.RPC ("GivePlayerAnError", It.IsAny<INetworkPlayer> (), It.IsAny<Object[]> ())).Verifiable();
+		_NetworkView.Setup (Mock => Mock.RPC ("UpdateFinger", It.IsAny<INetworkPlayer> (), It.IsAny<Object[]> ())).Verifiable();
 
-		_TestPlayer = new Player (_NetworkView.Object, _Network.Object);
+		_TestPlayer = new Player (_NetworkView.Object, _Network.Object, _NetworkPlayer.Object);
 	}
 
 	///
@@ -54,7 +54,7 @@ public class PlayerTest {
 
 		_TestPlayer.GivePlayerAnError(errorMessage);
 
-		_NetworkView.Verify(netV => netV.RPC ("GivePlayerAnError", It.IsAny<NetworkPlayer>(), It.IsAny<object[]>()));
+		_NetworkView.Verify(netV => netV.RPC ("GivePlayerAnError", It.IsAny<INetworkPlayer>(), It.IsAny<object[]>()));
 	}
 
 }
