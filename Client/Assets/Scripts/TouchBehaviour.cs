@@ -4,6 +4,7 @@ using AssemblyCSharp;
 
 public class TouchBehaviour : MonoBehaviour 
 {
+    public static bool DeleteMode = false;
 
 	public GameObject cubePrefab;
 	public GameObject cubeFinger;
@@ -11,8 +12,8 @@ public class TouchBehaviour : MonoBehaviour
 	private float maxPickingDistance = 200000;// increase if needed, depending on your scene size
 
 	//gives the boundarys deciding what side of a square is a square (needed due to double roundoff errors)
-	private static readonly double LOWER_BOUNDARY = 0.4999;
-	private static readonly double UPPER_BOUNDARY = 0.5001;
+	private const double LOWER_BOUNDARY = 0.4999;
+	private const double UPPER_BOUNDARY = 0.5001;
 
 	//this is the clicker for recognizing single/double click
 	private ClickEventHandler clicker;
@@ -105,13 +106,13 @@ public class TouchBehaviour : MonoBehaviour
 			cubeFinger.SetActive(true);
 
 			//if a build action is given, place the block at the cubefinger location
-			if (clicker.SingleClick() && cubeFinger.activeInHierarchy) {
+			if (!DeleteMode && clicker.SingleClick() && cubeFinger.activeInHierarchy) {
                 PlaceSquareAtFinger(cubeFinger.transform.position, cubeFinger.GetComponent<Location>().index, pickedObject.networkView.viewID);
 				//disable cubefinger, so it is placed in it s shiny new good position on next update
 				cubeFinger.SetActive(false);
 			}
 			//if a remove action is given, remove the block pointed to by the raycast
-			if(clicker.DoubleClick() && cubeFinger.activeInHierarchy){
+			else if(DeleteMode && clicker.SingleClick() && cubeFinger.activeInHierarchy){
 				RemovePickedObject(pickedObject.networkView.viewID);
 				cubeFinger.SetActive(false);
 			}

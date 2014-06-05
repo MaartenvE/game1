@@ -4,6 +4,7 @@ using System.Collections;
 public class ClickEventHandler : MonoBehaviour {
 
 	bool clicked = false;
+    bool clickStarted = false;
 	bool singleClick = false;
 	bool doubleClick = false;
 	double timePassed = double.MaxValue;
@@ -28,7 +29,14 @@ public class ClickEventHandler : MonoBehaviour {
 		doubleClick = false;
 		singleClick = false;
 
-		if (Input.GetMouseButtonUp (0)) {
+        if (Input.GetMouseButtonDown(0) && GUIUtility.hotControl == 0)
+        {
+            clickStarted = true;
+        }
+
+		if (clickStarted && Input.GetMouseButtonUp (0))
+        {
+            clickStarted = false;
 
 						//initial click handling
 						if (!clicked) {
