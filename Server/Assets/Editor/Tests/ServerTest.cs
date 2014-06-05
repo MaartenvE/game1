@@ -20,6 +20,7 @@ public class ServerTest {
 		testServer.network = network.Object;
 		testServer.networkView = networkView.Object;
 		testServer.LaunchServer ();
+        testServer.initializeCurrentStructure();
 	}
 
 	/**
@@ -84,6 +85,13 @@ public class ServerTest {
 		network.Verify (net => net.Instantiate (It.IsAny <UnityEngine.Object>(), location, block.transform.rotation, It.IsAny<int>()));
 
 	}
+
+    [TearDown]
+    public void CleanUp()
+    {
+        GameObject block = Resources.Load("TestCube") as GameObject;
+        block.GetComponent<Location>().index = new Vector3(0,0,0);
+    }
 
 
 }
