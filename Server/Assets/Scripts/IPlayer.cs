@@ -8,6 +8,8 @@ public interface IPlayer {
 	//private Time _startOfPenaltyTime; //this is the time the penalty started.
 	//private Time _penaltyLength; //this is how long the penalty lasts.
 
+    ITeam Team { get; set; }
+
 	void GiveInventoryBlock();
 
 	void DestroyInventoryBlock();

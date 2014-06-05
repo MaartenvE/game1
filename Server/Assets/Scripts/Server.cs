@@ -159,10 +159,10 @@ public class Server : MonoBehaviour{
 	/// Event handler, prints a console message when a player connects.
 	/// </summary>
 	/// <param name="player">Player.</param>
-	void OnPlayerConnected(NetworkPlayer player) {
-
+	void OnPlayerConnected(NetworkPlayer player)
+    {
 		Player newPlayer = new Player(_networkView, _network, new NetworkPlayerWrapper(player));
-		players.Add( newPlayer);
+		players.Add(newPlayer);
 
 		Debug.Log("Player connected from " + player.ipAddress);
 	}

@@ -2,8 +2,21 @@ using UnityEngine;
 using System.Collections;
 
 
-public class Player : IPlayer{
+public class Player : IPlayer
+{
+    private ITeam team;
+    public ITeam Team
+    {
+        get
+        {
+            return team;
+        }
 
+        set
+        {
+            team = value;
+        }
+    }
 
 	private INetworkView _networkView; //this is the networkview on which the player exists.
 	private INetwork _Network;
