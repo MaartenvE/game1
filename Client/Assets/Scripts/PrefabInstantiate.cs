@@ -8,7 +8,7 @@ public class PrefabInstantiate : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		this.transform.parent = GameObject.Find ("ImageTarget").transform as Transform;
+		this.transform.parent = GameObject.Find ("ImageTarget1").transform as Transform;
         this.tag = "block";
 	}
 	
