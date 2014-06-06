@@ -31,10 +31,12 @@ public class Server : MonoBehaviour{
     {
 		GameObject prefab = Resources.Load("TestCube") as GameObject;
 		GameObject block = _network.Instantiate(prefab, new Vector3(0,0,0), prefab.transform.rotation, 1) as GameObject;
-        initializeCurrentStructure();
-        networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor());
+
+		initializeCurrentStructure ();
 		Vector3 color = new Vector3 (block.renderer.material.color.r, block.renderer.material.color.b, block.renderer.material.color.g);
 		_currentStructure.updateCorrectness (block.GetComponent<Location> ().index, color);
+
+		networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor());
     }
 
 	/// <summary>
@@ -154,7 +156,7 @@ public class Server : MonoBehaviour{
 
 	public void initializeCurrentStructure(){
 		//dummy code
-		_currentStructure = new CurrentStructure (10, new Vector3[10, 10, 10]);
+		_currentStructure = new CurrentStructure (2, new Vector3[2, 2, 2]);
 	}
 
 	/// <summary>
