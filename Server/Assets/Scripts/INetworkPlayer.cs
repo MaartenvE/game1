@@ -5,5 +5,5 @@ public interface INetworkPlayer {
 
     NetworkPlayer getNetworkPlayer();
 
-    string toString();
+    string ToString();
 }

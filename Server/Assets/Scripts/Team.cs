@@ -2,7 +2,7 @@
 
 public class Team : ITeam
 {
-    private static int nextId = 0;
+    private static int nextId = 1;
 
     private int id;
     public int ID

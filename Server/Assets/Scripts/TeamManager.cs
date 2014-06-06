@@ -16,6 +16,13 @@ public class TeamManager : ITeamManager
     }
 
     private ITeam[] teams;
+    public IEnumerable<ITeam> Teams
+    {
+        get
+        {
+            return teams;
+        }
+    }
 
     public TeamManager(ITeam[] teams)
     {
@@ -48,5 +55,20 @@ public class TeamManager : ITeamManager
         {
             team.RemovePlayer(player);
         }
+    }
+
+    public IPlayer GetPlayer(INetworkPlayer networkPlayer)
+    {
+        foreach (ITeam team in teams)
+        {
+            foreach (IPlayer player in team.Players)
+            {
+                if (player.NetworkPlayer.Equals(networkPlayer))
+                {
+                    return player;
+                }
+            }
+        }
+        return null;
     }
 }

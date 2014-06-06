@@ -21,6 +21,13 @@ public class Player : IPlayer
 	private INetworkView _networkView; //this is the networkview on which the player exists.
 	private INetwork _Network;
 	private INetworkPlayer _NetworkPlayer; //this is the actual networkPlayer
+    public INetworkPlayer NetworkPlayer
+    {
+        get
+        {
+            return _NetworkPlayer;
+        }
+    }
 
 	private IInstantiatedBlock _Finger;
 	//private IBlock _InventoryBlock; //this is the currently allocated block the player has.

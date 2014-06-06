@@ -9,6 +9,7 @@ public interface IPlayer {
 	//private Time _penaltyLength; //this is how long the penalty lasts.
 
     ITeam Team { get; set; }
+    INetworkPlayer NetworkPlayer { get; }
 
 	void GiveInventoryBlock();
 
