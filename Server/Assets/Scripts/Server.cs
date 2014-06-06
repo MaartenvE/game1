@@ -57,9 +57,9 @@ public class Server : MonoBehaviour{
         
 		GameObject sideBlock = _networkView.Find (NVI).gameObject();
 		
-		block.GetComponent<Location> ().index = sideBlock.GetComponent<Location> ().index + matrixLocation;
+		block.GetComponent<MatrixLocation> ().index = sideBlock.GetComponent<MatrixLocation> ().index + matrixLocation;
 
-		Debug.Log (block.GetComponent<Location> ().index);
+		Debug.Log (block.GetComponent<MatrixLocation> ().index);
 	}
 
 
