@@ -7,7 +7,7 @@ public class StartScreen : MonoBehaviour
     {
         if (GUI.Button(new Rect((Screen.width / 2) - 25 , (Screen.height /2) - 80, 100, 50), "Join Game"))
         {
-            Debug.Log("Join game button was clicked");
+            Application.LoadLevel(2);
         }
 
        if (GUI.Button(new Rect((Screen.width / 2) -25, (Screen.height / 2) -20, 100, 50), "Spectate"))  

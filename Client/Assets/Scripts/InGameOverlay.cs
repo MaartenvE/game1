@@ -57,6 +57,10 @@ public class InGameOverlay : MonoBehaviour
         drawProgressBar();
 
         // Own block in bottom right
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
     }
 
     private void drawTrashcanIcon()
