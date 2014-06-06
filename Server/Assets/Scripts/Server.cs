@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using AssemblyCSharp;
 
 /**
  * The server class handles instantiating the server and all client server interaction
@@ -11,8 +9,8 @@ public class Server : MonoBehaviour{
 	private INetwork _network;
 	private INetworkView _networkView;
 
-	private ArrayList players = new ArrayList ();
-
+    BumpMatcher bumpMatcher = new BumpMatcher();
+	
 	public BlockMatrix blockMatrix = new BlockMatrix();
 	public int port{
 		set { _port = value; }
@@ -31,6 +29,8 @@ public class Server : MonoBehaviour{
 		GameObject prefab = Resources.Load("TestCube") as GameObject;
 		GameObject block = _network.Instantiate(prefab, new Vector3(0,0,0), prefab.transform.rotation, 1) as GameObject;
 		networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor());
+
+        bumpMatcher.OnBumpMatch += (Bump bump1, Bump bump2) => Debug.Log ("Detected bump between players " + bump1.Sender + " and " + bump2.Sender);
     }
 
 	/// <summary>
@@ -61,10 +61,10 @@ public class Server : MonoBehaviour{
 		_networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, color);
 		
 		GameObject sideBlock = _networkView.Find (NVI).gameObject();
-		
-		block.GetComponent<Location> ().index = sideBlock.GetComponent<Location> ().index + matrixLocation;
-		
-		Debug.Log (block.GetComponent<Location> ().index);
+
+		block.GetComponent<MatrixLocation> ().index = sideBlock.GetComponent<MatrixLocation> ().index + matrixLocation;
+
+		Debug.Log (block.GetComponent<MatrixLocation> ().index);
 	}
 
 
@@ -132,7 +132,8 @@ public class Server : MonoBehaviour{
 	
 	[RPC] 
 	//Decide: magnetic or true heading. Is compas heading already contained in the attitude from gyro?
-	Block Tap(double networkTime, float compasHeading, Quaternion attitude){
+	Block Tap(float force, NetworkMessageInfo info){
+		bumpMatcher.Add(new Bump(info.timestamp, force, new NetworkPlayerWrapper(info.sender)));
 		return null;
 	}
 

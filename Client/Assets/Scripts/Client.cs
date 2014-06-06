@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 using AssemblyCSharp;
 
 
 public class Client : MonoBehaviour {
 
-	public string ip = "127.0.0.1";
-	public int port = 3825;
+	public string ip = "145.94.197.173";
+	public int port = 36963;
 
     private INetwork _network;
     private INetworkView _networkView;
@@ -24,12 +23,20 @@ public class Client : MonoBehaviour {
     }
 
 	public void Start (){
+        Input.compass.enabled = true;
 		ConnectToServer (ip, port);
 	}
 	
 	public NetworkConnectionError ConnectToServer(string ip, int port) 
     {
 	    return _network.Connect(ip, port);
+	}
+
+	void OnConnectedToServer() {
+		BumpDetectorLoader.Detector.OnBump +=
+			(bump) => Handheld.Vibrate();
+		BumpDetectorLoader.Detector.OnBump += 
+			(Bump bump) => networkView.RPC ("Tap", RPCMode.Server, bump.Force);
 	}
 
     public void OnGUI()
@@ -76,7 +83,14 @@ public class Client : MonoBehaviour {
 	}
 
 	[RPC]
-	public void RemoveBlock(NetworkViewID NVI){
+	Block Tap(float force)
+	{
+		return null;
+    }
+
+	public void RemoveBlock(NetworkViewID NVI)
+    {
+
 	}
 	[RPC]
 	public void MoveServerFinger(NetworkViewID networkViewID, Vector3 coords, Vector3 location, int visible){
@@ -88,6 +102,4 @@ public class Client : MonoBehaviour {
         GameObject block = _networkView.Find(NVI).gameObject();
         block.renderer.material.color = new Color(color.x, color.y, color.z);
     }
-
-
 }

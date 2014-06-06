@@ -1,20 +1,32 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class NetworkPlayerWrapper : INetworkPlayer {
+public class NetworkPlayerWrapper : INetworkPlayer
+{
 
-    NetworkPlayer wrappedPlayer;
+    private NetworkPlayer _wrappedPlayer;
 
-    public NetworkPlayerWrapper(NetworkPlayer player){
-        wrappedPlayer = player;
+    public NetworkPlayerWrapper(NetworkPlayer player)
+    {
+        _wrappedPlayer = player;
     }
 
-    public NetworkPlayer getNetworkPlayer(){
-        return wrappedPlayer;
+    public NetworkPlayer getNetworkPlayer()
+    {
+        return _wrappedPlayer;
     }
 
-    public string toString(){
-        return wrappedPlayer.ToString();
+    public override string ToString()
+    {
+        return _wrappedPlayer.ToString();
     }
-	
+
+    public override bool Equals(object obj)
+    {
+        INetworkPlayer p = obj as INetworkPlayer;
+        if (p != null)
+        {
+            return _wrappedPlayer.Equals(p.getNetworkPlayer());
+        }
+        return false;
+    }
 }
