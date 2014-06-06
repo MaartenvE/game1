@@ -81,7 +81,8 @@ public class TouchBehaviour : MonoBehaviour
 	//Start is called at start
 	public void Start(){
 		//give the clicker the correct clicking component
-		clicker = gameObject.GetComponent<ClickEventHandler> ();
+		clicker = GameObject.Find("Client").GetComponent<ClickEventHandler> ();
+        cubeFinger.transform.parent = GameObject.Find("ImageTarget").transform as Transform;
 	}
 
 
