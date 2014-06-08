@@ -33,7 +33,7 @@ public class ServerTest {
 
 	[Test]
 	public void TestStart(){
-		network.Setup(net => net.Instantiate(It.IsAny <UnityEngine.Object>(), It.IsAny <Vector3>(), It.IsAny<Quaternion> (), It.IsAny<int>())).Returns(Resources.Load("TestCube") as GameObject);
+		network.Setup(net => net.Instantiate(It.IsAny <UnityEngine.Object>(), It.IsAny <Vector3>(), It.IsAny<Quaternion> (), It.IsAny<int>())).Returns(Resources.Load("GameCube") as GameObject);
 		testServer.Start ();
 
 		Vector3 location = new Vector3 (0, 0, 0);
@@ -47,7 +47,7 @@ public class ServerTest {
 	 */
 	[Test]
 	public void TestColour(){
-		GameObject block = Resources.Load("TestCube") as GameObject;
+		GameObject block = Resources.Load("GameCube") as GameObject;
 
 		Vector3 color = new Vector3 ((float)0.12, (float)0.13, (float)0.14);
 
@@ -64,8 +64,8 @@ public class ServerTest {
 
 	[Test]
 	public void TestInstantiation(){
-		GameObject block = Resources.Load("TestCube") as GameObject;
-		GameObject sideBlock = Resources.Load("TestCube") as GameObject;
+		GameObject block = Resources.Load("GameCube") as GameObject;
+		GameObject sideBlock = Resources.Load("GameCube") as GameObject;
 
 		network.Setup(net => net.Instantiate(It.IsAny <UnityEngine.Object>(), It.IsAny <Vector3>(), It.IsAny<Quaternion> (), It.IsAny<int>())).Returns(block);
 
