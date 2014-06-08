@@ -52,7 +52,7 @@ public class ClientTest
         Assert.IsNull(GameObject.Find("TestCube"));
     }
 
-    [Test]
+    /*[Test]
     public void ColorBlockTest()
     {
         Vector3 color = new Vector3((float)0.12, (float)0.13, (float)0.14);
@@ -62,7 +62,7 @@ public class ClientTest
 
         _client.ColorBlock(block.networkView.viewID, color);
         Assert.AreEqual(block.renderer.sharedMaterial.color, new Color(color.x, color.y, color.z));
-    }
+    }*/
     
     [TearDown]
     public void CleanUp()

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using AssemblyCSharp;
 
 public class TouchBehaviour : MonoBehaviour 
 {
@@ -69,20 +68,23 @@ public class TouchBehaviour : MonoBehaviour
 	}
 
 	//places a square at the exact coordinates of the cubefinger
-	public void PlaceSquareAtFinger(Vector3 fingerPosition, Vector3 locationIndex, NetworkViewID networkViewID){
+	public void PlaceSquareAtFinger(Vector3 fingerPosition, Vector3 locationIndex, NetworkViewID networkViewID)
+    {
 		this._networkView.RPC ("PlaceBlock", RPCMode.Server, fingerPosition, locationIndex, networkViewID);
 	}
 
-	//calls to remove the current pickedobject to server (assumes it has a networkview)
-	public void RemovePickedObject(NetworkViewID networkViewID){
-		this._networkView.RPC ("RemoveBlock", RPCMode.Server, networkViewID);
-	}
+
+
+    void removeObject(GameObject obj)
+    {
+        obj.GetComponent<BlockBehaviour>().Remove();
+    }
 
 	//Start is called at start
 	public void Start(){
 		//give the clicker the correct clicking component
-		clicker = GameObject.Find("Client").GetComponent<ClickEventHandler> ();
-        cubeFinger.transform.parent = GameObject.Find("ImageTarget").transform as Transform;
+		clicker = gameObject.GetComponent<ClickEventHandler> ();
+        //cubeFinger.transform.parent = GameObject.Find("ImageTarget1").transform as Transform;
 	}
 
 
@@ -113,7 +115,7 @@ public class TouchBehaviour : MonoBehaviour
 			}
 			//if a remove action is given, remove the block pointed to by the raycast
 			if(clicker.DoubleClick() && cubeFinger.activeInHierarchy){
-				RemovePickedObject(pickedObject.networkView.viewID);
+                removeObject(pickedObject.gameObject);
 				cubeFinger.SetActive(false);
 			}
 

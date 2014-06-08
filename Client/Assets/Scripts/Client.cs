@@ -87,16 +87,4 @@ public class Client : MonoBehaviour {
 	{
 		return null;
     }
-
-	public void RemoveBlock(NetworkViewID NVI)
-    {
-
-	}
-
-    [RPC]
-    public void ColorBlock(NetworkViewID NVI, Vector3 color)
-    {
-        GameObject block = _networkView.Find(NVI).gameObject();
-        block.renderer.material.color = new Color(color.x, color.y, color.z);
-    }
 }

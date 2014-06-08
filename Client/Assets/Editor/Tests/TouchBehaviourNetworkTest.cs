@@ -26,12 +26,12 @@ public class TouchBehaviourNetworkTest {
         networkView.Verify(netV => netV.RPC("PlaceBlock", RPCMode.Server, new Vector3(0, 0, 0), new Vector3(0, 0, 0), gameObject.networkView.viewID));
     }
 
-    [Test]
+    /*[Test]
     public void RemovePickedObjectTest()
     {
         touchBehaviour.RemovePickedObject(gameObject.networkView.viewID);
         networkView.Verify(netV => netV.RPC("RemoveBlock", RPCMode.Server, gameObject.networkView.viewID));
         Assert.AreEqual(GameObject.FindGameObjectsWithTag("testObject").Length, 0);
-    }
+    }*/
 
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 /**
  * The server class handles instantiating the server and all client server interaction
@@ -26,10 +27,6 @@ public class Server : MonoBehaviour{
 
     public void Start()
     {
-		GameObject prefab = Resources.Load("TestCube") as GameObject;
-		GameObject block = _network.Instantiate(prefab, new Vector3(0,0,0), prefab.transform.rotation, 1) as GameObject;
-		networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor());
-
         bumpMatcher.OnBumpMatch += (Bump bump1, Bump bump2) => Debug.Log ("Detected bump between players " + bump1.Sender + " and " + bump2.Sender);
     }
 
@@ -45,37 +42,31 @@ public class Server : MonoBehaviour{
 	/// </summary>
 	/// <returns>The blockerror.</returns>
 	/// <param name="location">Location.</param>
-	[RPC]
-	public void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI){
+	/*[RPC]
+	public void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI, NetworkMessageInfo info)
+    {
+        IPlayer player = TeamLoader.TeamManager.GetPlayer(new NetworkPlayerWrapper(info.sender));
+
 		GameObject prefab = Resources.Load ("TestCube") as GameObject;
 
 		location = roundLocation (location);
 
-		GameObject block = _network.Instantiate (prefab, location, prefab.transform.rotation, 1) as GameObject;
-
-		_networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor ());
+		GameObject block = _network.Instantiate(prefab, location, prefab.transform.rotation, 1) as GameObject;
+        block.GetComponent<BlockBehaviour>().SetInfo(randomTarget(), randomColor());
         
 		GameObject sideBlock = _networkView.Find (NVI).gameObject();
 		
 		block.GetComponent<MatrixLocation> ().index = sideBlock.GetComponent<MatrixLocation> ().index + matrixLocation;
 
 		Debug.Log (block.GetComponent<MatrixLocation> ().index);
-	}
+	}*/
 
-
-
-	[RPC]
-	public void ColorBlock(NetworkViewID NVI, Vector3 color){
-            GameObject block = _networkView.Find(NVI).gameObject();
-            block.renderer.material.color = new Color(color.x, color.y, color.z);   
+    string randomTarget()
+    {
+        int rand = UnityEngine.Random.Range(0, 2);
+        string[] targets = { "ImageTarget1", "ImageTarget2" };
+        return targets[rand];
     }
-
-
-	[RPC]
-	public void RemoveBlock(NetworkViewID NVI){
-        Network.RemoveRPCs(NVI);
-		Network.Destroy (NVI);
-	}
 
 	//stubs
 	[RPC]
@@ -87,9 +78,9 @@ public class Server : MonoBehaviour{
 	void ThrowAwayBlock(){
 	}
 	
-	[RPC] 
-	//Decide: magnetic or true heading. Is compas heading already contained in the attitude from gyro?
-	Block Tap(float force, NetworkMessageInfo info){
+	[RPC]
+	Block Tap(float force, NetworkMessageInfo info)
+    {
 		bumpMatcher.Add(new Bump(info.timestamp, force, new NetworkPlayerWrapper(info.sender)));
 		return null;
 	}
@@ -100,7 +91,8 @@ public class Server : MonoBehaviour{
 	/// <returns>The roundedlocation.</returns>
 	/// <param name="location">Location.</param>
 	private Vector3 roundLocation(Vector3 location){
-		return new Vector3(Mathf.Round(location.x), Mathf.Round(location.y), Mathf.Round(location.z));
+        return new Vector3((float) Math.Round(location.x, 1), (float) Math.Round(location.y, 1), (float) Math.Round(location.z, 1));
+		//return new Vector3(Mathf.Round(location.x), Mathf.Round(location.y), Mathf.Round(location.z));
 	}
 
 	/// <summary>
@@ -108,9 +100,9 @@ public class Server : MonoBehaviour{
 	/// </summary>
 	/// <returns>The color (all values between 0 and 1).</returns>
 	private Vector3 randomColor(){
-		return new Vector3 ((float)(Random.Range (0, 1000) / 1000.0), 
-		                    (float)(Random.Range (0, 1000) / 1000.0), 
-		                    (float)(Random.Range (0, 1000) / 1000.0));
+		return new Vector3 ((float)(UnityEngine.Random.Range (0, 1000) / 1000.0), 
+		                    (float)(UnityEngine.Random.Range (0, 1000) / 1000.0), 
+		                    (float)(UnityEngine.Random.Range (0, 1000) / 1000.0));
 	}
 
 	/// <summary>

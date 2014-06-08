@@ -45,7 +45,7 @@ public class ServerTest {
 	/**
 	 *  Test rather the given colour is applied correctly.
 	 */
-	[Test]
+	/*[Test]
 	public void TestColour(){
 		GameObject block = Resources.Load("TestCube") as GameObject;
 
@@ -56,13 +56,13 @@ public class ServerTest {
 
 		testServer.ColorBlock (block.networkView.viewID, color);
 		Assert.AreEqual (block.renderer.sharedMaterial.color, new Color (color.x, color.y, color.z));
-	}
+	}*/
 
 	/**
 	 * Test rather the Server has made the (network) Instantiate call using the given location.
 	*/
 
-	[Test]
+	/*[Test]
 	public void TestInstantiation(){
 		GameObject block = Resources.Load("TestCube") as GameObject;
 		GameObject sideBlock = Resources.Load("TestCube") as GameObject;
@@ -83,7 +83,7 @@ public class ServerTest {
 
 		network.Verify (net => net.Instantiate (It.IsAny <UnityEngine.Object>(), location, block.transform.rotation, It.IsAny<int>()));
 
-	}
+	}*/
 
 
 }
