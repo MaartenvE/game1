@@ -15,7 +15,7 @@ public class TeamLoader : MonoBehaviour
     {
         teamManager = new TeamManager(new[] {
             new Team("Team 1", "ImageTarget1"),
-            new Team("Team 2", "ImageTarget2"),
+            new Team("Team 2", "ImageTarget2")
         });
 
         instantiateTeamObjects();
@@ -24,6 +24,17 @@ public class TeamLoader : MonoBehaviour
     void OnPlayerConnected(NetworkPlayer networkPlayer)
     {
         IPlayer player = new Player(new NetworkPlayerWrapper(networkPlayer));
+
+        if (teamManager == null)
+        {
+            Debug.LogError("TeamManager is null");
+        }
+
+        if (player == null)
+        {
+            Debug.LogError("Player is null");
+        }
+
         teamManager.AddPlayer(player);
         Debug.Log("Player assigned to " + player.Team.Name);
 

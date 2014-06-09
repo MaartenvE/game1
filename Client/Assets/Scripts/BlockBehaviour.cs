@@ -3,16 +3,16 @@ using System;
 
 public class BlockBehaviour : MonoBehaviour
 {
-	void Start ()
+
+    void Start()
     {
         this.tag = "block";
-	}
-	
-	void Update ()
+    }
+
+    public void Place(Vector3 direction)
     {
-        //Vector3 location = this.transform.position;
-        //this.transform.position = new Vector3((float) Math.Round(location.x, 1), (float) Math.Round(location.y, 1), (float) Math.Round(location.z, 1));	
-	}
+        networkView.RPC("PlaceNewBlock", RPCMode.Server, direction);
+    }
 
     public void Remove()
     {
@@ -25,6 +25,9 @@ public class BlockBehaviour : MonoBehaviour
         this.transform.parent = GameObject.Find(parent).transform as Transform;
         this.renderer.material.color = new Color(color.x, color.y, color.z);
     }
+
+    [RPC]
+    void PlaceNewBlock(Vector3 direction) { }
 
     [RPC]
     void RemoveBlock() { }

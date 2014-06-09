@@ -20,7 +20,7 @@ public class PlayerInfo : MonoBehaviour
 
         foreach (TeamInfo teamInfo in GameObject.Find("Teams").GetComponentsInChildren<TeamInfo>())
         {
-            if (teamInfo.ID == team)
+            if (teamInfo.IsMine())
             {
                 teamObject = teamInfo.gameObject;
                 break;
@@ -29,7 +29,7 @@ public class PlayerInfo : MonoBehaviour
 
         if (CubeFinger != null)
         {
-            CubeFinger.transform.parent = teamObject.transform;
+            CubeFinger.transform.parent = GameObject.Find(teamObject.GetComponent<TeamInfo>().ImageTarget).transform;
         }
     }
 }

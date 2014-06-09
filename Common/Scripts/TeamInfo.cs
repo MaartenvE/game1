@@ -28,10 +28,8 @@ public class TeamInfo : MonoBehaviour
         ID = id;
         Name = name;
         ImageTarget = imageTarget;
-        if (Network.isClient)
-        {
-            GameObject target = GameObject.Find(imageTarget) as GameObject;
-            target.transform.parent = gameObject.transform;
-        }
+
+        GameObject target = GameObject.Find(imageTarget) as GameObject;
+        target.transform.parent = gameObject.transform;
     }
 }
