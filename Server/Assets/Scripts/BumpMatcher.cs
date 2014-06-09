@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BumpMatcher
+public class BumpMatcher : IBumpMatcher
 {
 	const double BUMP_BACKLOG_TIME = 3.0;
 	const double MAX_BUMP_TIME = 0.1;
 
 	LinkedList<Bump> bumpHistory = new LinkedList<Bump>();
 
-	public delegate void BumpMatchHandler(Bump bump1, Bump bump2);
 	public event BumpMatchHandler OnBumpMatch;
 
 	public void Add(Bump newBump)

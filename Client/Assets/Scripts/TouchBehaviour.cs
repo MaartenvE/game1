@@ -103,7 +103,7 @@ public class TouchBehaviour : MonoBehaviour
             //retrieve the object that was hit
             pickedObject = hit.transform;
 
-            if (pickedObject.transform.parent.parent.GetComponent<TeamInfo>().IsMine())
+            if (pickedObject.transform.parent.parent.GetComponent<TeamInfoLoader>().TeamInfo.IsMine())
             {
                 IRaycastHit raycastHitWrapper = new RaycastHitWrapper();
                 raycastHitWrapper.SetNativeRaycastHit(hit);

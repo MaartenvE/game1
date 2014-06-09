@@ -13,12 +13,11 @@ public class Team : ITeam
         }
     }
 
-    private int size = 0;
     public int Size
     {
         get
         {
-            return size;
+            return players.Count;
         }
     }
 

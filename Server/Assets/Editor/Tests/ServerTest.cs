@@ -4,14 +4,36 @@ using NUnit.Framework;
 using Moq;
 
 [TestFixture]
-public class ServerTest {
+public class ServerTest
+{
+    private Server server;
+    private Mock<INetwork> network;
+
+    [SetUp]
+    public void SetupServer()
+    {
+        network = new Mock<INetwork>();
+        server = new Server(network.Object);
+    }
+
+    [Test]
+    public void TestLaunch()
+    {
+        int maxPlayers = 32;
+        int port = 12345;
+        bool useNAT = false;
+        server.Launch(maxPlayers, port, useNAT);
+        network.Verify(n => n.InitializeServer(maxPlayers, port, useNAT));
+    }
+}
+
+/*
+[TestFixture]
+public class _ServerTest {
 	private Server testServer;
 	private Mock<INetwork> network;
 	private Mock<INetworkView> networkView;
 
-	/*
-	 * Setup for the tests by creating the appropiate mocks and setting up the server
-	*/
 	[SetUp]
 	public void SetupServer(){
 		testServer = new Server ();
@@ -22,9 +44,6 @@ public class ServerTest {
 		testServer.LaunchServer ();
 	}
 
-	/**
-	 * Test rather the server has made an InitializeServer call
-	*/
 	[Test]
 	public void TestInitialization(){
 		network.Verify (net => net.InitializeServer(It.IsAny<int> (), It.IsAny<int> (), It.IsAny<bool>()));
@@ -41,11 +60,7 @@ public class ServerTest {
 		networkView.Verify( netV => netV.RPC ("ColorBlock", RPCMode.AllBuffered, It.IsAny<object[]>()));
 	}
 
-
-	/**
-	 *  Test rather the given colour is applied correctly.
-	 */
-	/*[Test]
+	[Test]
 	public void TestColour(){
 		GameObject block = Resources.Load("TestCube") as GameObject;
 
@@ -56,13 +71,9 @@ public class ServerTest {
 
 		testServer.ColorBlock (block.networkView.viewID, color);
 		Assert.AreEqual (block.renderer.sharedMaterial.color, new Color (color.x, color.y, color.z));
-	}*/
+	}
 
-	/**
-	 * Test rather the Server has made the (network) Instantiate call using the given location.
-	*/
-
-	/*[Test]
+	[Test]
 	public void TestInstantiation(){
 		GameObject block = Resources.Load("TestCube") as GameObject;
 		GameObject sideBlock = Resources.Load("TestCube") as GameObject;
@@ -83,7 +94,7 @@ public class ServerTest {
 
 		network.Verify (net => net.Instantiate (It.IsAny <UnityEngine.Object>(), location, block.transform.rotation, It.IsAny<int>()));
 
-	}*/
+	}
 
 
-}
+}*/

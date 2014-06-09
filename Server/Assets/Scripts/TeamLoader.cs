@@ -47,7 +47,7 @@ public class TeamLoader : MonoBehaviour
         foreach (ITeam team in teamManager.Teams)
         {
             GameObject teamObject = Network.Instantiate(prefab, Vector3.zero, prefab.transform.rotation, 1) as GameObject;
-            teamObject.GetComponent<TeamInfo>().SetInfo(team.ID, team.Name, team.ImageTarget);
+            teamObject.GetComponent<TeamInfoLoader>().TeamInfo.SetInfo(team.ID, team.Name, team.ImageTarget);
         }
     }
 }

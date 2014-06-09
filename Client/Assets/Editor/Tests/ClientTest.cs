@@ -6,6 +6,32 @@ using Moq;
 [TestFixture]
 public class ClientTest
 {
+    private Client client;
+    private Mock<INetwork> network;
+
+    [SetUp]
+    public void SetupClient()
+    {
+        network = new Mock<INetwork>();
+        client = new Client(network.Object);
+    }
+
+    [Test]
+    public void TestConnectToServer()
+    {
+        string ip = "1.2.3.4";
+        int port = 1234;
+        
+        client.ConnectToServer(ip, port);
+
+        network.Verify(n => n.Connect(ip, port));
+    }
+}
+
+/*
+[TestFixture]
+public class ClientTest
+{
 
     private Client _client;
     private Mock<INetwork> _network;
@@ -52,7 +78,7 @@ public class ClientTest
         Assert.IsNull(GameObject.Find("TestCube"));
     }
 
-    /*[Test]
+    [Test]
     public void ColorBlockTest()
     {
         Vector3 color = new Vector3((float)0.12, (float)0.13, (float)0.14);
@@ -62,7 +88,7 @@ public class ClientTest
 
         _client.ColorBlock(block.networkView.viewID, color);
         Assert.AreEqual(block.renderer.sharedMaterial.color, new Color(color.x, color.y, color.z));
-    }*/
+    }
     
     [TearDown]
     public void CleanUp()
@@ -75,3 +101,4 @@ public class ClientTest
     }
 
 }
+*/

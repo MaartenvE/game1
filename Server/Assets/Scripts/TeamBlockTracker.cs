@@ -8,7 +8,7 @@ public class TeamBlockTracker
     public TeamBlockTracker(GameObject parent, GameObject prefab)
     {
         this.prefab = prefab;
-        this.teamInfo = parent.GetComponent<TeamInfo>();
+        this.teamInfo = parent.GetComponent<TeamInfoLoader>().TeamInfo;
 
         instantiateGroundBlock(Color.red);
     }

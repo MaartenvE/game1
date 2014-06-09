@@ -7,10 +7,7 @@ public class TouchBehaviourLoader : MonoBehaviour {
 
     public void Start()
     {
-        INetworkView networkView = new NetworkViewWrapper();
-        NetworkView nativeNetworkView = this.GetComponent<NetworkView>();
-
-        networkView.SetNativeNetworkView(nativeNetworkView);
+        INetworkView networkView = new NetworkViewWrapper(gameObject.networkView);
         TouchBehaviour touchBehaviour = this.gameObject.AddComponent<TouchBehaviour>();
         touchBehaviour.cubeFinger = cubeFinger;
         touchBehaviour.networkView = networkView;
