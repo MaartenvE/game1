@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using NUnit.Framework;
 using Moq;
 
@@ -15,7 +15,7 @@ public class TouchBehaviourNetworkTest {
         networkView = new Mock<INetworkView>();
         touchBehaviour = new TouchBehaviour();
         touchBehaviour.networkView = networkView.Object;
-        gameObject = Resources.Load("TestCube") as GameObject;
+        gameObject = Resources.Load("GameCube") as GameObject;
         gameObject.tag = "testObject";
     }
 
@@ -34,4 +34,4 @@ public class TouchBehaviourNetworkTest {
         Assert.AreEqual(GameObject.FindGameObjectsWithTag("testObject").Length, 0);
     }*/
 
-}
+//}

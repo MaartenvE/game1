@@ -7,12 +7,12 @@ public class ClientLoader : MonoBehaviour
 
     public Client Client { get; private set; }
 
-	void Start ()
+    void Start()
     {
         Input.compass.enabled = true;
         Client = new Client(new NetworkWrapper());
         Client.ConnectToServer(IP, Port);
-	}
+    }
 
     [RPC]
     void Win(int teamId)

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CubeFingerBehaviour : MonoBehaviour
 {
+    public static bool DeleteMode = false;
+
     public bool IsMine = false;
     private float maxPickingDistance = 200000;// increase if needed, depending on your scene size
 
@@ -143,13 +145,13 @@ public class CubeFingerBehaviour : MonoBehaviour
                     moveFinger(transform, raycastHitWrapper);
                     show = true;
 
-                    if (clicker.SingleClick() && gameObject.activeInHierarchy)
+                    if (!DeleteMode && clicker.SingleClick() && gameObject.activeInHierarchy)
                     {
                         placeObject(pickedObject.gameObject, CalculateSide(pickedObject, hit.point));
                         show = false;
                     }
 
-                    else if (clicker.DoubleClick() && gameObject.activeInHierarchy)
+                    else if (DeleteMode && clicker.SingleClick() && gameObject.activeInHierarchy)
                     {
                         removeObject(pickedObject.gameObject);
                         show = false;

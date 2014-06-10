@@ -48,7 +48,7 @@ public class Server
 
     public void Start()
     {
-		GameObject prefab = Resources.Load("TestCube") as GameObject;
+		GameObject prefab = Resources.Load("GameCube") as GameObject;
 		GameObject block = _network.Instantiate(prefab, new Vector3(0,0,0), prefab.transform.rotation, 1) as GameObject;
 
 		initializeCurrentStructure ();
@@ -72,10 +72,14 @@ public class Server
 	/// <param name="location">Location.</param>
 	[RPC]
 	public void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI){
+<<<<<<< HEAD
 		Vector3 color = randomColor ();
 		PlaceColoredBlock (location, matrixLocation, NVI, color);
 		_currentStructure.updateCorrectness (matrixLocation, color);
 	}
+=======
+		GameObject prefab = Resources.Load ("GameCube") as GameObject;
+>>>>>>> GUIDesign
 
 	[RPC]
 	public void PlaceColoredBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI, Vector3 color){
