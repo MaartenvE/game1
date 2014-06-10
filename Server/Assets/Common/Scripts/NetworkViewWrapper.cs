@@ -30,6 +30,11 @@ public class NetworkViewWrapper : INetworkView
         wrappedObject.RPC(name, mode, args);
     }
 
+    public void RPC(string name, INetworkPlayer player, params object[] args)
+    {
+        wrappedObject.RPC(name, player.NetworkPlayer, args);
+    }
+
     public INetworkView Find(NetworkViewID viewId)
     {
         NetworkView networkView = NetworkView.Find(viewId);

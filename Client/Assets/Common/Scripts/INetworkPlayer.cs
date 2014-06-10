@@ -2,7 +2,7 @@
 
 public interface INetworkPlayer
 {
-    NetworkPlayer getNetworkPlayer();
+    NetworkPlayer NetworkPlayer { get; }
 
     string ToString();
 

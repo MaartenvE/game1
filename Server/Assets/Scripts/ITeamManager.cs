@@ -9,4 +9,5 @@ public interface ITeamManager
     void RemovePlayer(IPlayer player);
 
     IPlayer GetPlayer(INetworkPlayer networkPlayer);
+    ITeam GetTeam(int teamId);
 }

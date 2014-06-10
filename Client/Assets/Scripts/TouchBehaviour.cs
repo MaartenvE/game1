@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class TouchBehaviour : MonoBehaviour 
@@ -63,14 +63,16 @@ public class TouchBehaviour : MonoBehaviour
 
 		//transform the displacement from localobject to the new coords to which the movedObject should go
 		finger.transform.position = pickedObject.TransformPoint (displacement);
-		finger.GetComponent<MatrixLocation> ().index = pickedObject.GetComponent<MatrixLocation> ().index + displacement;
+		//update finger location on server
+		//networkView.RPC ("MoveServerFinger", RPCMode.Server, cubeFinger.networkView.viewID, pickedObject.TransformPoint (displacement), pickedObject.GetComponent<Location> ().index+displacement, 1);
+		finger.GetComponent<Location> ().index = pickedObject.GetComponent<Location> ().index + displacement;
 		
 	}
 
 	//places a square at the exact coordinates of the cubefinger
 	public void PlaceSquareAtFinger(Vector3 fingerPosition, Vector3 locationIndex, NetworkViewID networkViewID)
     {
-		this._networkView.RPC ("PlaceBlock", RPCMode.Server, fingerPosition, locationIndex, networkViewID);
+		//this._networkView.RPC ("PlaceBlock", RPCMode.Server, fingerPosition, locationIndex, networkViewID);
 	}
 
 
@@ -84,6 +86,40 @@ public class TouchBehaviour : MonoBehaviour
         obj.GetComponent<BlockBehaviour>().Remove();
     }
 
+	//instiates this finger as the own finger (i.e. the one to be used for block placement etc.)
+	[RPC]
+	public void InstantiatePersonalFinger(NetworkViewID networkViewID){
+		//make the finger the cubeFinger
+				cubeFinger = networkView.Find (networkViewID).gameObject.GameObject;
+
+	}
+	//instantiates as a finger (is also needed for personalfinger)
+	[RPC]
+	public void InstantiateFinger(NetworkViewID networkViewID, Vector3 color){
+		//make all fingers (including those of other players, ignore raycast)
+		GameObject finger = networkView.Find (networkViewID).gameObject.GameObject;
+		finger.layer = 2;
+	}
+
+	[RPC]
+	public void MoveClientFinger(NetworkViewID networkViewID, Vector3 coords, Vector3 location, int visible){
+		GameObject finger = _networkView.Find (networkViewID).gameObject.GameObject;
+
+		finger.transform.position = coords;
+		finger.GetComponent<Location>().index = location;
+		if (visible == 1) {
+			finger.renderer.enabled = true;
+		} else {
+			finger.renderer.enabled = false;
+		}
+	}
+
+	public void DisableFinger(){
+        cubeFinger.renderer.enabled = false;
+		//networkView.RPC ("MoveServerFinger", RPCMode.Server, cubeFinger.networkView.viewID, cubeFinger.transform.position, cubeFinger.GetComponent<Location>().index, 0);
+	}
+	//_networkView.RPC ("MoveClientFinger", RPCMode.OthersBuffered, networkViewID, coords, location);
+
 	//Start is called at start
 	public void Start(){
 		//give the clicker the correct clicking component
@@ -94,54 +130,47 @@ public class TouchBehaviour : MonoBehaviour
 	// Update is called once per frame
 	public void Update () 
 	{
-        //send a ray from the center of the screen to the object
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        RaycastHit hit = new RaycastHit();
-        //if the ray hits the object, then do stuff
-        if (Physics.Raycast(ray, out hit, maxPickingDistance))
-        {
-            //retrieve the object that was hit
-            pickedObject = hit.transform;
+		if (cubeFinger != null) {
+						//send a ray from the center of the screen to the object
+						Ray ray = Camera.main.ViewportPointToRay (new Vector3 (0.5f, 0.5f, 0f));
+						RaycastHit hit = new RaycastHit ();
+						//if the ray hits the object, then do stuff
+						if (Physics.Raycast (ray, out hit, maxPickingDistance)) { 
+								//retrieve the object that was hit
+								pickedObject = hit.transform;
 
-            if (pickedObject.transform.parent.parent.GetComponent<TeamInfoLoader>().TeamInfo.IsMine())
-            {
-                IRaycastHit raycastHitWrapper = new RaycastHitWrapper();
-                raycastHitWrapper.SetNativeRaycastHit(hit);
-                //move the finger to correct position and show it
-                MoveFingerToSide(cubeFinger.transform, raycastHitWrapper);
-                cubeFinger.renderer.enabled = true;
+                                if (pickedObject.transform.parent.parent.GetComponent<TeamInfoLoader>().TeamInfo.IsMine())
+                                {
 
-                //if a build action is given, place the block at the cubefinger location
-                if (clicker.SingleClick() && cubeFinger.activeInHierarchy)
-                {
-                    //PlaceSquareAtFinger(cubeFinger.transform.position, cubeFinger.GetComponent<MatrixLocation>().index, pickedObject.networkView.viewID);
-                    placeObject(pickedObject.gameObject, CalculateSide(pickedObject, hit.point));
-                    //disable cubefinger, so it is placed in it s shiny new good position on next update
-                    //cubeFinger.SetActive(false);
-                }
-                //if a remove action is given, remove the block pointed to by the raycast
-                if (clicker.DoubleClick() && cubeFinger.activeInHierarchy)
-                {
-                    removeObject(pickedObject.gameObject);
-                    //cubeFinger.SetActive(false);
-                }
-            }
+								    IRaycastHit raycastHitWrapper = new RaycastHitWrapper ();
+								    raycastHitWrapper.SetNativeRaycastHit (hit);
+								    //move the finger to correct position and show it
+								    MoveFingerToSide (cubeFinger.transform, raycastHitWrapper);
+								    cubeFinger.renderer.enabled = true;
 
-            else
-            {
-                //if the trace did not hit anything, there is no sense in having a cubefinger enabled
-                //cubeFinger.SetActive(false);
-                cubeFinger.renderer.enabled = false;
-                pickedObject = null;
-            }
+								    //if a build action is given, place the block at the cubefinger location
+								    if (clicker.SingleClick () && cubeFinger.activeInHierarchy) {
+										    placeObject(pickedObject.gameObject, CalculateSide(pickedObject, hit.point));
+										    //disable cubefinger, so it is placed in it s shiny new good position on next update
+										    DisableFinger();
+								    }
+								    //if a remove action is given, remove the block pointed to by the raycast
+								    if (clicker.DoubleClick () && cubeFinger.activeInHierarchy) {
+                                        removeObject(pickedObject.gameObject);
+										    DisableFinger ();
+								    }
 
-        }
-        else
-        {
-            //if the trace did not hit anything, there is no sense in having a cubefinger enabled
-            //cubeFinger.SetActive(false);
-            cubeFinger.renderer.enabled = false;
-            pickedObject = null;
-        }
+                                } else {
+								    //if the trace did not hit anything, there is no sense in having a cubefinger enabled
+								    DisableFinger ();
+								    pickedObject = null;
+						        }
+
+						} else {
+								//if the trace did not hit anything, there is no sense in having a cubefinger enabled
+								DisableFinger ();
+								pickedObject = null;
+						}
+				}
 	}
 }

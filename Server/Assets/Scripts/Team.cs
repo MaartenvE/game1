@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public class Team : ITeam
 {
@@ -39,7 +40,22 @@ public class Team : ITeam
         }
     }
 
-    public float Progress { get; set; }
+    private BlockTracker tracker;
+    public BlockTracker Tracker
+    {
+        get
+        {
+            return tracker;
+        }
+    }
+
+    public float Progress
+    {
+        get
+        {
+            return tracker.Progress;
+        }
+    }
 
     private LinkedList<IPlayer> players;
     public IEnumerable<IPlayer> Players
@@ -52,10 +68,17 @@ public class Team : ITeam
 
     public Team(string name, string imageTarget)
     {
+        UnityEngine.Color?[,,] goalStructure = new UnityEngine.Color?[3, 3, 3];
+        goalStructure[1, 1, 1] = UnityEngine.Color.red;
+        goalStructure[1, 2, 1] = UnityEngine.Color.green;
+
         this.id = nextId++;
         this.name = name;
         this.imageTarget = imageTarget;
-        this.Progress = 0.0f;
+        this.tracker = new BlockTracker(this, new NetworkWrapper(), 
+            new Structure<UnityEngine.Color?>(goalStructure)
+        );
+        this.tracker.OnCompletion += () => UnityEngine.Debug.LogError("Progress complete!");
         this.players = new LinkedList<IPlayer>();
     }
 

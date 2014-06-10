@@ -30,15 +30,28 @@ public class TeamLoader : MonoBehaviour
             Debug.LogError("TeamManager is null");
         }
 
-        if (player == null)
-        {
-            Debug.LogError("Player is null");
-        }
-
         teamManager.AddPlayer(player);
         Debug.Log("Player assigned to " + player.Team.Name);
 
         GameObject.Find("Player").GetComponent<PlayerInfo>().SendInfo(player);
+
+        instantiateCubeFinger(player);
+    }
+
+    void OnPlayerDisconnected(NetworkPlayer networkPlayer)
+    {
+        IPlayer player = TeamLoader.TeamManager.GetPlayer(new NetworkPlayerWrapper(networkPlayer));
+
+        if (player == null) Debug.LogError("Player = null");
+        else if (player.CubeFinger == null) Debug.LogError("CubeFinger = null");
+        else if (player.CubeFinger.networkView == null) Debug.LogError("NetworkView = null");
+        else if (player.CubeFinger.networkView.viewID == null) Debug.LogError("ViewID = null");
+
+        Network.RemoveRPCs(player.CubeFinger.networkView.viewID);
+        Network.Destroy(player.CubeFinger.networkView.viewID);
+
+        teamManager.RemovePlayer(player);
+        Debug.Log("Player " + networkPlayer + " left.");
     }
 
     void instantiateTeamObjects()
@@ -49,5 +62,16 @@ public class TeamLoader : MonoBehaviour
             GameObject teamObject = Network.Instantiate(prefab, Vector3.zero, prefab.transform.rotation, 1) as GameObject;
             teamObject.GetComponent<TeamInfoLoader>().TeamInfo.SetInfo(team.ID, team.Name, team.ImageTarget);
         }
+    }
+
+    void instantiateCubeFinger(IPlayer player)
+    {
+        GameObject prefab = Resources.Load("CubeFinger") as GameObject;
+        GameObject cubeFinger = Network.Instantiate(prefab, prefab.transform.position, prefab.transform.rotation, 1) as GameObject;
+        CubeFingerBehaviour behaviour = cubeFinger.GetComponent<CubeFingerBehaviour>();
+        behaviour.SetParent(player.Team.ImageTarget);
+        behaviour.SetPlayer(player);
+
+        player.CubeFinger = behaviour;
     }
 }

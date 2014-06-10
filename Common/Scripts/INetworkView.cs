@@ -6,5 +6,7 @@ public interface INetworkView
     NetworkViewID networkViewId { get; }
 
     void RPC(string name, RPCMode mode, params object[] args);
+    void RPC(string name, INetworkPlayer player, params object[] args);
+
     INetworkView Find(NetworkViewID viewId);
 }

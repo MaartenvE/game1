@@ -71,4 +71,16 @@ public class TeamManager : ITeamManager
         }
         return null;
     }
+
+    public ITeam GetTeam(int teamId)
+    {
+        foreach (ITeam team in teams)
+        {
+            if (team.ID == teamId)
+            {
+                return team;
+            }
+        }
+        return null;
+    }
 }

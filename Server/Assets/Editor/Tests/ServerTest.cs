@@ -42,6 +42,7 @@ public class _ServerTest {
 		testServer.network = network.Object;
 		testServer.networkView = networkView.Object;
 		testServer.LaunchServer ();
+        testServer.initializeCurrentStructure();
 	}
 
 	[Test]
@@ -57,7 +58,7 @@ public class _ServerTest {
 
 		Vector3 location = new Vector3 (0, 0, 0);
 		network.Verify (net => net.Instantiate (It.IsAny <UnityEngine.Object>(), location, It.IsAny <Quaternion>(), It.IsAny<int> ()));
-		networkView.Verify( netV => netV.RPC ("ColorBlock", RPCMode.AllBuffered, It.IsAny<object[]>()));
+		networkView.Verify( netV => netV.RPC ("ColorBlock", RPCMode.AllBuffered, It.IsAny<object[]>()),Times.Once());
 	}
 
 	[Test]
@@ -95,6 +96,13 @@ public class _ServerTest {
 		network.Verify (net => net.Instantiate (It.IsAny <UnityEngine.Object>(), location, block.transform.rotation, It.IsAny<int>()));
 
 	}
+
+    [TearDown]
+    public void CleanUp()
+    {
+        GameObject block = Resources.Load("TestCube") as GameObject;
+        block.GetComponent<Location>().index = new Vector3(0,0,0);
+    }
 
 
 }*/

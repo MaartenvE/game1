@@ -3,6 +3,13 @@
 public class GameObjectWrapper : IGameObject
 {
     private GameObject wrappedObject;
+    public GameObject GameObject
+    {
+        get
+        {
+            return wrappedObject;
+        }
+    }
 
     public Transform transform
     {

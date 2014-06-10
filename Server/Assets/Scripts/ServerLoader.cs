@@ -11,6 +11,7 @@ public class ServerLoader : MonoBehaviour
 
 	void Start ()
     {
+
         Server server = new Server(new NetworkWrapper());
         server.Launch(MaxPlayers, Port, UseNAT);
 	}

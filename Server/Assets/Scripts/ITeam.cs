@@ -7,7 +7,9 @@ public interface ITeam
     string Name { get; }
     string ImageTarget { get; }
 
-    float Progress { get; set; }
+    BlockTracker Tracker { get; }
+
+    float Progress { get; }
 
     IEnumerable<IPlayer> Players { get; }
 

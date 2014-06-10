@@ -10,7 +10,7 @@ public class PlayerInfo : MonoBehaviour
 
     public void SendInfo(IPlayer player)
     {
-        networkView.RPC("SetPlayerInfo", player.NetworkPlayer.getNetworkPlayer(), player.Team.ID);
+        networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, player.Team.ID);
     }
 
     [RPC]
