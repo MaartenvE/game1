@@ -1,0 +1,1 @@
+these files are to be imported into the project as assets/packages (mostly for AR and qr code functionality)

@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class ConnectScreen : MonoBehaviour {
-    private string _ip = "127.0.0.1";
-    private string _port = "3825";
+    private string _ip = QRScanner.adressText;
+    private string _port = ""+QRScanner.portNum;
 
     private Rect windowRect = new Rect(20, 20, 120, 50);
 

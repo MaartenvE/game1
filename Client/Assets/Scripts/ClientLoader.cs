@@ -3,11 +3,14 @@ using System.Collections;
 
 public class ClientLoader : MonoBehaviour {
 
-    public string ip;
-    public int port;
+    
+    
 
 	void Start () {
-        INetwork networkWrapper = new NetworkWrapper();
+		string ip = QRScanner.adressText;
+		int port = QRScanner.portNum;
+        
+		INetwork networkWrapper = new NetworkWrapper();
         INetworkView networkViewWrapper = new NetworkViewWrapper();
 
         NetworkView nativeNetworkView = gameObject.GetComponent<NetworkView>();
