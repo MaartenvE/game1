@@ -36,7 +36,20 @@ public class HalfBlockTest
         halfBlock.wrappedObject = first;
         first.wrappedObject = second;
 
-        Color result = first.CalculateUnityColor();
+        Color result = halfBlock.CalculateUnityColor();
+        Assert.AreEqual(expectedColor, result);
+    }
+
+    [Test, TestCaseSource("Colors")]
+    public void CombineHalfBlockTest(Color firstColor, Color secondColor, Color expectedColor)
+    {
+
+        HalfBlock halfBlock = new HalfBlock(new HalfBlockColor(firstColor));
+        HalfBlock second = new HalfBlock(new HalfBlockColor(secondColor));
+
+        halfBlock.CombineHalfBlock(second);
+
+        Color result = halfBlock.CalculateUnityColor();
         Assert.AreEqual(expectedColor, result);
     }
 }

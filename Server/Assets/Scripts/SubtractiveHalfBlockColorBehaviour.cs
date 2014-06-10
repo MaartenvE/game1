@@ -39,4 +39,11 @@ public class SubtractiveHalfBlockColorBehaviour : IHalfBlockColorBehaviour {
 		_subtractiveColorMap.TryGetValue (key, out _result);
 		return _result;
 	}
+
+    public static AbstractHalfBlockColor RandomPrimaryColor()
+    {
+        Color[] primaryColors = {ColorModel.RED, ColorModel.YELLOW, ColorModel.BLUE};
+        int index = UnityEngine.Random.Range(0, 3);
+        return new HalfBlockColor(primaryColors[index]);
+    }
 }
