@@ -73,9 +73,11 @@ public class InGameOverlay : MonoBehaviour
         drawProgressBar();
 
         // Own block in bottom right
+
+		//back button quits game
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
-			Application.Quit();
+			Application.LoadLevel(1);
 		}
     }
 

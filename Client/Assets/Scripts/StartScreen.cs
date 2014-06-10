@@ -12,18 +12,20 @@ public class StartScreen : MonoBehaviour
 		GUI.Box( new Rect ( 0, 0, Screen.width, Screen.height), "Building Blocks", _currentStyle);
 
 		GUI.backgroundColor = new Color(0f, 0f, 255f);
-        if (GUI.Button(new Rect((Screen.width / 2) - 75	, (Screen.height /2)- 35, 150, 50), "Play The Game"))
+        if (GUI.Button(new Rect((Screen.width / 2) - 150, (Screen.height /2)- 85, 300, 100), "Play The Game"))
         {
             Application.LoadLevel(2);
         }
 
-       if (GUI.Button(new Rect((Screen.width / 2) - 75, (Screen.height / 2) +35, 150, 50), "Spectate"))  
+       if (GUI.Button(new Rect((Screen.width / 2) - 150, (Screen.height / 2) +85, 300, 100), "Spectate" ))  
         {
 			Application.LoadLevel(3);
         }  
 
 		GUI.Label(new Rect(Screen.width - 80 , Screen.height- 20, 80, 20), "Team Cubed");
+
     }
+
 
 	private void InitStyles()
 	{
