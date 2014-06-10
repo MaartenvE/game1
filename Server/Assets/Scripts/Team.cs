@@ -1,4 +1,5 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 public class Team : ITeam
@@ -68,19 +69,16 @@ public class Team : ITeam
 
     public IGameObject TeamObject { get; set; }
 
-    public Team(string name, string imageTarget)
+    public Team(string name, string imageTarget, Color?[,,] goalStructure)
     {
-        UnityEngine.Color?[,,] goalStructure = new UnityEngine.Color?[3, 3, 3];
-        goalStructure[1, 1, 1] = UnityEngine.Color.red;
-        goalStructure[1, 2, 1] = UnityEngine.Color.green;
-
         this.id = nextId++;
         this.name = name;
         this.imageTarget = imageTarget;
-        this.tracker = new BlockTracker(this, new NetworkWrapper(), 
-            new Structure<UnityEngine.Color?>(goalStructure)
-        );
-        this.tracker.OnCompletion += () => ServerLoader.Server.Win(this);
+        this.tracker = new BlockTracker(this, new NetworkWrapper(), new Structure<Color?>(goalStructure));
+        this.tracker.OnProgressChange += 
+            (float progress) => TeamObject.GetComponent<TeamInfoLoader>().TeamInfo.SetProgress(progress);
+        this.tracker.OnCompletion += 
+            () => ServerLoader.Server.Win(this);
         this.players = new LinkedList<IPlayer>();
     }
 

@@ -3,7 +3,9 @@
 public class BlockTracker
 {
     public delegate void CompleteHandler();
+    public delegate void ProgressHandler(float progress);
     public event CompleteHandler OnCompletion;
+    public event ProgressHandler OnProgressChange;
 
     private ITeam team;
     private INetwork network;
@@ -71,7 +73,6 @@ public class BlockTracker
     {
         Vector3 normalized = location / prefab.transform.localScale.x;
         normalized.x += goalStructure.GetLength(0) / 2;
-        normalized.y += goalStructure.GetLength(1) / 2;
         normalized.z += goalStructure.GetLength(2) / 2;
 
         bool correct = isCorrect(normalized, color);
@@ -114,7 +115,12 @@ public class BlockTracker
             correctness += correct ? 1 : -1;
             correctStructure[(int)location.x, (int)location.y, (int)location.z] = correct;
 
-            if (correctness == maxCorrectness && OnCompletion != null)
+            if (OnProgressChange != null)
+            {
+                OnProgressChange(Progress);
+            }
+
+            if (Progress == 1 && OnCompletion != null)
             {
                 OnCompletion();
             }

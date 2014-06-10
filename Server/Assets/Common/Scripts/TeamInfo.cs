@@ -31,6 +31,8 @@ public class TeamInfo
         }
     }
 
+    public float Progress { get; private set; }
+
     public TeamInfo(IGameObject gameObject)
     {
         this.gameObject = gameObject;
@@ -48,6 +50,11 @@ public class TeamInfo
     public void SetInfo(int id, string name, string imageTarget)
     {
         gameObject.networkView.RPC("SetTeamInfo", RPCMode.AllBuffered, id, name, imageTarget);
+    }
+
+    public void SetProgress(float progress)
+    {
+        gameObject.networkView.RPC("SetTeamProgress", RPCMode.AllBuffered, progress);
     }
 
 
@@ -68,6 +75,11 @@ public class TeamInfo
         }
 
         return false;
+    }
+
+    public void RPC_SetTeamProgress(float progress)
+    {
+        this.Progress = progress;
     }
 
     public void RPC_SetTeamInfo(int id, string name, string imageTarget)

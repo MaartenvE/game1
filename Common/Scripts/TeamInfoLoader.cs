@@ -22,6 +22,12 @@ public class TeamInfoLoader : MonoBehaviour
     }
 
     [RPC]
+    void SetTeamProgress(float progress)
+    {
+        teamInfo.RPC_SetTeamProgress(progress);
+    }
+
+    [RPC]
     void SetTeamInfo(int id, string name, string imageTarget)
     {
         teamInfo.RPC_SetTeamInfo(id, name, imageTarget);

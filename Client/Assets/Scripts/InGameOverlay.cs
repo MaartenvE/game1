@@ -16,8 +16,6 @@ public class InGameOverlay : MonoBehaviour
     private const float PROGRESSBAR_HEIGHT  = .03f;
     private const float PROGRESSBAR_PADDING = .01f;
 
-    private float progress = 0.4f;
-
     public Texture2D TrashcanIcon;
     public Texture2D ConstructionIcon;
     public Texture2D HouseIcon;
@@ -111,7 +109,7 @@ public class InGameOverlay : MonoBehaviour
 
             // Draw shadow
             GUI.color = Color.gray;
-            GUI.DrawTexture(new Rect(x, padding, size * 1.005f, size * 1.005f), view.Icon);
+            GUI.DrawTexture(new Rect(x, padding, size + 1, size + 1), view.Icon);
 
             // Draw button
             GUI.color = Color.white;
@@ -143,6 +141,17 @@ public class InGameOverlay : MonoBehaviour
 
     private void drawProgressBar()
     {
+        float progress = 0.0f;
+        int team = GameObject.Find("Player").GetComponent<PlayerInfo>().Team;
+        TeamInfoLoader[] teamLoaders = GameObject.Find("Teams").GetComponentsInChildren<TeamInfoLoader>();
+        foreach (TeamInfoLoader loader in teamLoaders)
+        {
+            if (loader.TeamInfo.ID == team)
+            {
+                progress = loader.TeamInfo.Progress;
+            }
+        }
+
         // Draw progress bar background
         GUI.color = Color.gray;
         GUI.Box(new Rect(
@@ -153,7 +162,7 @@ public class InGameOverlay : MonoBehaviour
             ), GUIContent.none, progressStyle);
 
         // Draw progress
-        GUI.color = Color.yellow;
+        GUI.color = Color.Lerp(Color.red, Color.green, progress);
         GUI.Box(new Rect(
                 (1f - PROGRESSBAR_WIDTH * progress - PROGRESSBAR_PADDING) * Screen.width, 
                 Screen.width * PROGRESSBAR_PADDING, 
