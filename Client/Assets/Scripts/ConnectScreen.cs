@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class ConnectScreen : MonoBehaviour {
-    private string _ip = "127.0.0.1";
-    private string _port = "3825";
+    private string _ip = QRScanner.adressText;
+    private string _port = ""+QRScanner.portNum;
 
     private Rect windowRect = new Rect(20, 20, 120, 50);
 
@@ -16,8 +16,8 @@ public class ConnectScreen : MonoBehaviour {
         if (GUI.Button(new Rect(0, 100, 100, 60), "Connect"))
             if (true){
                 Application.LoadLevel(1);
-                client.port = int.Parse(_port);
-                client.ip = _ip;
+                //Client.port = int.Parse(_port);
+                //Client.ip = _ip;
             } 
 		//still doesn't create a pop up
             else
