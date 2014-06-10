@@ -27,7 +27,7 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 
 		isFrameFormatSet = CameraDevice.Instance.SetFrameFormat(Image.PIXEL_FORMAT.GRAYSCALE, true);
 		
-		//InvokeRepeating("Autofocus", 1f, 2f);
+		InvokeRepeating("Autofocus", 1f, 2f);
 	}
 	
 	void Autofocus () {
@@ -71,12 +71,13 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 			}*/
 
 			//if either is null, the tempText was not of the proper format (false qrcode found)
-			if(port != null && adress != null){
+			if((port != null && port != "")){
+				if(adress != null && port != ""){
+					adressText = adress;
+					portNum = int.Parse(port);
 
-				adressText = adress;
-				portNum = int.Parse(port);
-
-				loadGame ();
+					loadGame ();
+				}
 			}
 
 
