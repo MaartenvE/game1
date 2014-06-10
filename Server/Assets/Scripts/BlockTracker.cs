@@ -52,9 +52,6 @@ public class BlockTracker
         block.GetComponent<GroundBlockBehaviour>().SetInfo(team.ImageTarget, color);
 
         checkBlock(location, color);
-
-        // todo: Why the fuck is CurrentStructure implemented using Vector3 instead of Color?
-        //team.CurrentStructure.updateCorrectness(location, new Vector3(color.r, color.g, color.b));
     }
 
     public void PlaceBlock(IPlayer player, Vector3 location, Color color)

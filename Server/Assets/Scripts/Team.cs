@@ -66,6 +66,8 @@ public class Team : ITeam
         }
     }
 
+    public IGameObject TeamObject { get; set; }
+
     public Team(string name, string imageTarget)
     {
         UnityEngine.Color?[,,] goalStructure = new UnityEngine.Color?[3, 3, 3];
@@ -78,7 +80,7 @@ public class Team : ITeam
         this.tracker = new BlockTracker(this, new NetworkWrapper(), 
             new Structure<UnityEngine.Color?>(goalStructure)
         );
-        this.tracker.OnCompletion += () => UnityEngine.Debug.LogError("Progress complete!");
+        this.tracker.OnCompletion += () => ServerLoader.Server.Win(this);
         this.players = new LinkedList<IPlayer>();
     }
 

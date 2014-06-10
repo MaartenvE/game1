@@ -17,15 +17,9 @@ public class GroundBlockBehaviour : MonoBehaviour
     [RPC]
     void PlaceNewBlock(Vector3 direction, NetworkMessageInfo info)
     {
+        Vector3 position = this.transform.position + (direction * transform.localScale.x);
+
         IPlayer player = TeamLoader.TeamManager.GetPlayer(new NetworkPlayerWrapper(info.sender));
-        //GameObject target = this.transform.parent.gameObject;
-        //GameObject team = target.transform.parent.gameObject;
-        //TeamBlockTracker tracker = team.GetComponent<TeamBlockTrackerLoader>().Tracker;
-
-        Vector3 position = this.transform.position + (direction * 0.2f);
-
-        //tracker.PlaceBlock(player, position, Color.green);
-
         player.Team.Tracker.PlaceBlock(player, position, Color.green);
     }
 

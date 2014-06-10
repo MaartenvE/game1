@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class Client
 {
@@ -13,4 +14,22 @@ public class Client
     {
 	    return network.Connect(ip, port);
 	}
+
+    public void RPC_Win(int teamId)
+    {
+        int myTeam = GameObject.Find("Player").GetComponent<PlayerInfo>().Team;
+        if (teamId == myTeam)
+        {
+            Debug.LogError("You won!");
+        }
+
+        else
+        {
+            Debug.LogError("You lost :(");
+        }
+
+        System.Threading.Thread.Sleep(5000);
+
+        Application.LoadLevel("Client");
+    }
 }

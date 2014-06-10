@@ -14,7 +14,8 @@ public class CubeFingerBehaviour : MonoBehaviour
     private ClickEventHandler clicker;
 
     //this is the currently selected object (i.e. hit by a raytrace from the center of the screen into the scene)
-    private static Transform pickedObject = null;
+    private Transform pickedObject = null;
+    private Vector3 previousLocation = Vector3.zero;
 
     //calculate which side of the cube (i.e. localObject) the RayCastHit hits
     private Vector3 CalculateSide(Transform localObject, Vector3 hit)
@@ -61,7 +62,11 @@ public class CubeFingerBehaviour : MonoBehaviour
 
         transform.position = pickedObject.TransformPoint(displacement);
 
-        networkView.RPC("MoveFinger", RPCMode.Server, transform.localPosition);
+        if (transform.localPosition != previousLocation)
+        {
+            networkView.RPC("MoveFinger", RPCMode.Server, transform.localPosition);
+            previousLocation = transform.localPosition;
+        }
     }
 
     void showFinger(bool show)

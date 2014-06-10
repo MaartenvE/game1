@@ -25,4 +25,8 @@ public interface INetwork {
     NetworkConnectionError Connect(string ip, int port);
 
     void Disconnect();
+
+    void SetSendingEnabled(int group, bool enabled);
+
+    bool isMessageQueueRunning { get; set; }
 }

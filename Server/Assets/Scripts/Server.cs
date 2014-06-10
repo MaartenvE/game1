@@ -1,15 +1,27 @@
-﻿
+﻿using UnityEngine;
+
 public class Server
 {
     private INetwork network;
+    private INetworkView networkView;
 
-    public Server(INetwork network)
+    public Server(INetwork network, INetworkView networkView)
     {
         this.network = network;
+        this.networkView = networkView;
     }
 
 	public void Launch(int maxPlayers, int port, bool useNAT) {
 		network.InitializeServer(maxPlayers, port, useNAT);
+    }
+
+    public void Win(ITeam team)
+    {
+        networkView.RPC("Win", RPCMode.OthersBuffered, team.ID);
+        network.SetSendingEnabled(1, false);
+        network.isMessageQueueRunning = false;
+
+        Application.LoadLevel("Server");
     }
 }
 

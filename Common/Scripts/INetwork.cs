@@ -21,4 +21,12 @@ public interface INetwork {
 	/// <param name="portnumber">Portnumber.</param>
 	/// <param name="NATPunchthrough">If set to <c>true</c> NAT punchthrough.</param>
 	NetworkConnectionError InitializeServer(int maxConnection, int portnumber, bool NATPunchthrough);
+
+    NetworkConnectionError Connect(string ip, int port);
+
+    void Disconnect();
+
+    void SetSendingEnabled(int group, bool enabled);
+
+    bool isMessageQueueRunning { get; set; }
 }

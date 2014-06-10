@@ -8,12 +8,14 @@ public class ServerTest
 {
     private Server server;
     private Mock<INetwork> network;
+    private Mock<INetworkView> networkView;
 
     [SetUp]
     public void SetupServer()
     {
         network = new Mock<INetwork>();
-        server = new Server(network.Object);
+        networkView = new Mock<INetworkView>();
+        server = new Server(network.Object, networkView.Object);
     }
 
     [Test]

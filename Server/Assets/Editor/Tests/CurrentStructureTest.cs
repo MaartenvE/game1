@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using System.Collections;
 using NUnit.Framework;
 using Moq;
@@ -25,7 +25,7 @@ public class CurrentStructureTest {
 
 
 
-
+/*
 	[Test, TestCaseSource("CurrentStructureCases")]
 	public void SizeTest(int id, int MAXSIZE, Vector3[,,] data, float correctness){
 		//setup test environment
@@ -74,3 +74,4 @@ public class CurrentStructureTest {
 		, new object[] {3, 1, new Vector3[1, 1, 1] {{{new Vector3 (0.5f, 0.3f, 0.1f)}}}, 0f}
 	};
 }
+*/

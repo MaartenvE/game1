@@ -12,6 +12,7 @@ public interface ITeam
     float Progress { get; }
 
     IEnumerable<IPlayer> Players { get; }
+    IGameObject TeamObject { get; set; }
 
     void AddPlayer(IPlayer player);
     void RemovePlayer(IPlayer player);

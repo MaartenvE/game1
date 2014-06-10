@@ -25,9 +25,9 @@ public class TeamLoader : MonoBehaviour
     {
         IPlayer player = new Player(new NetworkPlayerWrapper(networkPlayer));
 
-        if (teamManager == null)
+        foreach (ITeam team in teamManager.Teams)
         {
-            Debug.LogError("TeamManager is null");
+            Debug.Log(team.Name + " size: " + team.Size);
         }
 
         teamManager.AddPlayer(player);
@@ -41,11 +41,6 @@ public class TeamLoader : MonoBehaviour
     void OnPlayerDisconnected(NetworkPlayer networkPlayer)
     {
         IPlayer player = TeamLoader.TeamManager.GetPlayer(new NetworkPlayerWrapper(networkPlayer));
-
-        if (player == null) Debug.LogError("Player = null");
-        else if (player.CubeFinger == null) Debug.LogError("CubeFinger = null");
-        else if (player.CubeFinger.networkView == null) Debug.LogError("NetworkView = null");
-        else if (player.CubeFinger.networkView.viewID == null) Debug.LogError("ViewID = null");
 
         Network.RemoveRPCs(player.CubeFinger.networkView.viewID);
         Network.Destroy(player.CubeFinger.networkView.viewID);
@@ -61,6 +56,7 @@ public class TeamLoader : MonoBehaviour
         {
             GameObject teamObject = Network.Instantiate(prefab, Vector3.zero, prefab.transform.rotation, 1) as GameObject;
             teamObject.GetComponent<TeamInfoLoader>().TeamInfo.SetInfo(team.ID, team.Name, team.ImageTarget);
+            team.TeamObject = new GameObjectWrapper(teamObject);
         }
     }
 
