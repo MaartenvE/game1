@@ -24,6 +24,7 @@ public class InGameOverlay : MonoBehaviour
     public Texture2D BlocksIcon;
 
     private static LinkedList<GuiView> views;
+    private GuiView activeView;
 
     private GUIStyle progressStyle;
     private Texture2D progressTexture;
@@ -40,9 +41,24 @@ public class InGameOverlay : MonoBehaviour
         progressStyle.normal.background = progressTexture;
 
         views = new LinkedList<GuiView>();
-        InGameOverlay.AddView(new GuiView("game1scene", ConstructionIcon));
-        InGameOverlay.AddView(new GuiView("s", HouseIcon));
-        InGameOverlay.AddView(new GuiView("b", BlocksIcon));
+        InGameOverlay.AddView(new GuiView("currentStructure", ConstructionIcon));
+        InGameOverlay.AddView(new GuiView("goalStructure", HouseIcon));
+        InGameOverlay.AddView(new GuiView("combinedStructure", BlocksIcon));
+        activeView = views.First.Value;
+    }
+
+    void Update()
+    {
+        // Draw the right blocks
+        if (activeView.SceneName == "combinedStructure")
+        {
+            ToggleBlocksByTag("currentStructure", true);
+            ToggleBlocksByTag("goalStructure", true);
+        }
+        else
+        {
+            ShowStructure(activeView.SceneName);
+        }  
     }
 
     void OnGUI()
@@ -89,7 +105,7 @@ public class InGameOverlay : MonoBehaviour
 
         foreach (GuiView view in views)
         {
-            float size = Screen.width * (Application.loadedLevelName == view.SceneName ? VIEW_SELECTOR_SELECTED_SIZE : VIEW_SELECTOR_SIZE);
+            float size = Screen.width * (activeView.SceneName == view.SceneName ? VIEW_SELECTOR_SELECTED_SIZE : VIEW_SELECTOR_SIZE);
 
             // Draw shadow
             GUI.color = Color.gray;
@@ -99,9 +115,27 @@ public class InGameOverlay : MonoBehaviour
             GUI.color = Color.white;
             if (GUI.Button(new Rect(x, padding, size, size), view.Icon, GUIStyle.none))
             {
-                Application.LoadLevel(view.SceneName);
+                activeView = view;             
+
             }
+
             x += size + Screen.width * VIEW_SELECTOR_PADDING;
+        }
+    }
+
+    private void ShowStructure(string _tag)
+    {
+        ToggleBlocksByTag("currentStructure", false);
+        ToggleBlocksByTag("goalStructure", false);
+        ToggleBlocksByTag(_tag, true);
+    }
+
+    private void ToggleBlocksByTag(string _tag, bool _show)
+    {
+        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag(_tag);
+        foreach (GameObject block in gameObjects)
+        {
+            block.renderer.enabled = _show;
         }
     }
 

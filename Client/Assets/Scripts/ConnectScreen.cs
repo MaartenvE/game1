@@ -16,8 +16,6 @@ public class ConnectScreen : MonoBehaviour {
         if (GUI.Button(new Rect(0, 100, 100, 60), "Connect"))
             if (true){
                 Application.LoadLevel(1);
-                //Client.port = int.Parse(_port);
-                //Client.ip = _ip;
             } 
 		//still doesn't create a pop up
             else

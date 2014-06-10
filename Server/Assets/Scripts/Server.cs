@@ -26,7 +26,7 @@ public class Server : MonoBehaviour{
 
     public void Start()
     {
-		GameObject prefab = Resources.Load("TestCube") as GameObject;
+		GameObject prefab = Resources.Load("GameCube") as GameObject;
 		GameObject block = _network.Instantiate(prefab, new Vector3(0,0,0), prefab.transform.rotation, 1) as GameObject;
 		networkView.RPC("ColorBlock", RPCMode.AllBuffered, block.networkView.viewID, randomColor());
     }
@@ -45,7 +45,7 @@ public class Server : MonoBehaviour{
 	/// <param name="location">Location.</param>
 	[RPC]
 	public void PlaceBlock(Vector3 location, Vector3 matrixLocation, NetworkViewID NVI){
-		GameObject prefab = Resources.Load ("TestCube") as GameObject;
+		GameObject prefab = Resources.Load ("GameCube") as GameObject;
 
 		location = roundLocation (location);
 

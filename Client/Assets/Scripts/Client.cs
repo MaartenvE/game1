@@ -66,7 +66,7 @@ public class Client : MonoBehaviour {
 
     public void DestroyAllBlocks()
     {
-        foreach(GameObject g in GameObject.FindGameObjectsWithTag("block")){
+        foreach(GameObject g in GameObject.FindGameObjectsWithTag("currentStructure")){
             DestroyImmediate(g);
         }
     }
