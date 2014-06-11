@@ -93,7 +93,11 @@ public class InGameOverlay : MonoBehaviour
         if (GUI.Button(new Rect(padding, padding, size, size), TrashcanIcon, GUIStyle.none))
         {
             trashcanSelected = !trashcanSelected;
-            CubeFingerBehaviour.DeleteMode = trashcanSelected;
+            CubeFingerBehaviour cubeFinger = GameObject.Find("Player").GetComponent<PlayerInfo>().CubeFinger;
+            if (cubeFinger)
+            {
+                cubeFinger.DeleteMode = trashcanSelected;
+            }
         }
     }
 

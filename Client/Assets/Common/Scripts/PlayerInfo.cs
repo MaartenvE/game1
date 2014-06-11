@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerInfo : MonoBehaviour
 {
     public int Team;
-    public GameObject CubeFinger;
+    public CubeFingerBehaviour CubeFinger;
 
     private GameObject teamObject;
 
@@ -25,11 +25,6 @@ public class PlayerInfo : MonoBehaviour
                 teamObject = teamInfo.gameObject;
                 break;
             }
-        }
-
-        if (CubeFinger != null)
-        {
-            CubeFinger.transform.parent = GameObject.Find(teamObject.GetComponent<TeamInfoLoader>().TeamInfo.ImageTarget).transform;
         }
     }
 }

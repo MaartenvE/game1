@@ -1,9 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
+// todo: refactor CubeFingerBehaviour
 public class CubeFingerBehaviour : MonoBehaviour
 {
-    public static bool DeleteMode = false;
+    private bool deleteMode = false;
+    public bool DeleteMode
+    {
+        get
+        {
+            return deleteMode;
+        }
+
+        set
+        {
+            if (IsMine)
+            {
+                this.deleteMode = value;
+                networkView.RPC("SetFingerDeleteMode", RPCMode.Server, value ? 1 : 0);
+            }
+        }
+    }
+
+    private Color color;
 
     public bool IsMine = false;
     private float maxPickingDistance = 200000;// increase if needed, depending on your scene size
@@ -16,7 +36,7 @@ public class CubeFingerBehaviour : MonoBehaviour
     private ClickEventHandler clicker;
 
     //this is the currently selected object (i.e. hit by a raytrace from the center of the screen into the scene)
-    private Transform pickedObject = null;
+    private GameObject previousObject = null;
     private Vector3 previousLocation = Vector3.zero;
 
     //calculate which side of the cube (i.e. localObject) the RayCastHit hits
@@ -57,12 +77,37 @@ public class CubeFingerBehaviour : MonoBehaviour
         return displacement;
     }
 
+    void drawFinger()
+    {
+        if (deleteMode)
+        {
+            if (previousObject != null)
+            {
+                Color color = previousObject.renderer.material.color;
+                color.a = 0.4f;
+                this.renderer.material.color = color;
+                previousObject.renderer.enabled = false;
+            }
+        }
+
+        else
+        {
+            this.renderer.material.color = this.color;
+        }
+    }
+
     void moveFinger(Transform finger, IRaycastHit hit)
     {
-        pickedObject = hit.transform();
-        Vector3 displacement = CalculateSide(pickedObject, hit.point());
+        if (deleteMode)
+        {
+            transform.localPosition = finger.localPosition;
+        }
 
-        transform.position = pickedObject.TransformPoint(displacement);
+        else
+        {
+            Vector3 displacement = CalculateSide(finger, hit.point());
+            transform.position = finger.TransformPoint(displacement);
+        }
 
         if (transform.localPosition != previousLocation)
         {
@@ -102,6 +147,7 @@ public class CubeFingerBehaviour : MonoBehaviour
     {
         this.IsMine = true;
         clicker = GameObject.Find("Client").GetComponent<ClickEventHandler>();
+        GameObject.Find("Player").GetComponent<PlayerInfo>().CubeFinger = this;
     }
 
     [RPC]
@@ -114,11 +160,21 @@ public class CubeFingerBehaviour : MonoBehaviour
     }
 
     [RPC]
+    void SetFingerDeleteMode(int deleteMode)
+    {
+        if (!IsMine)
+        {
+            this.deleteMode = deleteMode != 0;
+        }
+    }
+
+    [RPC]
     void ColorFinger(Vector3 color)
     {
-        Color temp = ColorModel.ConvertToUnityColor(color);
-        temp.a = 0.6f;
-        this.renderer.material.color = temp;
+        Color unityColor = ColorModel.ConvertToUnityColor(color);
+        unityColor.a = 0.6f;
+        this.renderer.material.color = unityColor;
+        this.color = unityColor;
     }
 
     [RPC]
@@ -130,8 +186,18 @@ public class CubeFingerBehaviour : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        deleteMode = false;
+    }
+
     void Update()
     {
+        if (previousObject != null)
+        {
+            previousObject.renderer.enabled = true;
+        }
+
         if (IsMine)
         {
             bool show = false;
@@ -142,7 +208,7 @@ public class CubeFingerBehaviour : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, maxPickingDistance))
             {
-                pickedObject = hit.transform;
+                Transform pickedObject = hit.transform;
 
                 if (pickedObject.transform.parent.parent.GetComponent<TeamInfoLoader>().TeamInfo.IsMine())
                 {
@@ -150,16 +216,16 @@ public class CubeFingerBehaviour : MonoBehaviour
                     raycastHitWrapper.SetNativeRaycastHit(hit);
 
                     //move the finger to correct position and show it
-                    moveFinger(transform, raycastHitWrapper);
+                    moveFinger(pickedObject, raycastHitWrapper);
                     show = true;
 
-                    if (!DeleteMode && clicker.SingleClick() && gameObject.activeInHierarchy)
+                    if (!deleteMode && clicker.SingleClick() && gameObject.activeInHierarchy)
                     {
                         placeObject(pickedObject.gameObject, CalculateSide(pickedObject, hit.point));
                         show = false;
                     }
 
-                    else if (DeleteMode && clicker.SingleClick() && gameObject.activeInHierarchy)
+                    else if (deleteMode && clicker.SingleClick() && gameObject.activeInHierarchy)
                     {
                         removeObject(pickedObject.gameObject);
                         show = false;
@@ -167,15 +233,26 @@ public class CubeFingerBehaviour : MonoBehaviour
                 }
             }
 
-
-            else
-            {
-                // if the trace did not hit anything, there is no sense in having a cubeFinger enabled.
-                show = false;
-                pickedObject = null;
-            }
-
             showFinger(show);
         }
+
+        if (this.renderer.enabled)
+        {
+            Collider[] colliders = Physics.OverlapSphere(transform.position, 0.05f);
+            if (colliders.Count() > 0)
+            {
+                previousObject = colliders[0].gameObject;
+            }
+        }
+        else
+        {
+            if (previousObject != null)
+            {
+                previousObject.renderer.enabled = true;
+                previousObject = null;
+            }
+        }
+
+        drawFinger();
     }
 }
