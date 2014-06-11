@@ -15,7 +15,7 @@ public class TouchBehaviourNetworkTest {
         networkView = new Mock<INetworkView>();
         touchBehaviour = new TouchBehaviour();
         touchBehaviour.networkView = networkView.Object;
-        gameObject = Resources.Load("TestCube") as GameObject;
+        gameObject = Resources.Load("Block") as GameObject;
         gameObject.tag = "testObject";
     }
 

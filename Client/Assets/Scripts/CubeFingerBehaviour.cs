@@ -107,6 +107,14 @@ public class CubeFingerBehaviour : MonoBehaviour
     }
 
     [RPC]
+    void ColorFinger(Vector3 color)
+    {
+        Color temp = ColorModel.ConvertToUnityColor(color);
+        temp.a = 0.6f;
+        this.renderer.material.color = temp;
+    }
+
+    [RPC]
     void ShowFinger(int show)
     {
         if (!IsMine)

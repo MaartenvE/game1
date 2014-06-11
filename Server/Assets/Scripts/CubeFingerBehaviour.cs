@@ -20,6 +20,9 @@ public class CubeFingerBehaviour : MonoBehaviour
     {
         this.Player = player;
         networkView.RPC("SetPersonalCubeFinger", player.NetworkPlayer.NetworkPlayer);
+        player.GiveInventoryBlock();
+        Debug.LogWarning("FingerColor = " + Player.HalfBlock.CalculateUnityColor());
+        ColorFinger(ColorModel.ConvertToVector3(Player.HalfBlock.CalculateUnityColor()));
     }
 
     [RPC]
@@ -40,5 +43,15 @@ public class CubeFingerBehaviour : MonoBehaviour
     {
         this.renderer.enabled = show != 0;
         networkView.RPC("ShowFinger", RPCMode.Others, show);
+    }
+
+    [RPC]
+    void ColorFinger(Vector3 color)
+    {
+        Color temp = ColorModel.ConvertToUnityColor(color);
+        Debug.LogWarning("Color = " + temp);
+        temp.a = 0.6f;
+        this.renderer.material.color = temp;
+        networkView.RPC("ColorFinger", RPCMode.Others, color);
     }
 }

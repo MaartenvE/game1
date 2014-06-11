@@ -21,12 +21,14 @@ public class GroundBlockBehaviour : MonoBehaviour
         //GameObject target = this.transform.parent.gameObject;
         //GameObject team = target.transform.parent.gameObject;
         //TeamBlockTracker tracker = team.GetComponent<TeamBlockTrackerLoader>().Tracker;
+        //if (player.HasPlaceableBlock)
+        {
+            Vector3 position = this.transform.position + (direction * 0.2f);
 
-        Vector3 position = this.transform.position + (direction * 0.2f);
+            //tracker.PlaceBlock(player, position, Color.green);
 
-        //tracker.PlaceBlock(player, position, Color.green);
-
-        player.Team.Tracker.PlaceBlock(player, position, Color.green);
+            player.Team.Tracker.PlaceBlock(player, position, player.HalfBlock.CalculateUnityColor());
+        }
     }
 
     [RPC]

@@ -14,8 +14,15 @@ public class BumpMatcherLoader : MonoBehaviour
 	void Start()
     {
         bumpMatcher = new BumpMatcher();
-        bumpMatcher.OnBumpMatch += (Bump bump1, Bump bump2) => Debug.Log("Detected bump between players " + bump1.Sender + " and " + bump2.Sender);
+        bumpMatcher.OnBumpMatch += (Bump bump1, Bump bump2) => HandleBumpEvent(bump1.Sender, bump2.Sender);
 	}
+
+    private void HandleBumpEvent(INetworkPlayer networkPlayer1, INetworkPlayer networkPlayer2)
+    {
+        IPlayer player1 = TeamLoader.TeamManager.GetPlayer(networkPlayer1);
+        IPlayer player2 = TeamLoader.TeamManager.GetPlayer(networkPlayer1);
+        player1.CombineBlock(player2);        
+    }
 
     [RPC]
     void Tap(float force, NetworkMessageInfo info)
