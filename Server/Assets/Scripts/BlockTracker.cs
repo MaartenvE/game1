@@ -2,25 +2,20 @@
 
 public class BlockTracker
 {
-    public delegate void CompleteHandler();
-    public delegate void ProgressHandler(float progress);
-    public event CompleteHandler OnCompletion;
-    public event ProgressHandler OnProgressChange;
+    public event StructureCompleteHandler OnStructureComplete;
+    public event StructureProgressHandler OnProgressChange;
 
     private ITeam team;
     private INetwork network;
     private GameObject prefab;
 
-    private Structure<Color?> goalStructure;
-    private Structure<bool> correctStructure;
+    private TeamStructureTracker structure;
 
-    private int maxCorrectness;
-    private int correctness;
     public float Progress
     {
         get
         {
-            return (float) correctness / (float) maxCorrectness;
+            return structure.Progress;
         }
     }
 
@@ -30,12 +25,17 @@ public class BlockTracker
         this.network = network;
         this.prefab = Resources.Load("Block") as GameObject;
 
-        this.goalStructure = goalStructure;
-        this.correctStructure = new Structure<bool>(new bool[goalStructure.GetLength(0), goalStructure.GetLength(1), goalStructure.GetLength(2)]);
+        this.structure = new TeamStructureTracker(goalStructure);
 
-        this.maxCorrectness = goalStructure.GetLength(0) * goalStructure.GetLength(1) * goalStructure.GetLength(2);
+        this.structure.OnProgressChange += (float progress) =>
+        {
+            if (this.OnProgressChange != null) this.OnProgressChange(progress);
+        };
 
-        initializeCorrectness();
+        this.structure.OnCompletion += () =>
+        {
+            if (this.OnStructureComplete != null) this.OnStructureComplete();
+        };
 
         instantiateGroundBlock(Color.red);
     }
@@ -51,9 +51,11 @@ public class BlockTracker
     private void instantiateBlock(Vector3 location, Color color)
     {
         GameObject block = network.Instantiate(prefab, location, prefab.transform.rotation, 1) as GameObject;
-        block.GetComponent<GroundBlockBehaviour>().SetInfo(team.ImageTarget, color);
 
-        checkBlock(location, color);
+        bool correct = checkBlock(location, color);
+
+        // todo: pass correctness
+        block.GetComponent<GroundBlockBehaviour>().SetInfo(team.ImageTarget, color);
     }
 
     public void PlaceBlock(IPlayer player, Vector3 location, Color color)
@@ -64,66 +66,14 @@ public class BlockTracker
         }
     }
 
+    // todo: make fully responsible for destroying block, pass correctness
     public void RemoveBlock(Vector3 location)
     {
         checkBlock(location, null);
     }
 
-    public void checkBlock(Vector3 location, Color? color)
+    private bool checkBlock(Vector3 location, Color? color)
     {
-        Vector3 normalized = location / prefab.transform.localScale.x;
-        normalized.x += goalStructure.GetLength(0) / 2;
-        normalized.z += goalStructure.GetLength(2) / 2;
-
-        bool correct = isCorrect(normalized, color);
-
-        if (correct != getCorrectness(normalized))
-        {
-            setCorrectness(normalized, correct);
-        }
-    }
-
-    private void initializeCorrectness()
-    {
-        for (int x = 0; x < goalStructure.GetLength(0); x++)
-        {
-            for (int y = 0; y < goalStructure.GetLength(1); y++)
-            {
-                for (int z = 0; z < goalStructure.GetLength(2); z++)
-                {
-                    Vector3 location = new Vector3(x, y, z);
-                    setCorrectness(location, isCorrect(location, null));
-                }
-            }
-        }
-    }
-
-    private bool isCorrect(Vector3 location, Color? color)
-    {
-        return goalStructure[(int)location.x, (int)location.y, (int)location.z] == color;
-    }
-
-    private bool getCorrectness(Vector3 location)
-    {
-        return correctStructure[(int)location.x, (int)location.y, (int)location.z];
-    }
-
-    private void setCorrectness(Vector3 location, bool correct)
-    {
-        if (correct != correctStructure[(int)location.x, (int)location.y, (int)location.z])
-        {
-            correctness += correct ? 1 : -1;
-            correctStructure[(int)location.x, (int)location.y, (int)location.z] = correct;
-
-            if (OnProgressChange != null)
-            {
-                OnProgressChange(Progress);
-            }
-
-            if (Progress == 1 && OnCompletion != null)
-            {
-                OnCompletion();
-            }
-        }
+        return structure.CheckBlock(structure.Normalize(location, prefab.transform.localScale.x), color);
     }
 }

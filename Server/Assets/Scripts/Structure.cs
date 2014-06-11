@@ -1,30 +1,47 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections;
 
-public class Structure<T>
+public class Structure<T> : IEnumerable
 {
-    public T[, ,] Elements;
+    private T[, ,] elements;
+
+    public int Size { get; private set; }
 
     public Structure(T[, ,] elements)
     {
-        this.Elements = elements;
+        this.elements = elements;
+        this.Size = elements.GetLength(0) * elements.GetLength(1) * elements.GetLength(2);
+    }
+
+    public Structure(int xLength, int yLength, int zLength)
+    {
+        elements = new T[xLength, yLength, zLength];
     }
 
     public int GetLength(int dimension)
     {
-        return Elements.GetLength(dimension);
+        return elements.GetLength(dimension);
+    }
+
+    public bool IsWithinBounds(int x, int y, int z)
+    {
+        return x >= 0 && x < elements.GetLength(0)
+            && y >= 0 && y < elements.GetLength(1)
+            && z >= 0 && z < elements.GetLength(2);
+    }
+
+    public bool IsWithinBounds(Vector3 location)
+    {
+        return IsWithinBounds((int)location.x, (int)location.y, (int)location.z);
     }
 
     public T this[int x, int y, int z]
     {
         get
         {
-            if (x >= 0 && x < Elements.GetLength(0)
-                && y >= 0 && y < Elements.GetLength(1)
-                && z >= 0 && z < Elements.GetLength(2))
+            if (IsWithinBounds(x, y, z))
             {
-                return Elements[x, y, z];
+                return elements[x, y, z];
             }
 
             return default(T);
@@ -32,12 +49,28 @@ public class Structure<T>
 
         set
         {
-            if (x >= 0 && x < Elements.GetLength(0)
-                && y >= 0 && y < Elements.GetLength(1)
-                && z >= 0 && z < Elements.GetLength(2))
+            if (IsWithinBounds(x, y, z))
             {
-                Elements[x, y, z] = value;
+                elements[x, y, z] = value;
             }
         }
+    }
+
+    public T this[Vector3 location]
+    {
+        get
+        {
+            return this[(int)location.x, (int)location.y, (int)location.z];
+        }
+
+        set
+        {
+            this[(int)location.x, (int)location.y, (int)location.z] = value;
+        }
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+        return elements.GetEnumerator();
     }
 }

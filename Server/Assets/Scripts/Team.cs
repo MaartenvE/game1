@@ -77,7 +77,7 @@ public class Team : ITeam
         this.tracker = new BlockTracker(this, new NetworkWrapper(), new Structure<Color?>(goalStructure));
         this.tracker.OnProgressChange += 
             (float progress) => TeamObject.GetComponent<TeamInfoLoader>().TeamInfo.SetProgress(progress);
-        this.tracker.OnCompletion += 
+        this.tracker.OnStructureComplete += 
             () => ServerLoader.Server.Win(this);
         this.players = new LinkedList<IPlayer>();
     }
