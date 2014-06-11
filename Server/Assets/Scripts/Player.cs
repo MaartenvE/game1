@@ -4,6 +4,8 @@ public class Player : IPlayer
 {
     public ITeam Team { get; set; }
 
+    public HalfBlock HalfBlock { get; set; }
+
     private INetworkPlayer networkPlayer;
     public INetworkPlayer NetworkPlayer
     {
@@ -25,6 +27,7 @@ public class Player : IPlayer
 	private INetworkPlayer _NetworkPlayer; //this is the actual networkPlayer
 
 	private IInstantiatedBlock _Finger;
+    public bool HasPlaceableBlock { get; set; }
 	//private IBlock _InventoryBlock; //this is the currently allocated block the player has.
 
 	//private Time _StartOfPenaltyTime; //this is the time the penalty started.
@@ -35,12 +38,13 @@ public class Player : IPlayer
 		_networkView = networkView;
 		_Network = network;
         _NetworkPlayer = networkPlayer;
+        HalfBlock = null;
         InstantiateFinger();
 	}
 
 
 	private void InstantiateFinger(){
-		GameObject prefab = Resources.Load ("TestCube") as GameObject;
+		GameObject prefab = Resources.Load ("Block") as GameObject;
 		GameObject finger = _Network.Instantiate (prefab, new Vector3(0,0,0), prefab.transform.rotation, 1) as GameObject;
         _Finger = new InstantiatedBlock(finger) as IInstantiatedBlock;
         Vector3 color = new Vector3(0, 0, 0);
@@ -53,17 +57,36 @@ public class Player : IPlayer
 
 		//now color the block correctly
 		_networkView.RPC ("ColorBlock", RPCMode.AllBuffered, finger.networkView.viewID, color);
-		finger.renderer.material.color = new Color(0.8f,0.05f,0.8f,0.08f);
+		//finger.renderer.material.color = new Color(0.8f,0.05f,0.8f,0.08f);
 	}
 
 	
 	public void GiveInventoryBlock(){
-		throw new UnityException("not yet implemented");
+        if (HalfBlock == null)
+        {
+            HalfBlock = new HalfBlock(SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor());
+            Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
+            this.HasPlaceableBlock = false;
+
+            //_networkView.RPC("SetBlockHalf", _NetworkPlayer);
+            //_networkView.RPC("SetHalfBlockColor", _NetworkPlayer, color);
+            //finger.renderer.material.color = ColorModel.ConvertToUnityColor(color);
+        }        
+        
 	}
+
+    public void CombineBlock(IPlayer other)
+    {
+        this.HalfBlock.CombineHalfBlock(other.HalfBlock);
+        SetHalfBlockColor(ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor()));
+        SetBlockFull();
+        this.HasPlaceableBlock = true;
+        other.GiveInventoryBlock();
+    }
 
 
 	public void DestroyInventoryBlock(){
-		throw new UnityException("not yet implemented");
+        HalfBlock = null;
 	}
 
 
@@ -85,5 +108,23 @@ public class Player : IPlayer
 
 		_networkView.RPC ("GivePlayerAnError", _NetworkPlayer , errorMessage);
 	}
+
+    [RPC]
+    public void SetHalfBlockColor(Vector3 color)
+    {
+
+    }
+
+    [RPC]
+    public void SetBlockHalf()
+    {
+
+    }
+
+    [RPC]
+    public void SetBlockFull()
+    {
+
+    }
 	
 }
