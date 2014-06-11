@@ -10,6 +10,7 @@ public class TeamStructureTracker
     public event StructureProgressHandler OnProgressChange;
 
     private Structure<Color?> goal;
+    private Structure<Color?> current;
 
     private int totalblockCount;
     private int correctBlockCount = 0;
@@ -26,6 +27,7 @@ public class TeamStructureTracker
     public TeamStructureTracker(Structure<Color?> goalStructure)
     {
         this.goal = goalStructure;
+        this.current = new Structure<Color?>(goal.GetLength(0), goal.GetLength(1), goal.GetLength(2));
 
         initializeCorrectness();
     }
@@ -51,6 +53,8 @@ public class TeamStructureTracker
 
     public bool CheckBlock(Vector3 position, Color? color)
     {
+
+        bool wasCorrect = checkColor(position, current[position]);
         bool correct = checkColor(position, color);
 
         if (correct)
@@ -61,9 +65,18 @@ public class TeamStructureTracker
 
         else
         {
-            if (color == null) correctBlockCount--;
-            else wrongBlockCount++;
+            if (color == null)
+            {
+                if (wasCorrect) correctBlockCount--;
+                else wrongBlockCount--;
+            }
+            else
+            {
+                wrongBlockCount++;
+            }
         }
+
+        current[position] = color;
 
         invokeHandlers();
 
@@ -74,6 +87,7 @@ public class TeamStructureTracker
     {
         return this.goal[position] == color;
     }
+
 
     private void invokeHandlers()
     {

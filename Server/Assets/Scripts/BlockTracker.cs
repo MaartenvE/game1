@@ -37,7 +37,8 @@ public class BlockTracker
             if (this.OnStructureComplete != null) this.OnStructureComplete();
         };
 
-        instantiateGroundBlock(Color.red);
+        Vector3 center = this.structure.Normalize(Vector3.zero, prefab.transform.localScale.x);
+        instantiateGroundBlock(goalStructure[center] ?? Color.black);
     }
 
     private void instantiateGroundBlock(Color color)

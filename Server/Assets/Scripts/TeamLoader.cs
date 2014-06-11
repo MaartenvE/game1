@@ -15,10 +15,10 @@ public class TeamLoader : MonoBehaviour
     {
         Color?[, ,] goal = new Color?[3, 3, 3];
         goal[1, 0, 1] = Color.red;
-        goal[1, 1, 1] = Color.green;
-        goal[1, 2, 1] = Color.green;
-        goal[1, 0, 2] = Color.green;
-        goal[1, 0, 0] = Color.green;
+        goal[1, 1, 1] = Color.blue;
+        goal[1, 2, 1] = Color.blue;
+        goal[1, 0, 2] = Color.blue;
+        goal[1, 0, 0] = Color.blue;
 
         teamManager = new TeamManager(new[] {
             new Team("Team 1", "ImageTarget1", goal),
