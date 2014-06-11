@@ -25,6 +25,7 @@ public class TeamLoader : MonoBehaviour
             new Team("Team 2", "ImageTarget2", goal)
         });
 
+        instantiateStructure(new Structure<Color?>(goal));
         instantiateTeamObjects();
     }
 
@@ -50,6 +51,17 @@ public class TeamLoader : MonoBehaviour
 
         teamManager.RemovePlayer(player);
         Debug.Log("Player " + networkPlayer + " left.");
+    }
+
+    void instantiateStructure(Structure<Color?> goal)
+    {
+        GameObject prefab = Resources.Load("GoalCube") as GameObject;
+        foreach (Vector3 position in goal.Keys)
+        {
+            Vector3 location = goal.Denormalize(position, prefab.transform.localScale.x);
+            GameObject blockObject = Network.Instantiate(prefab, location, prefab.transform.rotation, 1) as GameObject;
+            blockObject.GetComponent<GoalCubeBehaviour>().SetInfo("GoalStructure", goal[position].GetValueOrDefault());
+        }
     }
 
     void instantiateTeamObjects()

@@ -45,10 +45,12 @@ public class TeamStructureTracker
 
     public Vector3 Normalize(Vector3 position, float scale)
     {
-        Vector3 normalized = position / scale;
-        normalized.x += goal.GetLength(0) / 2;
-        normalized.z += goal.GetLength(2) / 2;
-        return normalized;
+        return goal.Normalize(position, scale);
+    }
+
+    public Vector3 Denormalize(Vector3 position, float scale)
+    {
+        return goal.Denormalize(position, scale);
     }
 
     public bool CheckBlock(Vector3 position, Color? color)

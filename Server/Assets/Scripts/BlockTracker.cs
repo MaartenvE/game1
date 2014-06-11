@@ -23,7 +23,7 @@ public class BlockTracker
     {
         this.team = team;
         this.network = network;
-        this.prefab = Resources.Load("Block") as GameObject;
+        this.prefab = Resources.Load("GameCube") as GameObject;
 
         this.structure = new TeamStructureTracker(goalStructure);
 

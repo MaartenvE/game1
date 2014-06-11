@@ -3,12 +3,6 @@ using System;
 
 public class BlockBehaviour : MonoBehaviour
 {
-
-    void Start()
-    {
-        this.tag = "block";
-    }
-
     public void Place(Vector3 direction)
     {
         networkView.RPC("PlaceNewBlock", RPCMode.Server, direction);

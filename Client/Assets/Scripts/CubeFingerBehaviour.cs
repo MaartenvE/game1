@@ -210,7 +210,8 @@ public class CubeFingerBehaviour : MonoBehaviour
             {
                 Transform pickedObject = hit.transform;
 
-                if (pickedObject.transform.parent.parent.GetComponent<TeamInfoLoader>().TeamInfo.IsMine())
+                Transform parent = pickedObject.transform.parent;
+                if (parent.CompareTag("imageTarget") && parent.parent.GetComponent<TeamInfoLoader>().TeamInfo.IsMine())
                 {
                     IRaycastHit raycastHitWrapper = new RaycastHitWrapper();
                     raycastHitWrapper.SetNativeRaycastHit(hit);
