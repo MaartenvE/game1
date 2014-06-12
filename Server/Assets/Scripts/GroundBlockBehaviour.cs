@@ -20,7 +20,7 @@ public class GroundBlockBehaviour : MonoBehaviour
     {
         IPlayer player = TeamLoader.TeamManager.GetPlayer(new NetworkPlayerWrapper(info.sender));
 
-        // if (player.HasPlaceableBlock)
+        if (player.HasPlaceableBlock)
         {
             Vector3 position = this.transform.localPosition + (direction * transform.localScale.x);
             player.Team.Tracker.PlaceBlock(player, position, player.HalfBlock.CalculateUnityColor());

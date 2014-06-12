@@ -88,12 +88,16 @@ public class Player : IPlayer
 
     public void CombineBlock(IPlayer other)
     {
-        this.HalfBlock.CombineHalfBlock(other.HalfBlock);
-        this.HasPlaceableBlock = true;
-        Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
-        _networkView.RPC("SetHalfBlockColor", networkPlayer, color);
-        _networkView.RPC("SetBlockFull", networkPlayer);
-        other.GiveInventoryBlock();
+        if (!this.HasPlaceableBlock && !other.HasPlaceableBlock)
+        {
+            this.HalfBlock.CombineHalfBlock(other.HalfBlock);
+            this.HasPlaceableBlock = true;
+            Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
+            _networkView.RPC("SetHalfBlockColor", networkPlayer, color);
+            _networkView.RPC("SetBlockFull", networkPlayer);
+            CubeFinger.UpdateColor(color);
+            other.GiveNewInventoryBlock();
+        }
     }
 
 

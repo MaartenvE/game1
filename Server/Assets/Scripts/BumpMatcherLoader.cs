@@ -20,8 +20,16 @@ public class BumpMatcherLoader : MonoBehaviour
     private void HandleBumpEvent(INetworkPlayer networkPlayer1, INetworkPlayer networkPlayer2)
     {
         IPlayer player1 = TeamLoader.TeamManager.GetPlayer(networkPlayer1);
-        IPlayer player2 = TeamLoader.TeamManager.GetPlayer(networkPlayer1);
-        player1.CombineBlock(player2);        
+        IPlayer player2 = TeamLoader.TeamManager.GetPlayer(networkPlayer2);
+        if (Random.value < 0.5)
+        {
+            player1.CombineBlock(player2); 
+        }
+        else
+        {
+            player2.CombineBlock(player1);
+        }
+               
     }
 
     [RPC]

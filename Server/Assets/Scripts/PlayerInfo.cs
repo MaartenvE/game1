@@ -72,8 +72,10 @@ public class PlayerInfo : MonoBehaviour
     }
 
     [RPC]
-    public void ThrowAwayBlock()
+    public void ThrowAwayBlock(NetworkMessageInfo message)
     {
-
+        INetworkPlayer nPlayer = new NetworkPlayerWrapper(message.sender);
+        IPlayer player = TeamLoader.TeamManager.GetPlayer(nPlayer);
+        player.GiveNewInventoryBlock();
     }
 }
