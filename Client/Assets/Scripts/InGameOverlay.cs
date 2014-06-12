@@ -12,9 +12,9 @@ public class InGameOverlay : MonoBehaviour
     private const float VIEW_SELECTOR_TOP           = .01f;
     private const float VIEW_SELECTOR_PADDING       = .03f;
 
-    private const float PROGRESSBAR_WIDTH   = .15f;
-    private const float PROGRESSBAR_HEIGHT  = .03f;
-    private const float PROGRESSBAR_PADDING = .01f;
+    public const float PROGRESSBAR_WIDTH   = .15f;
+    public const float PROGRESSBAR_HEIGHT  = .03f;
+    public const float PROGRESSBAR_PADDING = .01f;
 
     public Texture2D TrashcanIcon;
     public Texture2D ConstructionIcon;
@@ -140,6 +140,7 @@ public class InGameOverlay : MonoBehaviour
         foreach (GameObject block in gameObjects)
         {
             block.renderer.enabled = _show;
+            block.layer = _show ? 0 : 2;
         }
     }
 
@@ -156,7 +157,14 @@ public class InGameOverlay : MonoBehaviour
             }
         }
 
-        // Draw progress bar background
+        ProgressBar.Draw(new Rect(
+                (1f - PROGRESSBAR_WIDTH - PROGRESSBAR_PADDING) * Screen.width,
+                Screen.width * PROGRESSBAR_PADDING,
+                Screen.width * PROGRESSBAR_WIDTH,
+                Screen.width * PROGRESSBAR_HEIGHT
+            ), progress);
+
+        /*// Draw progress bar background
         GUI.color = Color.gray;
         GUI.Box(new Rect(
                 (1f - PROGRESSBAR_WIDTH - PROGRESSBAR_PADDING) * Screen.width, 
@@ -172,7 +180,7 @@ public class InGameOverlay : MonoBehaviour
                 Screen.width * PROGRESSBAR_PADDING, 
                 Screen.width * PROGRESSBAR_WIDTH * progress, 
                 Screen.width * PROGRESSBAR_HEIGHT
-            ), GUIContent.none, progressStyle);
+            ), GUIContent.none, progressStyle);*/
     }
 
     public static void AddView(GuiView view)

@@ -10,12 +10,13 @@ public class QRWriter : MonoBehaviour {
 
 	public int width;
 	public int height;
-	public int port;
 
 	// Use this for initialization
 	void Start () {
 		QRCodeWriter writer = new QRCodeWriter();
 
+        GameObject server = GameObject.Find("Server");
+        int port = server.GetComponent<ServerLoader>().Port;
 		BitMatrix qrcode = writer.encode("BuildingBlocksServer="+Network.player.ipAddress+":"+port,BarcodeFormat.QR_CODE,width, height);
 
 		var texture = new Texture2D(width, height);

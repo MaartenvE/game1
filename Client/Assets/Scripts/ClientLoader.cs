@@ -11,7 +11,7 @@ public class ClientLoader : MonoBehaviour
     {
         Input.compass.enabled = true;
         Client = new Client(new NetworkWrapper());
-        Client.ConnectToServer(IP, Port);
+        Client.ConnectToServer(QRScanner.IP ?? IP, QRScanner.Port ?? Port);
     }
 
     [RPC]

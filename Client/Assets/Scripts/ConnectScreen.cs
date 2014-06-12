@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+/*
 public class ConnectScreen : MonoBehaviour {
     private string _ip = QRScanner.adressText;
     private string _port = ""+QRScanner.portNum;
@@ -30,3 +30,4 @@ public class ConnectScreen : MonoBehaviour {
         // Draw any Controls inside the window here
     }
 }
+*/
