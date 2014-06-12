@@ -76,7 +76,7 @@ public class InGameOverlay : MonoBehaviour
         deleteBlock();
 
         // Leave Game
-        leaveGame();
+        //leaveGame();
 
 		//back button quits game
         backButton();

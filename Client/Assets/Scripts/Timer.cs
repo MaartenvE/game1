@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Timer: MonoBehaviour
@@ -33,11 +33,11 @@ public class Timer: MonoBehaviour
 		int min = (int) (_elapsedTime / 60);
 		int sec = (int) (_elapsedTime % 60);
 		
-		if (sec < 10)
-		{
+		if (sec < 10) {
 			print = "Time = " + min + ":0" + sec;
+		} else {
+			print = "Time = " + min + ":" + sec;
 		}
-		print = "Time = " + min + ":" + sec;
 
 		InitStyles ();
 		GUI.Label(new Rect(Screen.width - 140, 25, 140, 40), print, _currentStyle);
