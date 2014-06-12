@@ -76,4 +76,9 @@ public class CubeFingerBehaviour : MonoBehaviour
         this.bufferedColor = color;
         networkView.RPC("ColorFinger", RPCMode.Others, this.bufferedColor);
     }
+
+    public void UpdateColor(Vector3 color)
+    {
+        ColorFinger(color);
+    }
 }

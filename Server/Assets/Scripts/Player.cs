@@ -20,6 +20,7 @@ public class Player : IPlayer
     public Player(INetworkPlayer player)
     {
         networkPlayer = player;
+        _networkView = new NetworkViewWrapper(GameObject.Find("Player").networkView);
     }
 
 	private INetworkView _networkView; //this is the networkview on which the player exists.
@@ -42,7 +43,7 @@ public class Player : IPlayer
         InstantiateFinger();
 	}
 
-
+    // unused
 	private void InstantiateFinger(){
 		GameObject prefab = Resources.Load ("Block") as GameObject;
 		GameObject finger = _Network.Instantiate (prefab, new Vector3(0,0,0), prefab.transform.rotation, 1) as GameObject;
@@ -67,6 +68,10 @@ public class Player : IPlayer
             HalfBlock = new HalfBlock(SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor());
             Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
             this.HasPlaceableBlock = false;
+            CubeFinger.UpdateColor(color);
+            
+            _networkView.RPC("SetHalfBlockColor", networkPlayer, color);
+            _networkView.RPC("SetBlockHalf", networkPlayer);
 
             //_networkView.RPC("SetBlockHalf", _NetworkPlayer);
             //_networkView.RPC("SetHalfBlockColor", _NetworkPlayer, color);
@@ -75,12 +80,19 @@ public class Player : IPlayer
         
 	}
 
+    public void GiveNewInventoryBlock()
+    {
+        HalfBlock = null;
+        GiveInventoryBlock();
+    }
+
     public void CombineBlock(IPlayer other)
     {
         this.HalfBlock.CombineHalfBlock(other.HalfBlock);
-        SetHalfBlockColor(ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor()));
-        SetBlockFull();
         this.HasPlaceableBlock = true;
+        Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
+        _networkView.RPC("SetHalfBlockColor", networkPlayer, color);
+        _networkView.RPC("SetBlockFull", networkPlayer);
         other.GiveInventoryBlock();
     }
 
@@ -92,8 +104,7 @@ public class Player : IPlayer
 
     public void givePlayerAColor(Vector3 color){
         _Finger.SetColor(color);
-
-        _networkView.RPC("GivePlayerAColor", _NetworkPlayer, color);
+        _networkView.RPC("GivePlayerAColor", networkPlayer, color);
     }
 	
 
@@ -108,23 +119,5 @@ public class Player : IPlayer
 
 		_networkView.RPC ("GivePlayerAnError", _NetworkPlayer , errorMessage);
 	}
-
-    [RPC]
-    public void SetHalfBlockColor(Vector3 color)
-    {
-
-    }
-
-    [RPC]
-    public void SetBlockHalf()
-    {
-
-    }
-
-    [RPC]
-    public void SetBlockFull()
-    {
-
-    }
 	
 }

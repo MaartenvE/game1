@@ -72,11 +72,14 @@ public class InGameOverlay : MonoBehaviour
 
         // Own block in bottom right
 
+        // Delete block
+        deleteBlock();
+
+        // Leave Game
+        leaveGame();
+
 		//back button quits game
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			Application.LoadLevel(1);
-		}
+        backButton();
     }
 
     private void drawTrashcanIcon()
@@ -175,5 +178,33 @@ public class InGameOverlay : MonoBehaviour
     public static void AddView(string sceneName, Texture2D icon)
     {
         AddView(new GuiView(sceneName, icon));
+    }
+
+    private void deleteBlock()
+    {
+        GUI.color = Color.white;
+        if(GUI.Button(new Rect(Screen.width - 125, Screen.height -100, 75, 20), "Throw Away"))
+        {
+            NetworkView playerNetworkView = GameObject.Find("Player").networkView;
+            INetworkView _networkView = new NetworkViewWrapper(playerNetworkView);
+            _networkView.RPC("ThrowAwayBlock", RPCMode.Server);
+        }
+    }
+
+    private void leaveGame()
+    {
+        GUI.color = Color.white;
+        if (GUI.Button(new Rect(0, Screen.height - 25, 100, 20), "Leave Game"))
+        {
+            Application.Quit();
+        }
+    }
+
+    private void backButton()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.LoadLevel(1);
+        }
     }
 }

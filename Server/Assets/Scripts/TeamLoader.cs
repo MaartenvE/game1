@@ -93,8 +93,8 @@ public class TeamLoader : MonoBehaviour
         GameObject cubeFinger = Network.Instantiate(prefab, prefab.transform.position, prefab.transform.rotation, 1) as GameObject;
         CubeFingerBehaviour behaviour = cubeFinger.GetComponent<CubeFingerBehaviour>();
         behaviour.SetParent(player.Team.ImageTarget);
-        behaviour.SetPlayer(player);
-
+        
         player.CubeFinger = behaviour;
+        behaviour.SetPlayer(player);
     }
 }
