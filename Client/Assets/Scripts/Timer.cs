@@ -1,58 +1,50 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class Timer: MonoBehaviour
 {
-	private float _startTime;
-	private float _elapsedTime;
+    private const float PADDING_TOP = .05f;
+    private const float PADDING_RIGHT = .01f;
+    private const float WIDTH = .15f;
+    private const float HEIGHT = .04f;
 
-	private GUIStyle _currentStyle = null;
-	
-	void Awake(){
-		_startTime = 900;
-	}
-	
-	void Update () {
-		
-		if (_startTime > 0)
-		{
-			_elapsedTime =  _startTime - Time.time ;
-		}
-	}
-	
-	void OnTriggerEnter(){
-		_startTime = Time.time;
-	}
-	
-	void OnTriggerExit(){
-		_startTime = 0;
-	}
-	
-	void OnGUI(){
-		string print = "";
-		int min = (int) (_elapsedTime / 60);
-		int sec = (int) (_elapsedTime % 60);
-		
-		if (sec < 10) {
-			print = "Time = " + min + ":0" + sec;
-		} else {
-			print = "Time = " + min + ":" + sec;
-		}
+    private double endTime;
+    private GUIStyle style;
 
-		InitStyles ();
-		GUI.Label(new Rect(Screen.width - 140, 25, 140, 40), print, _currentStyle);
-	}
+    void OnGUI()
+    {
+        setStyle();
 
-	private void InitStyles()
-	{
-		if( _currentStyle == null )
-		{
-			_currentStyle = new GUIStyle( GUI.skin.label );
-			//_currentStyle.font = new Font("Arial");
-			_currentStyle.fontSize = 22;
-			_currentStyle.fontStyle = FontStyle.Bold;
-		}
-	}
+        double timeRemaining = Math.Max(0, endTime - Network.time);
 
+        int minutes = (int) (timeRemaining / 60);
+        int seconds = (int) (timeRemaining % 60);
 
+        string text = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+        float width = Screen.width * WIDTH;
+        GUI.Label(new Rect(
+                Screen.width - width - (Screen.width * PADDING_RIGHT), 
+                Screen.width * PADDING_TOP, 
+                width,
+                Screen.width * HEIGHT
+            ), text, style);
+    }
+
+    private void setStyle()
+    {
+        if (style == null)
+        {
+            style = new GUIStyle(GUI.skin.label);
+            style.alignment = TextAnchor.MiddleRight;
+        }
+        style.fontSize = (int)(Screen.width * HEIGHT - 2);
+    }
+
+    [RPC]
+    void SetTime(float timeRemaining)
+    {
+        endTime = Network.time + timeRemaining;
+    }
 }
