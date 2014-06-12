@@ -68,7 +68,8 @@ public static class StructureReader {
 
 	private static int readSizeOption(string sizeOption){
 		//read the xx from [size=xx]
-		return int.Parse(findAndMatch(sizeOption, "\\[size=(\\d*)\\]"));
+		//return int.Parse(findAndMatch(sizeOption, "\\[size=(\\d*)\\]"));
+        return 10;
 	}
 
 	private static Color[][] readBlock(string block, int size){

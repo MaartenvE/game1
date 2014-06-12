@@ -30,8 +30,6 @@ public class Server
         networkView.RPC("Win", RPCMode.OthersBuffered, teamId);
         network.SetSendingEnabled(1, false);
         network.isMessageQueueRunning = false;
-
-        Application.LoadLevel("Server");
     }
 
 
