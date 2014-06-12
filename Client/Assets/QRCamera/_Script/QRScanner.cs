@@ -72,7 +72,7 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 
 			//if either is null, the tempText was not of the proper format (false qrcode found)
 			if((port != null && port != "")){
-				if(adress != null && port != ""){
+				if(adress != null && adress != ""){
 					adressText = adress;
 					portNum = int.Parse(port);
 
