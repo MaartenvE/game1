@@ -86,9 +86,7 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 			// Fail detecting QR Code!
 		}
 		finally {
-			if(!string.IsNullOrEmpty(tempText)) {
-				//qrText = tempText;
-			}
+
 		}
 	}
 

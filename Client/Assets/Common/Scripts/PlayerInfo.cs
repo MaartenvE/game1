@@ -9,10 +9,14 @@ public class PlayerInfo : MonoBehaviour
 
     private GameObject teamObject;
 
-    public void SendInfo(IPlayer player, int? teamId = null)
+    public void SendInfo(IPlayer player, int? teamId)
     {
         networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, teamId ?? player.Team.ID);
     }
+
+	public void SendInfo(IPlayer player){
+		networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, player.Team.ID);
+	}
 
     [RPC]
     void SetPlayerInfo(int team)
