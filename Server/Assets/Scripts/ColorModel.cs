@@ -9,7 +9,6 @@ public static class ColorModel {
     public static Color ORANGE = new Color(1, 0.5f, 0);
     public static Color PURPLE = new Color(0.5f, 0, 1);
     public static Color GREEN = Color.green;
-<<<<<<< HEAD
 	public static Color NONE = new Color(0f,0f,0f);
 
 	public static char REDCHAR = 'r';
@@ -47,7 +46,6 @@ public static class ColorModel {
 			throw new System.FormatException("undocumented color, either register it in ColorModel or double check puzzleformat");
 		}
 	}
-=======
 
     public static Vector3 ConvertToVector3(Color color)
     {
@@ -58,6 +56,4 @@ public static class ColorModel {
     {
         return new Color(color.x, color.y, color.z);
     }
-
->>>>>>> 77aaffec5433c244b60a407bbb57398d6c075acd
 }
