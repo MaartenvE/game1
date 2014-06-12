@@ -56,7 +56,7 @@ public class BlockTracker
         bool correct = checkBlock(location, color);
 
         // todo: pass correctness
-        block.GetComponent<GroundBlockBehaviour>().SetInfo(team.ImageTarget, color);
+        block.GetComponent<GroundBlockBehaviour>().SetInfo(team.ImageTarget, location, color);
     }
 
     public void PlaceBlock(IPlayer player, Vector3 location, Color color)

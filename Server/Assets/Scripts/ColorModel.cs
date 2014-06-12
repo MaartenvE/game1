@@ -9,7 +9,6 @@ public static class ColorModel {
     public static Color ORANGE = new Color(1, 0.5f, 0);
     public static Color PURPLE = new Color(0.5f, 0, 1);
     public static Color GREEN = Color.green;
-
 	public static Color NONE = new Color(0f,0f,0f);
 
 	public static char REDCHAR = 'r';
@@ -58,5 +57,4 @@ public static class ColorModel {
     {
         return new Color(color.x, color.y, color.z);
     }
-
 }
