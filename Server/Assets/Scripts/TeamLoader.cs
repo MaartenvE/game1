@@ -29,27 +29,39 @@ public class TeamLoader : MonoBehaviour
         instantiateTeamObjects();
     }
 
-    void OnPlayerConnected(NetworkPlayer networkPlayer)
+    [RPC]
+    void SelectTeam(int spectate, NetworkMessageInfo info)
     {
-        IPlayer player = new Player(new NetworkPlayerWrapper(networkPlayer));
+        IPlayer player = new Player(new NetworkPlayerWrapper(info.sender));
+        if (spectate == 0)
+        {
+            teamManager.AddPlayer(player);
+            Debug.Log("Player assigned to " + player.Team.Name);
 
-        teamManager.AddPlayer(player);
-        Debug.Log("Player assigned to " + player.Team.Name);
+            GameObject.Find("Player").GetComponent<PlayerInfo>().SendInfo(player);
+            player.Team.TeamObject.GetComponent<TeamInfoLoader>().TeamInfo.SetProgress(player.Team.Progress);
 
-        GameObject.Find("Player").GetComponent<PlayerInfo>().SendInfo(player);
-        player.Team.TeamObject.GetComponent<TeamInfoLoader>().TeamInfo.SetProgress(player.Team.Progress);
-
-        instantiateCubeFinger(player);
+            instantiateCubeFinger(player);
+        }
+        else
+        {
+            GameObject.Find("Player").GetComponent<PlayerInfo>().SendInfo(player, 0);
+            Debug.Log("Player assigned to Spectator");
+        }
     }
 
     void OnPlayerDisconnected(NetworkPlayer networkPlayer)
     {
         IPlayer player = TeamLoader.TeamManager.GetPlayer(new NetworkPlayerWrapper(networkPlayer));
 
-        Network.RemoveRPCs(player.CubeFinger.networkView.viewID);
-        Network.Destroy(player.CubeFinger.networkView.viewID);
+        if (player != null)
+        {
+            Network.RemoveRPCs(player.CubeFinger.networkView.viewID);
+            Network.Destroy(player.CubeFinger.networkView.viewID);
 
-        teamManager.RemovePlayer(player);
+            teamManager.RemovePlayer(player);
+        }
+
         Debug.Log("Player " + networkPlayer + " left.");
     }
 

@@ -17,9 +17,10 @@ public class StartScreen : MonoBehaviour
             Application.LoadLevel(2);
         }
 
-       if (GUI.Button(new Rect((Screen.width / 2) - 150, (Screen.height / 2) +85, 300, 100), "Spectate" ))  
+        if (GUI.Button(new Rect((Screen.width / 2) - 150, (Screen.height / 2) + 85, 300, 100), "Spectate"))
         {
-			Application.LoadLevel(3);
+            TeamSelector.IsSpectator = true;
+            Application.LoadLevel(2);
         }  
 
 		GUI.Label(new Rect(Screen.width - 80 , Screen.height- 20, 80, 20), "Team Cubed");

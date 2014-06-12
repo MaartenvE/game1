@@ -90,7 +90,8 @@ public class InGameOverlay : MonoBehaviour
 
         // Draw button
         GUI.color = trashcanSelected ? Color.red : Color.white;
-        if (GUI.Button(new Rect(padding, padding, size, size), TrashcanIcon, GUIStyle.none))
+        GUI.DrawTexture(new Rect(padding, padding, size, size), TrashcanIcon);
+        if (GUI.Button(new Rect(padding, padding, size, size), GUIContent.none, GUIStyle.none))
         {
             trashcanSelected = !trashcanSelected;
             CubeFingerBehaviour cubeFinger = GameObject.Find("Player").GetComponent<PlayerInfo>().CubeFinger;
@@ -116,11 +117,12 @@ public class InGameOverlay : MonoBehaviour
             GUI.DrawTexture(new Rect(x, padding, size + 1, size + 1), view.Icon);
 
             // Draw button
-            GUI.color = Color.white;
-            if (GUI.Button(new Rect(x, padding, size, size), view.Icon, GUIStyle.none))
+            // For some reason, buttons are drawn smaller, so draw a Texture with underneath a button.
+            GUI.color = (activeView.SceneName == view.SceneName) ? Color.green : Color.white;
+            GUI.DrawTexture(new Rect(x, padding, size, size), view.Icon);
+            if (GUI.Button(new Rect(x, padding, size, size), GUIContent.none, GUIStyle.none))
             {
-                activeView = view;             
-
+                activeView = view;
             }
 
             x += size + Screen.width * VIEW_SELECTOR_PADDING;
@@ -163,24 +165,6 @@ public class InGameOverlay : MonoBehaviour
                 Screen.width * PROGRESSBAR_WIDTH,
                 Screen.width * PROGRESSBAR_HEIGHT
             ), progress);
-
-        /*// Draw progress bar background
-        GUI.color = Color.gray;
-        GUI.Box(new Rect(
-                (1f - PROGRESSBAR_WIDTH - PROGRESSBAR_PADDING) * Screen.width, 
-                Screen.width * PROGRESSBAR_PADDING, 
-                Screen.width * PROGRESSBAR_WIDTH, 
-                Screen.width * PROGRESSBAR_HEIGHT
-            ), GUIContent.none, progressStyle);
-
-        // Draw progress
-        GUI.color = Color.Lerp(Color.red, Color.green, progress);
-        GUI.Box(new Rect(
-                (1f - PROGRESSBAR_WIDTH * progress - PROGRESSBAR_PADDING) * Screen.width, 
-                Screen.width * PROGRESSBAR_PADDING, 
-                Screen.width * PROGRESSBAR_WIDTH * progress, 
-                Screen.width * PROGRESSBAR_HEIGHT
-            ), GUIContent.none, progressStyle);*/
     }
 
     public static void AddView(GuiView view)

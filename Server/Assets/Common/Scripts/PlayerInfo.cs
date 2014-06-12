@@ -3,14 +3,15 @@ using System.Collections;
 
 public class PlayerInfo : MonoBehaviour
 {
+    public static bool IsSpectator = false;
     public int Team;
     public CubeFingerBehaviour CubeFinger;
 
     private GameObject teamObject;
 
-    public void SendInfo(IPlayer player)
+    public void SendInfo(IPlayer player, int? teamId = null)
     {
-        networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, player.Team.ID);
+        networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, teamId ?? player.Team.ID);
     }
 
     [RPC]
@@ -28,7 +29,6 @@ public class PlayerInfo : MonoBehaviour
                 teamObject = teamInfoLoader.gameObject;
                 goalStructure.transform.parent = GameObject.Find(teamInfo.ImageTarget).transform;
                 goalStructure.transform.localPosition = Vector3.zero;
-                break;
             }
 
             else

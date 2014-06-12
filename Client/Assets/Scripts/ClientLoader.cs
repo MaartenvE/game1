@@ -14,6 +14,11 @@ public class ClientLoader : MonoBehaviour
         Client.ConnectToServer(QRScanner.IP ?? IP, QRScanner.Port ?? Port);
     }
 
+    void OnGUI()
+    {
+        Client.OnGUI();
+    }
+
     [RPC]
     void Win(int teamId)
     {
