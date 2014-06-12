@@ -214,7 +214,8 @@ public class CubeFingerBehaviour : MonoBehaviour
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
                 RaycastHit hit = new RaycastHit();
 
-                if (Physics.Raycast(ray, out hit, maxPickingDistance))
+                if ((DeleteMode || GameObject.Find("Player").GetComponent<PlayerInfo>().HasFullBlock)
+                    && Physics.Raycast(ray, out hit, maxPickingDistance))
                 {
                     Transform pickedObject = hit.transform;
 

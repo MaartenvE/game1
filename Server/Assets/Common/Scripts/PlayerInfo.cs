@@ -7,6 +7,8 @@ public class PlayerInfo : MonoBehaviour
     public int Team;
     public CubeFingerBehaviour CubeFinger;
 
+    public bool HasFullBlock { get; private set; }
+
     private GameObject teamObject;
 
     public void SendInfo(IPlayer player, int? teamId)
@@ -54,6 +56,7 @@ public class PlayerInfo : MonoBehaviour
     [RPC]
     public void SetBlockHalf()
     {
+        HasFullBlock = false;
         GameObject rotatingBlock = GameObject.Find("RotatingBlock");
         GameObject halfBlock = Resources.Load("HalfBlock") as GameObject;
         rotatingBlock.GetComponent<MeshFilter>().mesh = halfBlock.GetComponent<MeshFilter>().mesh;
@@ -62,6 +65,7 @@ public class PlayerInfo : MonoBehaviour
     [RPC]
     public void SetBlockFull()
     {
+        HasFullBlock = true;
         GameObject rotatingBlock = GameObject.Find("RotatingBlock");
         GameObject block = Resources.Load("GoalCube") as GameObject;
         rotatingBlock.GetComponent<MeshFilter>().mesh = block.GetComponent<MeshFilter>().mesh;
