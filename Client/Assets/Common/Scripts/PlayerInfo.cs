@@ -58,8 +58,7 @@ public class PlayerInfo : MonoBehaviour
     {
         HasFullBlock = false;
         GameObject rotatingBlock = GameObject.Find("RotatingBlock");
-        GameObject halfBlock = Resources.Load("HalfBlock") as GameObject;
-        rotatingBlock.GetComponent<MeshFilter>().mesh = halfBlock.GetComponent<MeshFilter>().mesh;
+        rotatingBlock.renderer.enabled = true;
     }
 
     [RPC]
@@ -67,8 +66,7 @@ public class PlayerInfo : MonoBehaviour
     {
         HasFullBlock = true;
         GameObject rotatingBlock = GameObject.Find("RotatingBlock");
-        GameObject block = Resources.Load("GoalCube") as GameObject;
-        rotatingBlock.GetComponent<MeshFilter>().mesh = block.GetComponent<MeshFilter>().mesh;
+        rotatingBlock.renderer.enabled = false;
     }
 
     [RPC]
