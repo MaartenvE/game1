@@ -19,9 +19,16 @@ public class ClientLoader : MonoBehaviour
         Client.OnGUI();
     }
 
+    void Restart()
+    {
+        Application.LoadLevel("Client");
+    }
+
     [RPC]
     void Win(int teamId)
     {
         Client.RPC_Win(teamId);
+        Network.SetSendingEnabled(1, false);
+        Invoke("Restart", 5);
     }
 }

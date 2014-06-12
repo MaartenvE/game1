@@ -20,12 +20,21 @@ public class Client
     {
         if (won != null)
         {
+            GameObject crosshair = GameObject.Find("Crosshair");
+            if (crosshair != null)
+            {
+                crosshair.SetActive(false);
+            }
+
             string text = won.GetValueOrDefault()
                 ? "Congratulations, your team won!"
                 : "Game over";
 
             var style = GUI.skin.GetStyle("Label");
             style.alignment = TextAnchor.MiddleCenter;
+            style.fontSize = 25;
+
+            GUI.color = won.GetValueOrDefault() ? Color.green : Color.red;
             GUI.Label(new Rect(0, 0, Screen.width, Screen.height), text);
         }
     }
@@ -34,9 +43,5 @@ public class Client
     {
         int myTeam = GameObject.Find("Player").GetComponent<PlayerInfo>().Team;
         this.won = teamId == myTeam;
-
-        System.Threading.Thread.Sleep(5000);
-
-        Application.LoadLevel("Client");
     }
 }
