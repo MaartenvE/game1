@@ -23,6 +23,8 @@ public class GroundBlockBehaviour : MonoBehaviour
         {
             Vector3 position = this.transform.position + (direction * transform.localScale.x);
             player.Team.Tracker.PlaceBlock(player, position, player.HalfBlock.CalculateUnityColor());
+
+            player.GiveNewInventoryBlock();
         }
     }
 

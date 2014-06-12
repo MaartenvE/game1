@@ -38,7 +38,6 @@ public class TeamLoader : MonoBehaviour
 
         GameObject.Find("Player").GetComponent<PlayerInfo>().SendInfo(player);
         player.Team.TeamObject.GetComponent<TeamInfoLoader>().TeamInfo.SetProgress(player.Team.Progress);
-
         instantiateCubeFinger(player);
     }
 
@@ -81,8 +80,8 @@ public class TeamLoader : MonoBehaviour
         GameObject cubeFinger = Network.Instantiate(prefab, prefab.transform.position, prefab.transform.rotation, 1) as GameObject;
         CubeFingerBehaviour behaviour = cubeFinger.GetComponent<CubeFingerBehaviour>();
         behaviour.SetParent(player.Team.ImageTarget);
-        behaviour.SetPlayer(player);
-
+        
         player.CubeFinger = behaviour;
+        behaviour.SetPlayer(player);
     }
 }

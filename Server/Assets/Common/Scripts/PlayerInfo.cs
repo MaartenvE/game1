@@ -39,4 +39,31 @@ public class PlayerInfo : MonoBehaviour
             }
         }
     }
+
+    [RPC]
+    public void SetHalfBlockColor(Vector3 color)
+    {
+
+    }
+
+    [RPC]
+    public void SetBlockHalf()
+    {
+
+    }
+
+    [RPC]
+    public void SetBlockFull()
+    {
+
+    }
+
+    [RPC]
+    public void ThrowAwayBlock(NetworkMessageInfo message)
+    {
+        INetworkPlayer networkPlayer = new NetworkPlayerWrapper(message.sender);
+        IPlayer player = TeamLoader.TeamManager.GetPlayer(networkPlayer);
+        player.HalfBlock = null;
+        player.GiveInventoryBlock();
+    }
 }

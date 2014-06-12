@@ -39,4 +39,33 @@ public class PlayerInfo : MonoBehaviour
             }
         }
     }
+
+    [RPC]
+    public void SetHalfBlockColor(Vector3 color)
+    {
+        GameObject rotatingBlock = GameObject.Find("RotatingBlock");
+        rotatingBlock.renderer.material.color = ColorModel.ConvertToUnityColor(color);
+    }
+
+    [RPC]
+    public void SetBlockHalf()
+    {
+        GameObject rotatingBlock = GameObject.Find("RotatingBlock");
+        GameObject halfBlock = Resources.Load("HalfBlock") as GameObject;
+        rotatingBlock.GetComponent<MeshFilter>().mesh = halfBlock.GetComponent<MeshFilter>().mesh;
+    }
+
+    [RPC]
+    public void SetBlockFull()
+    {
+        GameObject rotatingBlock = GameObject.Find("RotatingBlock");
+        GameObject block = Resources.Load("GoalCube") as GameObject;
+        rotatingBlock.GetComponent<MeshFilter>().mesh = block.GetComponent<MeshFilter>().mesh;
+    }
+
+    [RPC]
+    public void ThrowAwayBlock()
+    {
+
+    }
 }
