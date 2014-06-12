@@ -193,67 +193,76 @@ public class CubeFingerBehaviour : MonoBehaviour
 
     void Update()
     {
-        if (previousObject != null)
+        if (this.transform.parent.GetComponent<ImageTargetBehaviour>().CurrentStatus == TrackableBehaviour.Status.NOT_FOUND)
         {
-            previousObject.renderer.enabled = true;
+            this.renderer.enabled = false;
         }
 
-        if (IsMine)
-        {
-            bool show = false;
-
-            //send a ray from the center of the screen to the object
-            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-            RaycastHit hit = new RaycastHit();
-
-            if (Physics.Raycast(ray, out hit, maxPickingDistance))
-            {
-                Transform pickedObject = hit.transform;
-
-                Transform parent = pickedObject.transform.parent;
-                if (parent.CompareTag("imageTarget") && parent.parent.GetComponent<TeamInfoLoader>().TeamInfo.IsMine())
-                {
-                    IRaycastHit raycastHitWrapper = new RaycastHitWrapper();
-                    raycastHitWrapper.SetNativeRaycastHit(hit);
-
-                    //move the finger to correct position and show it
-                    moveFinger(pickedObject, raycastHitWrapper);
-                    show = true;
-
-                    if (!deleteMode && clicker.SingleClick() && gameObject.activeInHierarchy)
-                    {
-                        placeObject(pickedObject.gameObject, CalculateSide(pickedObject, hit.point));
-                        show = false;
-                    }
-
-                    else if (deleteMode && clicker.SingleClick() && gameObject.activeInHierarchy)
-                    {
-                        removeObject(pickedObject.gameObject);
-                        show = false;
-                    }
-                }
-            }
-
-            showFinger(show);
-        }
-
-        if (this.renderer.enabled)
-        {
-            Collider[] colliders = Physics.OverlapSphere(transform.position, 0.05f);
-            if (colliders.Count() > 0)
-            {
-                previousObject = colliders[0].gameObject;
-            }
-        }
         else
         {
+
             if (previousObject != null)
             {
                 previousObject.renderer.enabled = true;
-                previousObject = null;
             }
-        }
 
-        drawFinger();
+            if (IsMine)
+            {
+                bool show = false;
+
+                //send a ray from the center of the screen to the object
+                Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+                RaycastHit hit = new RaycastHit();
+
+                if (Physics.Raycast(ray, out hit, maxPickingDistance))
+                {
+                    Transform pickedObject = hit.transform;
+
+                    Transform parent = pickedObject.transform.parent;
+                    if (parent.CompareTag("imageTarget") && parent.parent.GetComponent<TeamInfoLoader>().TeamInfo.IsMine())
+                    {
+                        IRaycastHit raycastHitWrapper = new RaycastHitWrapper();
+                        raycastHitWrapper.SetNativeRaycastHit(hit);
+
+                        //move the finger to correct position and show it
+                        moveFinger(pickedObject, raycastHitWrapper);
+                        show = true;
+
+                        if (!deleteMode && clicker.SingleClick() && gameObject.activeInHierarchy)
+                        {
+                            placeObject(pickedObject.gameObject, CalculateSide(pickedObject, hit.point));
+                            show = false;
+                        }
+
+                        else if (deleteMode && clicker.SingleClick() && gameObject.activeInHierarchy)
+                        {
+                            removeObject(pickedObject.gameObject);
+                            show = false;
+                        }
+                    }
+                }
+
+                showFinger(show);
+            }
+
+            if (this.renderer.enabled)
+            {
+                Collider[] colliders = Physics.OverlapSphere(transform.position, 0.05f);
+                if (colliders.Count() > 0)
+                {
+                    previousObject = colliders[0].gameObject;
+                }
+            }
+            else
+            {
+                if (previousObject != null)
+                {
+                    previousObject.renderer.enabled = true;
+                    previousObject = null;
+                }
+            }
+
+            drawFinger();
+        }
     }
 }

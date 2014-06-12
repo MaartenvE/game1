@@ -3,6 +3,15 @@ using System;
 
 public class BlockBehaviour : MonoBehaviour
 {
+    // todo: there has to be a better way to hide blocks on start
+    void Update()
+    {
+        if (this.transform.parent.GetComponent<ImageTargetBehaviour>().CurrentStatus == TrackableBehaviour.Status.NOT_FOUND)
+        {
+            this.renderer.enabled = false;
+        }
+    }
+
     public void Place(Vector3 direction)
     {
         networkView.RPC("PlaceNewBlock", RPCMode.Server, direction);
