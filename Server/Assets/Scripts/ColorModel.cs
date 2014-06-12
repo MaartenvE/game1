@@ -47,6 +47,7 @@ public static class ColorModel {
 		}
 	}
 
+
     public static Vector3 ConvertToVector3(Color color)
     {
         return new Vector3(color.r, color.g, color.b);

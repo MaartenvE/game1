@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
-using UnityEditor;
+//using UnityEditor;
 using System.Text.RegularExpressions;
 
 public static class StructureReader {
@@ -20,7 +20,8 @@ public static class StructureReader {
 		}
 		catch (System.FormatException e)
 		{
-			EditorUtility.DisplayDialog("whoops", "a faulty puzzle was loaded, check formatting. errormessage: "+e.Message+"\n"+e.StackTrace, "Ok");
+			throw new System.FormatException(e.Message);
+			//EditorUtility.DisplayDialog("whoops", "a faulty puzzle was loaded, check formatting. errormessage: "+e.Message+"\n"+e.StackTrace, "Ok");
 		}
 
 		return null;
@@ -59,9 +60,7 @@ public static class StructureReader {
 		Color[][][] level = new Color[size][][];
 
 		for(int i = 0; i< size; i++){
-			EditorUtility.DisplayDialog("title",blocks[i], "ok");
 			level[i] = readBlock(blocks[i], size);
-
 		}
 
 		return level;

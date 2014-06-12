@@ -16,6 +16,13 @@ public class Client
 	    return network.Connect(ip, port);
 	}
 
+	public void OnDisconnectedFromServer(NetworkDisconnection info) {
+		if (info == NetworkDisconnection.LostConnection)
+						Application.LoadLevel (0);
+		else
+			Debug.Log("Successfully diconnected from the server");
+	}
+
     public void OnGUI()
     {
         if (won != null)
