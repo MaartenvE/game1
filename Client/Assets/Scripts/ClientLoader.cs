@@ -11,12 +11,24 @@ public class ClientLoader : MonoBehaviour
     {
         Input.compass.enabled = true;
         Client = new Client(new NetworkWrapper());
-        Client.ConnectToServer(IP, Port);
+        Client.ConnectToServer(QRScanner.IP ?? IP, QRScanner.Port ?? Port);
+    }
+
+    void OnGUI()
+    {
+        Client.OnGUI();
+    }
+
+    void Restart()
+    {
+        Application.LoadLevel("Client");
     }
 
     [RPC]
     void Win(int teamId)
     {
         Client.RPC_Win(teamId);
+        Network.SetSendingEnabled(1, false);
+        Invoke("Restart", 5);
     }
 }

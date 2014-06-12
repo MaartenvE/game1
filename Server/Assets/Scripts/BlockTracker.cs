@@ -23,7 +23,7 @@ public class BlockTracker
     {
         this.team = team;
         this.network = network;
-        this.prefab = Resources.Load("Block") as GameObject;
+        this.prefab = Resources.Load("GameCube") as GameObject;
 
         this.structure = new TeamStructureTracker(goalStructure);
 
@@ -37,7 +37,8 @@ public class BlockTracker
             if (this.OnStructureComplete != null) this.OnStructureComplete();
         };
 
-        instantiateGroundBlock(Color.red);
+        Vector3 center = this.structure.Normalize(Vector3.zero, prefab.transform.localScale.x);
+        instantiateGroundBlock(goalStructure[center] ?? Color.black);
     }
 
     private void instantiateGroundBlock(Color color)

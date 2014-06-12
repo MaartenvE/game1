@@ -35,7 +35,7 @@ public class HalfBlockDecoratorTest
         halfBlockDecorator.wrappedObject = first;
         first.wrappedObject = second;
 
-        Color result = first.CalculateUnityColor();
+        Color result = halfBlockDecorator.CalculateUnityColor();
         Assert.AreEqual(expectedColor, result);
     }
 }

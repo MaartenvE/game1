@@ -17,10 +17,15 @@ public class GroundBlockBehaviour : MonoBehaviour
     [RPC]
     void PlaceNewBlock(Vector3 direction, NetworkMessageInfo info)
     {
-        Vector3 position = this.transform.position + (direction * transform.localScale.x);
-
         IPlayer player = TeamLoader.TeamManager.GetPlayer(new NetworkPlayerWrapper(info.sender));
-        player.Team.Tracker.PlaceBlock(player, position, Color.green);
+
+        // if (player.HasPlaceableBlock)
+        {
+            Vector3 position = this.transform.position + (direction * transform.localScale.x);
+            player.Team.Tracker.PlaceBlock(player, position, player.HalfBlock.CalculateUnityColor());
+
+            player.GiveNewInventoryBlock();
+        }
     }
 
     [RPC]

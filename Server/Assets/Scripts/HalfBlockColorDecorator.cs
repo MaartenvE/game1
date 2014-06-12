@@ -2,18 +2,12 @@
 using System.Collections;
 
 public class HalfBlockColorDecorator : HalfBlockDecorator {
-    private HalfBlockColorDecorator _wrappedObject;
+
     private AbstractHalfBlockColor _color;
 
     public AbstractHalfBlockColor color
     {
         get { return _color;}
-    }
-
-    public HalfBlockColorDecorator wrappedObject
-    {
-        get { return _wrappedObject; }
-        set { _wrappedObject = value; }
     }
 
     public HalfBlockColorDecorator(AbstractHalfBlockColor color)

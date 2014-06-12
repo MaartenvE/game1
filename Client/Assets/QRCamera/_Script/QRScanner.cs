@@ -14,8 +14,8 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 	private string tempText;
 	private string qrText;
 
-	public static string adressText;
-	public static int portNum;
+    public static string IP;
+    public static int? Port;
 	
 	void Start () {
 		QCARBehaviour qcarBehaviour = GetComponent<QCARBehaviour>();
@@ -73,8 +73,8 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 			//if either is null, the tempText was not of the proper format (false qrcode found)
 			if((port != null && port != "")){
 				if(adress != null && adress != ""){
-					adressText = adress;
-					portNum = int.Parse(port);
+					IP = adress;
+					Port = int.Parse(port);
 
 					loadGame ();
 				}

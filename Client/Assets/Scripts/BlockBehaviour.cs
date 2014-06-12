@@ -3,10 +3,13 @@ using System;
 
 public class BlockBehaviour : MonoBehaviour
 {
-
-    void Start()
+    // todo: there has to be a better way to hide blocks on start
+    void Update()
     {
-        this.tag = "block";
+        if (this.transform.parent.GetComponent<ImageTargetBehaviour>().CurrentStatus == TrackableBehaviour.Status.NOT_FOUND)
+        {
+            this.renderer.enabled = false;
+        }
     }
 
     public void Place(Vector3 direction)

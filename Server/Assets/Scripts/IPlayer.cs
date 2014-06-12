@@ -7,6 +7,9 @@ public interface IPlayer
 
     CubeFingerBehaviour CubeFinger { get; set; }
 
+    HalfBlock HalfBlock { get; set; }
+    bool HasPlaceableBlock { get; set; }
+
 	void GiveInventoryBlock();
 
 	void DestroyInventoryBlock();
@@ -16,4 +19,8 @@ public interface IPlayer
 	void GiveServerAnError(string errorMessage);
 
 	void GivePlayerAnError(string errorMessage);
+
+    void CombineBlock(IPlayer other);
+
+    void GiveNewInventoryBlock();
 }

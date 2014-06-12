@@ -3,14 +3,15 @@ using System.Collections;
 
 public class PlayerInfo : MonoBehaviour
 {
+    public static bool IsSpectator = false;
     public int Team;
-    public GameObject CubeFinger;
+    public CubeFingerBehaviour CubeFinger;
 
     private GameObject teamObject;
 
-    public void SendInfo(IPlayer player)
+    public void SendInfo(IPlayer player, int? teamId = null)
     {
-        networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, player.Team.ID);
+        networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, teamId ?? player.Team.ID);
     }
 
     [RPC]
@@ -18,18 +19,53 @@ public class PlayerInfo : MonoBehaviour
     {
         Team = team;
 
-        foreach (TeamInfoLoader teamInfo in GameObject.Find("Teams").GetComponentsInChildren<TeamInfoLoader>())
+        GameObject goalStructure = GameObject.Find("GoalStructure");
+
+        foreach (TeamInfoLoader teamInfoLoader in GameObject.Find("Teams").GetComponentsInChildren<TeamInfoLoader>())
         {
-            if (teamInfo.TeamInfo.IsMine())
+            TeamInfo teamInfo = teamInfoLoader.TeamInfo;
+            if (teamInfo.IsMine())
             {
-                teamObject = teamInfo.gameObject;
-                break;
+                teamObject = teamInfoLoader.gameObject;
+                goalStructure.transform.parent = GameObject.Find(teamInfo.ImageTarget).transform;
+                goalStructure.transform.localPosition = Vector3.zero;
+            }
+
+            else
+            {
+                GameObject goalClone = GameObject.Instantiate(goalStructure) as GameObject;
+                goalClone.transform.parent = GameObject.Find(teamInfo.ImageTarget).transform;
+                goalClone.transform.localPosition = Vector3.zero;
             }
         }
+    }
 
-        if (CubeFinger != null)
-        {
-            CubeFinger.transform.parent = GameObject.Find(teamObject.GetComponent<TeamInfoLoader>().TeamInfo.ImageTarget).transform;
-        }
+    [RPC]
+    public void SetHalfBlockColor(Vector3 color)
+    {
+        GameObject rotatingBlock = GameObject.Find("RotatingBlock");
+        rotatingBlock.renderer.material.color = ColorModel.ConvertToUnityColor(color);
+    }
+
+    [RPC]
+    public void SetBlockHalf()
+    {
+        GameObject rotatingBlock = GameObject.Find("RotatingBlock");
+        GameObject halfBlock = Resources.Load("HalfBlock") as GameObject;
+        rotatingBlock.GetComponent<MeshFilter>().mesh = halfBlock.GetComponent<MeshFilter>().mesh;
+    }
+
+    [RPC]
+    public void SetBlockFull()
+    {
+        GameObject rotatingBlock = GameObject.Find("RotatingBlock");
+        GameObject block = Resources.Load("GoalCube") as GameObject;
+        rotatingBlock.GetComponent<MeshFilter>().mesh = block.GetComponent<MeshFilter>().mesh;
+    }
+
+    [RPC]
+    public void ThrowAwayBlock()
+    {
+
     }
 }

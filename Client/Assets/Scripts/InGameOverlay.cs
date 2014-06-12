@@ -12,9 +12,9 @@ public class InGameOverlay : MonoBehaviour
     private const float VIEW_SELECTOR_TOP           = .01f;
     private const float VIEW_SELECTOR_PADDING       = .03f;
 
-    private const float PROGRESSBAR_WIDTH   = .15f;
-    private const float PROGRESSBAR_HEIGHT  = .03f;
-    private const float PROGRESSBAR_PADDING = .01f;
+    public const float PROGRESSBAR_WIDTH   = .15f;
+    public const float PROGRESSBAR_HEIGHT  = .03f;
+    public const float PROGRESSBAR_PADDING = .01f;
 
     public Texture2D TrashcanIcon;
     public Texture2D ConstructionIcon;
@@ -72,11 +72,14 @@ public class InGameOverlay : MonoBehaviour
 
         // Own block in bottom right
 
+        // Delete block
+        deleteBlock();
+
+        // Leave Game
+        leaveGame();
+
 		//back button quits game
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			Application.LoadLevel(1);
-		}
+        backButton();
     }
 
     private void drawTrashcanIcon()
@@ -90,10 +93,15 @@ public class InGameOverlay : MonoBehaviour
 
         // Draw button
         GUI.color = trashcanSelected ? Color.red : Color.white;
-        if (GUI.Button(new Rect(padding, padding, size, size), TrashcanIcon, GUIStyle.none))
+        GUI.DrawTexture(new Rect(padding, padding, size, size), TrashcanIcon);
+        if (GUI.Button(new Rect(padding, padding, size, size), GUIContent.none, GUIStyle.none))
         {
             trashcanSelected = !trashcanSelected;
-            CubeFingerBehaviour.DeleteMode = trashcanSelected;
+            CubeFingerBehaviour cubeFinger = GameObject.Find("Player").GetComponent<PlayerInfo>().CubeFinger;
+            if (cubeFinger)
+            {
+                cubeFinger.DeleteMode = trashcanSelected;
+            }
         }
     }
 
@@ -112,11 +120,12 @@ public class InGameOverlay : MonoBehaviour
             GUI.DrawTexture(new Rect(x, padding, size + 1, size + 1), view.Icon);
 
             // Draw button
-            GUI.color = Color.white;
-            if (GUI.Button(new Rect(x, padding, size, size), view.Icon, GUIStyle.none))
+            // For some reason, buttons are drawn smaller, so draw a Texture with underneath a button.
+            GUI.color = (activeView.SceneName == view.SceneName) ? Color.green : Color.white;
+            GUI.DrawTexture(new Rect(x, padding, size, size), view.Icon);
+            if (GUI.Button(new Rect(x, padding, size, size), GUIContent.none, GUIStyle.none))
             {
-                activeView = view;             
-
+                activeView = view;
             }
 
             x += size + Screen.width * VIEW_SELECTOR_PADDING;
@@ -136,6 +145,7 @@ public class InGameOverlay : MonoBehaviour
         foreach (GameObject block in gameObjects)
         {
             block.renderer.enabled = _show;
+            block.layer = _show ? 0 : 2;
         }
     }
 
@@ -152,23 +162,12 @@ public class InGameOverlay : MonoBehaviour
             }
         }
 
-        // Draw progress bar background
-        GUI.color = Color.gray;
-        GUI.Box(new Rect(
-                (1f - PROGRESSBAR_WIDTH - PROGRESSBAR_PADDING) * Screen.width, 
-                Screen.width * PROGRESSBAR_PADDING, 
-                Screen.width * PROGRESSBAR_WIDTH, 
+        ProgressBar.Draw(new Rect(
+                (1f - PROGRESSBAR_WIDTH - PROGRESSBAR_PADDING) * Screen.width,
+                Screen.width * PROGRESSBAR_PADDING,
+                Screen.width * PROGRESSBAR_WIDTH,
                 Screen.width * PROGRESSBAR_HEIGHT
-            ), GUIContent.none, progressStyle);
-
-        // Draw progress
-        GUI.color = Color.Lerp(Color.red, Color.green, progress);
-        GUI.Box(new Rect(
-                (1f - PROGRESSBAR_WIDTH * progress - PROGRESSBAR_PADDING) * Screen.width, 
-                Screen.width * PROGRESSBAR_PADDING, 
-                Screen.width * PROGRESSBAR_WIDTH * progress, 
-                Screen.width * PROGRESSBAR_HEIGHT
-            ), GUIContent.none, progressStyle);
+            ), progress);
     }
 
     public static void AddView(GuiView view)
@@ -179,5 +178,33 @@ public class InGameOverlay : MonoBehaviour
     public static void AddView(string sceneName, Texture2D icon)
     {
         AddView(new GuiView(sceneName, icon));
+    }
+
+    private void deleteBlock()
+    {
+        GUI.color = Color.white;
+        if(GUI.Button(new Rect(Screen.width - 125, Screen.height -100, 75, 20), "Throw Away"))
+        {
+            NetworkView playerNetworkView = GameObject.Find("Player").networkView;
+            INetworkView _networkView = new NetworkViewWrapper(playerNetworkView);
+            _networkView.RPC("ThrowAwayBlock", RPCMode.Server);
+        }
+    }
+
+    private void leaveGame()
+    {
+        GUI.color = Color.white;
+        if (GUI.Button(new Rect(0, Screen.height - 25, 100, 20), "Leave Game"))
+        {
+            Application.Quit();
+        }
+    }
+
+    private void backButton()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.LoadLevel(1);
+        }
     }
 }

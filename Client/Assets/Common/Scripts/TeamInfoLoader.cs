@@ -2,6 +2,8 @@
 
 public class TeamInfoLoader : MonoBehaviour
 {
+    private TeamInfoOverlay overlay;
+
     private TeamInfo teamInfo;
     public TeamInfo TeamInfo
     {
@@ -14,6 +16,12 @@ public class TeamInfoLoader : MonoBehaviour
     void Awake()
     {
         teamInfo = new TeamInfo(new GameObjectWrapper(gameObject));
+        overlay = new TeamInfoOverlay(teamInfo);
+    }
+
+    void OnGUI()
+    {
+        overlay.OnGUI();
     }
 
     void OnNetworkInstantiate(NetworkMessageInfo info)

@@ -35,6 +35,21 @@ public class Structure<T> : IEnumerable
         return IsWithinBounds((int)location.x, (int)location.y, (int)location.z);
     }
 
+    public Vector3 Normalize(Vector3 position, float scale)
+    {
+        Vector3 normalized = position / scale;
+        normalized.x += GetLength(0) / 2;
+        normalized.z += GetLength(2) / 2;
+        return normalized;
+    }
+
+    public Vector3 Denormalize(Vector3 position, float scale)
+    {
+        position.x -= GetLength(0) / 2;
+        position.z -= GetLength(0) / 2;
+        return position * scale;
+    }
+
     public T this[int x, int y, int z]
     {
         get
@@ -72,5 +87,25 @@ public class Structure<T> : IEnumerable
     public IEnumerator GetEnumerator()
     {
         return elements.GetEnumerator();
+    }
+
+    public IEnumerable Keys
+    {
+        get
+        {
+            for (int x = 0; x < GetLength(0); x++)
+            {
+                for (int y = 0; y < GetLength(1); y++)
+                {
+                    for (int z = 0; z < GetLength(2); z++)
+                    {
+                        if (this[x, y, z] != null)
+                        {
+                            yield return new Vector3(x, y, z);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
