@@ -13,12 +13,24 @@ public class TeamLoader : MonoBehaviour
 
     void OnServerInitialized()
     {
-        Color?[, ,] goal = new Color?[3, 3, 3];
-        goal[1, 0, 1] = Color.red;
-        goal[1, 1, 1] = Color.blue;
-        goal[1, 2, 1] = Color.blue;
-        goal[1, 0, 2] = Color.blue;
-        goal[1, 0, 0] = Color.blue;
+        Color?[, ,] goal = new Color?[4, 4, 4];
+        goal[1, 0, 1] = ColorModel.RED;
+        goal[2, 0, 1] = ColorModel.RED;
+        goal[0, 0, 1] = ColorModel.RED;
+        goal[1, 0, 2] = ColorModel.RED;
+        goal[0, 0, 2] = ColorModel.GREEN;
+        goal[0, 0, 3] = ColorModel.GREEN;
+        goal[0, 1, 2] = ColorModel.GREEN;
+        goal[0, 1, 1] = ColorModel.GREEN;
+        goal[2, 0, 2] = ColorModel.ORANGE;
+        goal[2, 1, 2] = ColorModel.ORANGE;
+        goal[2, 2, 2] = ColorModel.ORANGE;
+        goal[2, 2, 3] = ColorModel.ORANGE;
+        goal[1, 0, 3] = ColorModel.BLUE;
+        goal[2, 0, 3] = ColorModel.BLUE;
+        goal[1, 1, 3] = ColorModel.BLUE;
+        goal[2, 1, 3] = ColorModel.BLUE;
+        
 
         teamManager = new TeamManager(new[] {
             new Team("Team 1", "ImageTarget1", goal),

@@ -3,8 +3,12 @@ using System.Collections;
 
 public class Client
 {
+    private const float TEXT_SIZE = 0.1f;
+
     private bool? won;
     private INetwork network;
+
+    private GUIStyle style;
 
     public Client(INetwork network)
     {
@@ -37,13 +41,22 @@ public class Client
                 ? "Congratulations, your team won!"
                 : "Game over";
 
-            var style = GUI.skin.GetStyle("Label");
-            style.alignment = TextAnchor.MiddleCenter;
-            style.fontSize = 25;
+            setStyle();
 
             GUI.color = won.GetValueOrDefault() ? Color.green : Color.red;
-            GUI.Label(new Rect(0, 0, Screen.width, Screen.height), text);
+            GUI.Label(new Rect(0, 0, Screen.width, Screen.height), text, style);
         }
+    }
+
+    private void setStyle()
+    {
+        if (style == null)
+        {
+            style = new GUIStyle(GUI.skin.label);
+            style.alignment = TextAnchor.MiddleCenter;
+        }
+
+        style.fontSize = (int)(Screen.width * TEXT_SIZE);
     }
 
     public void RPC_Win(int teamId)

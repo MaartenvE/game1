@@ -20,4 +20,7 @@ public class ServerLoader : MonoBehaviour
 
     [RPC]
     void Win(int teamId) { }
+
+    [RPC]
+    void SetTime(int secondsLeft) { }
 }

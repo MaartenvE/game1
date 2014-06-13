@@ -17,12 +17,22 @@ public class Server
 
     public void Win(ITeam team)
     {
-        networkView.RPC("Win", RPCMode.OthersBuffered, team.ID);
+        sendWin(team.ID);
+    }
+
+    public void TimeUp()
+    {
+        sendWin(0);
+    }
+
+    private void sendWin(int teamId)
+    {
+        networkView.RPC("Win", RPCMode.OthersBuffered, teamId);
         network.SetSendingEnabled(1, false);
         network.isMessageQueueRunning = false;
-
-        Application.LoadLevel("Server");
     }
+
+
 }
 
 /*
