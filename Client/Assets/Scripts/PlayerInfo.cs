@@ -42,6 +42,8 @@ public class PlayerInfo : MonoBehaviour
     {
         GameObject rotatingBlock = GameObject.Find("RotatingBlock");
         rotatingBlock.renderer.material.color = ColorModel.ConvertToUnityColor(color);
+        GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
+        rotatingHalfBlock.renderer.material.color = ColorModel.ConvertToUnityColor(color);
     }
 
     [RPC]
@@ -49,7 +51,9 @@ public class PlayerInfo : MonoBehaviour
     {
         HasFullBlock = false;
         GameObject rotatingBlock = GameObject.Find("RotatingBlock");
-        rotatingBlock.renderer.enabled = true;
+        rotatingBlock.renderer.enabled = false;
+        GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
+        rotatingHalfBlock.renderer.enabled = true;
     }
 
     [RPC]
@@ -57,7 +61,9 @@ public class PlayerInfo : MonoBehaviour
     {
         HasFullBlock = true;
         GameObject rotatingBlock = GameObject.Find("RotatingBlock");
-        rotatingBlock.renderer.enabled = false;
+        rotatingBlock.renderer.enabled = true;
+        GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
+        rotatingHalfBlock.renderer.enabled = false;
     }
 
     [RPC]

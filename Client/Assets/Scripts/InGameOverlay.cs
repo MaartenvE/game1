@@ -7,6 +7,9 @@ public class InGameOverlay : MonoBehaviour
     private const float TRASHCAN_SELECTED_SIZE = .12f;
     private const float TRASHCAN_PADDING       = .01f;
 
+    private const float REFRESH_SIZE = .1f;
+    private const float REFRESH_PADDING = .85f;
+
     private const float VIEW_SELECTOR_SIZE          = .1f;
     private const float VIEW_SELECTOR_SELECTED_SIZE = .12f;
     private const float VIEW_SELECTOR_TOP           = .01f;
@@ -20,6 +23,7 @@ public class InGameOverlay : MonoBehaviour
     public Texture2D ConstructionIcon;
     public Texture2D HouseIcon;
     public Texture2D BlocksIcon;
+    public Texture2D RefreshIcon;
 
     private static LinkedList<GuiView> views;
     private GuiView activeView;
@@ -71,9 +75,7 @@ public class InGameOverlay : MonoBehaviour
         drawProgressBar();
 
         // Own block in bottom right
-
-        // Delete block
-        deleteBlock();
+        drawRefreshIcon();
 
         // Leave Game
         //leaveGame();
@@ -102,6 +104,23 @@ public class InGameOverlay : MonoBehaviour
             {
                 cubeFinger.DeleteMode = trashcanSelected;
             }
+        }
+    }
+
+    private void drawRefreshIcon()
+    {
+        float size = Screen.width * REFRESH_SIZE;
+        float padding_left = Screen.width * REFRESH_PADDING;
+        float padding_top = Screen.height * REFRESH_PADDING;
+
+        // Draw button
+        GUI.color = Color.white;
+        GUI.DrawTexture(new Rect(padding_left, padding_top, size, size), RefreshIcon);
+        if (GUI.Button(new Rect(padding_left, padding_top, size, size), GUIContent.none, GUIStyle.none))
+        {
+            NetworkView playerNetworkView = GameObject.Find("Player").networkView;
+            INetworkView _networkView = new NetworkViewWrapper(playerNetworkView);
+            _networkView.RPC("ThrowAwayBlock", RPCMode.Server);
         }
     }
 
@@ -178,17 +197,6 @@ public class InGameOverlay : MonoBehaviour
     public static void AddView(string sceneName, Texture2D icon)
     {
         AddView(new GuiView(sceneName, icon));
-    }
-
-    private void deleteBlock()
-    {
-        GUI.color = Color.white;
-        if(GUI.Button(new Rect(Screen.width - 125, Screen.height -100, 75, 20), "Throw Away"))
-        {
-            NetworkView playerNetworkView = GameObject.Find("Player").networkView;
-            INetworkView _networkView = new NetworkViewWrapper(playerNetworkView);
-            _networkView.RPC("ThrowAwayBlock", RPCMode.Server);
-        }
     }
 
     private void leaveGame()
