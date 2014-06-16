@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Player : IPlayer
 {
+
+	public const float FULL_BLOCK_CHANCE = 0.4f;
     public ITeam Team { get; set; }
 
     public HalfBlock HalfBlock { get; set; }
@@ -29,10 +31,6 @@ public class Player : IPlayer
 
 	private IInstantiatedBlock _Finger;
     public bool HasPlaceableBlock { get; set; }
-	//private IBlock _InventoryBlock; //this is the currently allocated block the player has.
-
-	//private Time _StartOfPenaltyTime; //this is the time the penalty started.
-	//private Time _PenaltyLength; //this is how long the penalty lasts.
 	
 
 	public Player(INetworkView networkView, INetwork network, INetworkPlayer networkPlayer){
@@ -58,7 +56,6 @@ public class Player : IPlayer
 
 		//now color the block correctly
 		_networkView.RPC ("ColorBlock", RPCMode.AllBuffered, finger.networkView.viewID, color);
-		//finger.renderer.material.color = new Color(0.8f,0.05f,0.8f,0.08f);
 	}
 
 	
@@ -67,15 +64,19 @@ public class Player : IPlayer
         {
             HalfBlock = new HalfBlock(SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor());
             Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
-            this.HasPlaceableBlock = false;
-            CubeFinger.UpdateColor(color);
             
-            _networkView.RPC("SetHalfBlockColor", networkPlayer, color);
-            _networkView.RPC("SetBlockHalf", networkPlayer);
+            CubeFinger.UpdateColor(color);
 
-            //_networkView.RPC("SetBlockHalf", _NetworkPlayer);
-            //_networkView.RPC("SetHalfBlockColor", _NetworkPlayer, color);
-            //finger.renderer.material.color = ColorModel.ConvertToUnityColor(color);
+			if(Random.value < FULL_BLOCK_CHANCE){
+				this.HasPlaceableBlock = true;
+				_networkView.RPC("SetBlockFull", networkPlayer);
+			}
+            else{
+				this.HasPlaceableBlock = false;
+				_networkView.RPC("SetBlockHalf", networkPlayer);
+			}
+            _networkView.RPC("SetHalfBlockColor", networkPlayer, color);
+            
         }        
         
 	}
