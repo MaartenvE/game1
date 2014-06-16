@@ -10,12 +10,13 @@ public static class StructureReader {
 
 	//returns a level read as Color[z][y][x]
 	/// <exception cref="FormatException">thrown because the format is wrong, or the implementation of the documentation (see maps/readme.txt).</exception>
-	public static Color[][][] loadLevel(string specificLevelPath){
+	public static Color?[,,] loadLevel(string specificLevelPath){
 		try
 		{
 			using (StreamReader sr = new StreamReader(specificLevelPath))
 			{
-				return readLevel (sr);
+				Color?[][][] level = readLevel(sr);
+				return ArrayToOtherArray(level, level.Length);
 			}
 		}
 		catch (System.FormatException e)
@@ -24,23 +25,40 @@ public static class StructureReader {
 			//EditorUtility.DisplayDialog("whoops", "a faulty puzzle was loaded, check formatting. errormessage: "+e.Message+"\n"+e.StackTrace, "Ok");
 		}
 
-		return null;
 
 	}
 
-	public static Color[][][] loadRandomLevel(string RelativeDirectoryPath){
-		string[] maps = Directory.GetFiles (Application.dataPath+RelativeDirectoryPath);
+	public static Color?[,,] loadRandomLevelFromMaps(){
+		string directoryPath = Application.dataPath+"/maps/";
+		string[] maps = Directory.GetFiles (directoryPath);
 
 		string map = getRandomMap (maps);
 
-		while (map.Contains ("readme")) {
-			if (!map.Contains ("readme")) {
-				return loadLevel (Application.dataPath+RelativeDirectoryPath+map);
-			}
+		while (true) {
+				if(map.Contains (".structure")){
+					if(!map.Contains (".meta"))
+						return loadLevel(map);
+				}
 			map = getRandomMap(maps);
 		}
 
 		throw new System.ExecutionEngineException ("loadRandomLevel failed to load random level, do you have levels?");
+	}
+
+	private static Color?[,,] ArrayToOtherArray(Color?[][][] array, int size){
+		Color?[,,] OtherArray = new Color?[size,size,size];
+
+		for (int x = 0; x < size; x++) {
+			for (int y = 0; y < size; y++) {
+				for (int z = 0; z < size; z++) {
+					//due to dimensional view differences and wanting a logical format for .structure
+					//these dimensions are interchanged asswell.
+					OtherArray[y,x,z] = array[x][y][z];
+				}
+			}
+		}
+
+		return OtherArray;
 	}
 
 	private static string getRandomMap(string[] maps){
@@ -48,7 +66,7 @@ public static class StructureReader {
 		return maps [random];
 	}
 
-	private static Color[][][] readLevel(StreamReader sr){
+	private static Color?[][][] readLevel(StreamReader sr){
 		int size = readSizeOption (sr.ReadLine());
 
 		string test = sr.ReadToEnd ();
@@ -57,7 +75,7 @@ public static class StructureReader {
 		//find Size times a pattern according to ["anything without [ or ]"]
 		string[] blocks = findAndMatchAsSingleLine(test, "(?:\\[([^\\[\\]]*)\\])", size);
 
-		Color[][][] level = new Color[size][][];
+		Color?[][][] level = new Color?[size][][];
 
 		for(int i = 0; i< size; i++){
 			level[i] = readBlock(blocks[i], size);
@@ -68,15 +86,15 @@ public static class StructureReader {
 
 	private static int readSizeOption(string sizeOption){
 		//read the xx from [size=xx]
-		//return int.Parse(findAndMatch(sizeOption, "\\[size=(\\d*)\\]"));
-        return 10;
+		return int.Parse(findAndMatch(sizeOption, "\\[size=(\\d*)\\]"));
+        //return 10;
 	}
 
-	private static Color[][] readBlock(string block, int size){
+	private static Color?[][] readBlock(string block, int size){
 		//find Size times a pattern according to {"anything without { or }"}
 		string[] rows = findAndMatchAsSingleLine(block, "(?:\\{([^\\{\\}])*\\})", size);
 
-		Color[][] result = new Color[size][];
+		Color?[][] result = new Color?[size][];
 
 		//fill the y dimension with x dimension array
 		for(int i = 0; i<size; i++){
@@ -88,14 +106,17 @@ public static class StructureReader {
 	}
 
 	//finds the characters, and returns their respective colors
-	private static Color[] readRow(string row, int size){
+	private static Color?[] readRow(string row, int size){
 		//find Size times a pattern according to "any lowercase letter or number"
 		string[] colorChars = findAndMatchAsSingleLine( row, "([0-9a-z])+" , size );
 
-		Color[] result = new Color[size];
+		Color?[] result = new Color?[size];
 
 		for(int i = 0; i<size; i++){
 			result[i] = ColorModel.matchColor(char.Parse (colorChars[i]));
+			if(char.Parse (colorChars[i])==ColorModel.NONECHAR)
+				result[i] = null;
+
 		}
 
 		return result;
@@ -116,11 +137,15 @@ public static class StructureReader {
 		MatchCollection matches = Regex.Matches (text, pattern, RegexOptions.Singleline);
 		string[] results = new string[times];
 
+		if (matches.Count != times) {
+			throw new System.Exception("did not find as many groups as expected in regex expression, found: "+matches.Count+"but expected: "+times);
+		}
+
 		//if a match is found, and the correct number of matches are found
 		for (int i = 0; i<times; i++) {
 			Match match = matches[i];
 				if (match.Success){// && match.Groups.Count == times) {
-					results[i] = match.Groups[0].Value;
+						results[i] = match.Groups[0].Value;
 				}
 				else{
 					if(!match.Success)

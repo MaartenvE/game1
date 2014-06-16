@@ -13,7 +13,7 @@ public class TeamLoader : MonoBehaviour
 
     void OnServerInitialized()
     {
-        Color?[, ,] goal = new Color?[4, 4, 4];
+        /*Color?[, ,] goal = new Color?[4, 4, 4];
         goal[1, 0, 1] = ColorModel.RED;
         goal[2, 0, 1] = ColorModel.RED;
         goal[0, 0, 1] = ColorModel.RED;
@@ -29,7 +29,9 @@ public class TeamLoader : MonoBehaviour
         goal[1, 0, 3] = ColorModel.BLUE;
         goal[2, 0, 3] = ColorModel.BLUE;
         goal[1, 1, 3] = ColorModel.BLUE;
-        goal[2, 1, 3] = ColorModel.BLUE;
+        goal[2, 1, 3] = ColorModel.BLUE;*/
+
+		Color?[,,] goal = StructureReader.loadRandomLevelFromMaps ();
         
 
         teamManager = new TeamManager(new[] {

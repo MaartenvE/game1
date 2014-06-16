@@ -32,6 +32,18 @@ public class TeamStructureTracker
         initializeCorrectness();
     }
 
+	//here because no color can mix into black, and format does not yet support nulls explicitely (to big code chaos to rebase)
+	/*private void makeBlackNull(Structure<Color?> goalStructure){
+
+		for (int x = 0; x< goalStructure.GetLength; x++) {
+			for(int y = 0; y< goalStructure.GetLength;
+			Color? color = goalStructure[i];
+			if(color == ColorModel.NONE){
+				color = null;
+			}
+		}
+	}*/
+
     private void initializeCorrectness()
     {
         foreach (Color? color in goal)
