@@ -138,7 +138,7 @@ public static class StructureReader {
 		string[] results = new string[times];
 
 		if (matches.Count != times) {
-			throw new System.Exception("did not find as many groups as expected in regex expression, found: "+matches.Count+"but expected: "+times);
+			throw new System.FormatException("did not find as many groups as expected in regex expression, found: "+matches.Count+"but expected: "+times);
 		}
 
 		//if a match is found, and the correct number of matches are found
