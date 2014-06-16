@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using BuildingBlocks.CubeFinger;
 
 public class InGameOverlay : MonoBehaviour
 {
@@ -97,10 +98,10 @@ public class InGameOverlay : MonoBehaviour
         if (GUI.Button(new Rect(padding, padding, size, size), GUIContent.none, GUIStyle.none))
         {
             trashcanSelected = !trashcanSelected;
-            CubeFingerBehaviour cubeFinger = GameObject.Find("Player").GetComponent<PlayerInfo>().CubeFinger;
-            if (cubeFinger)
+            CubeFinger cubeFinger = GameObject.Find("Player").GetComponent<PlayerInfo>().CubeFinger;
+            if (cubeFinger != null)
             {
-                cubeFinger.DeleteMode = trashcanSelected;
+                cubeFinger.Mode = trashcanSelected ? CubeFingerMode.Delete : CubeFingerMode.Build;
             }
         }
     }

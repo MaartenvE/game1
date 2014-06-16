@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using BuildingBlocks.CubeFinger;
 
 public class PlayerInfo : MonoBehaviour
 {
     public static bool IsSpectator = false;
     public int Team;
-    public CubeFingerBehaviour CubeFinger;
+    public CubeFinger CubeFinger;
 
     public bool HasFullBlock { get; private set; }
 

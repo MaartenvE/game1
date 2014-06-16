@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum CubeFingerMode
+{
+    None,
+    Delete,
+    Build
+};
+
 public class CubeFingerBehaviour : MonoBehaviour
 {
     public IPlayer Player;
@@ -8,7 +15,7 @@ public class CubeFingerBehaviour : MonoBehaviour
     private Color color;
 
     private Vector3 bufferedColor;
-    private int deleteMode;
+    private CubeFingerMode mode;
 
     public void OnNetworkInstantiate(NetworkMessageInfo info)
     {
@@ -18,29 +25,28 @@ public class CubeFingerBehaviour : MonoBehaviour
     public void SetParent(string parent)
     {
         gameObject.transform.parent = GameObject.Find(parent).transform;
-        networkView.RPC("SetCubeFingerParent", RPCMode.OthersBuffered, parent);
+        networkView.RPC("SetFingerParent", RPCMode.OthersBuffered, parent);
     }
 
     public void SetPlayer(IPlayer player)
     {
         this.Player = player;
-        networkView.RPC("SetPersonalCubeFinger", player.NetworkPlayer.NetworkPlayer);
+        networkView.RPC("SetPersonalFinger", player.NetworkPlayer.NetworkPlayer);
         player.GiveInventoryBlock();
-        Debug.LogWarning("FingerColor = " + Player.HalfBlock.CalculateUnityColor());
         ColorFinger(ColorModel.ConvertToVector3(Player.HalfBlock.CalculateUnityColor()));
     }
 
     void OnPlayerConnected(NetworkPlayer networkPlayer)
     {
-        networkView.RPC("SetFingerDeleteMode", networkPlayer, this.deleteMode);
+        networkView.RPC("SetFingerMode", networkPlayer, (int) mode);
         networkView.RPC("ColorFinger", networkPlayer, this.bufferedColor);
     }
 
     [RPC]
-    void SetCubeFingerParent(string parent) { }
+    void SetFingerParent(string parent) { }
 
     [RPC]
-    void SetPersonalCubeFinger() { }
+    void SetPersonalFinger() { }
 
     [RPC]
     void MoveFinger(Vector3 location)
@@ -58,11 +64,11 @@ public class CubeFingerBehaviour : MonoBehaviour
 
     // todo: SetFingerDeleteMode should somehow be buffered
     [RPC]
-    void SetFingerDeleteMode(int delete)
+    void SetFingerMode(int mode)
     {
-        this.renderer.material.color = (delete == 0) ? new Color(1, 0, 0, 0.6f) : this.color;
-        this.deleteMode = delete;
-        networkView.RPC("SetFingerDeleteMode", RPCMode.Others, this.deleteMode);
+        //this.renderer.material.color = (delete == 0) ? new Color(1, 0, 0, 0.6f) : this.color;
+        this.mode = (CubeFingerMode)mode;
+        networkView.RPC("SetFingerMode", RPCMode.Others, mode);
     }
 
     // todo: ColorFinger should somehow be buffered

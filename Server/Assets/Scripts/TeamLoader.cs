@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using BuildingBlocks.CubeFinger;
 
 public class TeamLoader : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class TeamLoader : MonoBehaviour
         
 
         teamManager = new TeamManager(new[] {
-            new Team("Team 1", "ImageTarget1", goal),
+            //new Team("Team 1", "ImageTarget1", goal),
             new Team("Team 2", "ImageTarget2", goal)
         });
 
@@ -103,10 +104,14 @@ public class TeamLoader : MonoBehaviour
     {
         GameObject prefab = Resources.Load("CubeFinger") as GameObject;
         GameObject cubeFinger = Network.Instantiate(prefab, prefab.transform.position, prefab.transform.rotation, 1) as GameObject;
-        CubeFingerBehaviour behaviour = cubeFinger.GetComponent<CubeFingerBehaviour>();
-        behaviour.SetParent(player.Team.ImageTarget);
+        //CubeFingerBehaviour behaviour = cubeFinger.GetComponent<CubeFingerBehaviour>();
+        //behaviour.SetParent(player.Team.ImageTarget);
         
-        player.CubeFinger = behaviour;
-        behaviour.SetPlayer(player);
+        //player.CubeFinger = behaviour;
+        //behaviour.SetPlayer(player);
+
+        CubeFinger finger = cubeFinger.GetComponent<CubeFingerLoader>().Finger as CubeFinger;
+        finger.SetParent(player.Team.ImageTarget);
+        finger.SetPlayer(player);
     }
 }

@@ -147,7 +147,7 @@ public class CubeFingerBehaviour : MonoBehaviour
     {
         this.IsMine = true;
         clicker = GameObject.Find("Client").GetComponent<ClickEventHandler>();
-        GameObject.Find("Player").GetComponent<PlayerInfo>().CubeFinger = this;
+        //GameObject.Find("Player").GetComponent<PlayerInfo>().CubeFinger = this;
     }
 
     [RPC]
