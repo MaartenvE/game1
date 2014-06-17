@@ -31,7 +31,6 @@ class BumpDetectorIntegrationTest
 
         foreach (Vector3[] input in inputs)
         {
-            Debug.Log(input[1]);
             currentAcceleration = input[0];
             currentMagnetisation = input[1];
             bumpDetector.DetectBump();

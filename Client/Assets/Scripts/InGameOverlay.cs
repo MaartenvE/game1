@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using BuildingBlocks.CubeFinger;
 
 public class InGameOverlay : MonoBehaviour
 {
@@ -99,10 +100,10 @@ public class InGameOverlay : MonoBehaviour
         if (GUI.Button(new Rect(padding, padding, size, size), GUIContent.none, GUIStyle.none))
         {
             trashcanSelected = !trashcanSelected;
-            CubeFingerBehaviour cubeFinger = GameObject.Find("Player").GetComponent<PlayerInfo>().CubeFinger;
-            if (cubeFinger)
+            CubeFinger cubeFinger = PlayerInfo.CubeFinger;
+            if (cubeFinger != null)
             {
-                cubeFinger.DeleteMode = trashcanSelected;
+                cubeFinger.Mode = trashcanSelected ? CubeFingerMode.Delete : CubeFingerMode.Build;
             }
         }
     }
@@ -171,7 +172,7 @@ public class InGameOverlay : MonoBehaviour
     private void drawProgressBar()
     {
         float progress = 0.0f;
-        int team = GameObject.Find("Player").GetComponent<PlayerInfo>().Team;
+        int team = PlayerInfo.Team;
         TeamInfoLoader[] teamLoaders = GameObject.Find("Teams").GetComponentsInChildren<TeamInfoLoader>();
         foreach (TeamInfoLoader loader in teamLoaders)
         {

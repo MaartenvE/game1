@@ -3,19 +3,21 @@
 public class GameObjectWrapper : IGameObject
 {
     private GameObject wrappedObject;
-    public GameObject GameObject
+    private INetworkView wrappedNetworkView;
+
+    public IRenderer renderer
     {
         get
         {
-            return wrappedObject;
+            return wrappedObject ? new RendererWrapper(wrappedObject.renderer) : null;
         }
     }
 
-    public Transform transform
+    public ITransform transform
     {
         get
         {
-            return wrappedObject.transform;
+            return new TransformWrapper(wrappedObject.transform);
         }
     }
 
@@ -23,18 +25,24 @@ public class GameObjectWrapper : IGameObject
     {
         get
         {
-            return new NetworkViewWrapper(wrappedObject.networkView);
+            return wrappedNetworkView;
         }
     }
 
     public GameObjectWrapper(GameObject wrappedObject)
     {
         this.wrappedObject = wrappedObject;
+        this.wrappedNetworkView = new NetworkViewWrapper(wrappedObject.networkView);
     }
 
     public T GetComponent<T>() where T : Component
     {
         return wrappedObject.GetComponent<T>();
+    }
+
+    public T[] GetComponentsInChildren<T>() where T : Component
+    {
+        return wrappedObject.GetComponentsInChildren<T>();
     }
 
     public IGameObject Find(string name)
