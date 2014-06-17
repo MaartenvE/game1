@@ -31,6 +31,18 @@ public class TeamInfo
         }
     }
 
+    /// <summary>
+    /// Determine if the team represented by this TeamInfo object belongs to the local player. 
+    /// This requires a GameObject named Player to be present with a PlayerInfo script.
+    /// </summary>
+    public bool IsMine
+    {
+        get
+        {
+            return PlayerInfo.Team == ID;
+        }
+    }
+
     public float Progress { get; private set; }
 
     public TeamInfo(IGameObject gameObject)
@@ -55,26 +67,6 @@ public class TeamInfo
     public void SetProgress(float progress)
     {
         gameObject.networkView.RPC("SetTeamProgress", RPCMode.AllBuffered, progress);
-    }
-
-
-    /// <summary>
-    /// Determine if the team represented by this TeamInfo object belongs to the local player. 
-    /// This requires a GameObject named Player to be present with a PlayerInfo script.
-    /// </summary>
-    public bool IsMine()
-    {
-        IGameObject player = gameObject.Find("Player");
-        if (player != null)
-        {
-            PlayerInfo info = player.GetComponent<PlayerInfo>();
-            if (info != null)
-            {
-                return info.Team == ID;
-            }
-        }
-
-        return false;
     }
 
     public void RPC_SetTeamProgress(float progress)

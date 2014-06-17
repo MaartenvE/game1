@@ -61,7 +61,7 @@ public class Client
 
     public void RPC_Win(int teamId)
     {
-        int myTeam = GameObject.Find("Player").GetComponent<PlayerInfo>().Team;
+        int myTeam = PlayerInfo.Team;
         this.won = teamId == myTeam;
     }
 }

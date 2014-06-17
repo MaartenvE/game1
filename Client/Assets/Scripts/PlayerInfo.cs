@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using BuildingBlocks.CubeFinger;
 
 public class PlayerInfo : MonoBehaviour
 {
     public static bool IsSpectator = false;
-    public int Team;
-    public CubeFingerBehaviour CubeFinger;
+    public static int Team;
+    public static CubeFinger CubeFinger;
 
-    public bool HasFullBlock { get; private set; }
+    public static bool HasFullBlock { get; private set; }
 
-    private GameObject teamObject;
+    private static GameObject teamObject;
 
     [RPC]
     void SetPlayerInfo(int team)
@@ -21,7 +22,7 @@ public class PlayerInfo : MonoBehaviour
         foreach (TeamInfoLoader teamInfoLoader in GameObject.Find("Teams").GetComponentsInChildren<TeamInfoLoader>())
         {
             TeamInfo teamInfo = teamInfoLoader.TeamInfo;
-            if (teamInfo.IsMine())
+            if (teamInfo.IsMine)
             {
                 teamObject = teamInfoLoader.gameObject;
                 goalStructure.transform.parent = GameObject.Find(teamInfo.ImageTarget).transform;

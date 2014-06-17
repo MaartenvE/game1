@@ -12,7 +12,7 @@ public class TeamInfoOverlay
 
     public void OnGUI()
     {
-        if (!teamInfo.IsMine())
+        if (!teamInfo.IsMine)
         {
             string imageTarget = teamInfo.ImageTarget;
             if (imageTarget != null)

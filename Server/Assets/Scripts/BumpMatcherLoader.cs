@@ -19,6 +19,9 @@ public class BumpMatcherLoader : MonoBehaviour
 
     private void HandleBumpEvent(INetworkPlayer networkPlayer1, INetworkPlayer networkPlayer2)
     {
+        networkView.RPC("BumpMatch", networkPlayer1.NetworkPlayer);
+        networkView.RPC("BumpMatch", networkPlayer2.NetworkPlayer);
+
         IPlayer player1 = TeamLoader.TeamManager.GetPlayer(networkPlayer1);
         IPlayer player2 = TeamLoader.TeamManager.GetPlayer(networkPlayer2);
         if (Random.value < 0.5)
@@ -37,4 +40,7 @@ public class BumpMatcherLoader : MonoBehaviour
     {
         bumpMatcher.Add(new Bump(info.timestamp, force, new NetworkPlayerWrapper(info.sender)));
     }
+
+    [RPC]
+    void BumpMatch() { }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using BuildingBlocks.CubeFinger;
 
 public class TeamLoader : MonoBehaviour
 {
@@ -13,26 +14,7 @@ public class TeamLoader : MonoBehaviour
 
     void OnServerInitialized()
     {
-        /*Color?[, ,] goal = new Color?[4, 4, 4];
-        goal[1, 0, 1] = ColorModel.RED;
-        goal[2, 0, 1] = ColorModel.RED;
-        goal[0, 0, 1] = ColorModel.RED;
-        goal[1, 0, 2] = ColorModel.RED;
-        goal[0, 0, 2] = ColorModel.GREEN;
-        goal[0, 0, 3] = ColorModel.GREEN;
-        goal[0, 1, 2] = ColorModel.GREEN;
-        goal[0, 1, 1] = ColorModel.GREEN;
-        goal[2, 0, 2] = ColorModel.ORANGE;
-        goal[2, 1, 2] = ColorModel.ORANGE;
-        goal[2, 2, 2] = ColorModel.ORANGE;
-        goal[2, 2, 3] = ColorModel.ORANGE;
-        goal[1, 0, 3] = ColorModel.BLUE;
-        goal[2, 0, 3] = ColorModel.BLUE;
-        goal[1, 1, 3] = ColorModel.BLUE;
-        goal[2, 1, 3] = ColorModel.BLUE;*/
-
 		Color?[,,] goal = StructureReader.loadRandomLevelFromMaps ();
-        
 
         teamManager = new TeamManager(new[] {
             new Team("Team 1", "ImageTarget1", goal),
@@ -105,10 +87,9 @@ public class TeamLoader : MonoBehaviour
     {
         GameObject prefab = Resources.Load("CubeFinger") as GameObject;
         GameObject cubeFinger = Network.Instantiate(prefab, prefab.transform.position, prefab.transform.rotation, 1) as GameObject;
-        CubeFingerBehaviour behaviour = cubeFinger.GetComponent<CubeFingerBehaviour>();
-        behaviour.SetParent(player.Team.ImageTarget);
-        
-        player.CubeFinger = behaviour;
-        behaviour.SetPlayer(player);
+
+        CubeFinger finger = cubeFinger.GetComponent<CubeFingerLoader>().Finger as CubeFinger;
+        finger.SetParent(player.Team.ImageTarget);
+        finger.SetPlayer(player);
     }
 }
