@@ -8,8 +8,8 @@ public class InGameOverlay : MonoBehaviour
     private const float TRASHCAN_SELECTED_SIZE = .12f;
     private const float TRASHCAN_PADDING       = .01f;
 
-    private const float REFRESH_SIZE = .1f;
-    private const float REFRESH_PADDING = .85f;
+    private const float REFRESH_SIZE = .15f;
+    private const float REFRESH_PADDING = .8f;
 
     private const float VIEW_SELECTOR_SIZE          = .1f;
     private const float VIEW_SELECTOR_SELECTED_SIZE = .12f;
@@ -25,6 +25,8 @@ public class InGameOverlay : MonoBehaviour
     public Texture2D HouseIcon;
     public Texture2D BlocksIcon;
     public Texture2D RefreshIcon;
+
+    public bool AnimationDone;
 
     private static LinkedList<GuiView> views;
     private GuiView activeView;
@@ -48,6 +50,7 @@ public class InGameOverlay : MonoBehaviour
         InGameOverlay.AddView(new GuiView("goalStructure", HouseIcon));
         InGameOverlay.AddView(new GuiView("combinedStructure", BlocksIcon));
         activeView = views.First.Value;
+        AnimationDone = true;
     }
 
     void Update()
@@ -76,7 +79,10 @@ public class InGameOverlay : MonoBehaviour
         drawProgressBar();
 
         // Own block in bottom right
-        drawRefreshIcon();
+        if (AnimationDone)
+        {
+            drawRefreshIcon();
+        }
 
         // Leave Game
         //leaveGame();

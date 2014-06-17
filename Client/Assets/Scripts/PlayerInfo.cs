@@ -55,6 +55,8 @@ public class PlayerInfo : MonoBehaviour
         rotatingBlock.renderer.enabled = false;
         GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
         rotatingHalfBlock.renderer.enabled = true;
+        BlockAnimationBehaviour animation = rotatingHalfBlock.AddComponent<BlockAnimationBehaviour>();
+        animation.SetUpAnimation(new Vector3(0, 0.5f, 2), GameObject.Find("BlockPosition").transform.localPosition);
     }
 
     [RPC]
@@ -65,6 +67,8 @@ public class PlayerInfo : MonoBehaviour
         rotatingBlock.renderer.enabled = true;
         GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
         rotatingHalfBlock.renderer.enabled = false;
+        BlockAnimationBehaviour animation = rotatingBlock.AddComponent<BlockAnimationBehaviour>();
+        animation.SetUpAnimation(new Vector3(0, 0.5f, 2), GameObject.Find("BlockPosition").transform.localPosition);
     }
 
     [RPC]
