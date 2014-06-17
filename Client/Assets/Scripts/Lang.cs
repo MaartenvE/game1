@@ -4,46 +4,59 @@ using System.Collections;
 public class Lang  {
 	 
 
-	public static GUIStyle buttonStyle(float height,float width)
+	public static GUIStyle ButtonStyle(float height,float width)
 	{
 		GUIStyle buttonStyle = null;
 		buttonStyle  = new GUIStyle (GUI.skin.button);
-		float size = 0;
+		float size = Mathf.Min (height, width);
 
-		size = Mathf.Min (height, width);
-
-
-		Debug.LogError ("Screen height = " + height);
+		//Debug.LogError ("Screen height = " + height);
 		//buttonStyle.font = new Font("Arial");
-		buttonStyle.fontSize = (int)(size * 0.05 );
+		buttonStyle.fontSize = (int)(size * 0.065 );
 		//buttonStyle.normal.background = MakeTex( 2, 2, new Color( 255f, 255f, 255f, 0.95f ) );
 		//buttonStyle.fontStyle = FontStyle.Bold;
 
 		return buttonStyle;
 	}
 
-	public GUIStyle timeStyle()
-	{
-		GUIStyle timeStyle = new GUIStyle(GUI.skin.label);
-
-		timeStyle.alignment = TextAnchor.MiddleRight;
-		timeStyle.font = new Font("Arial");
-		timeStyle.fontSize = 15;
-		timeStyle.fontStyle = FontStyle.Bold;
-		
-		return timeStyle;
-	}
-
-	public static GUIStyle labelStyle(float height)
+	public static GUIStyle LabelStyle(float height, float width)
 	{
 		GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
 
-		labelStyle.font = new Font("Arial");
-		labelStyle.fontSize = 128;
-		labelStyle.fontStyle = FontStyle.Bold;
+		float size = Mathf.Min (height, width);
+
+		//labelStyle.font = new Font("Arial");
+		labelStyle.fontSize = (int)(size * 0.04f);
+		//labelStyle.fontStyle = FontStyle.Bold;
 
 		return labelStyle;
 	}
+
+	public static GUIStyle QRStyle(float height, float width)
+	{
+		GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
+		
+		float size = Mathf.Min (height, width);
+		
+		//labelStyle.font = new Font("Arial");
+		labelStyle.fontSize = (int)(size * 0.06f);
+		//labelStyle.fontStyle = FontStyle.Bold;
+		
+		return labelStyle;
+	}
+
+	public static GUIStyle BoxStyle(float height, float width)
+	{
+		GUIStyle boxStyle = new GUIStyle( GUI.skin.box );// 	126,170,147
+		boxStyle.normal.background = MakeTex( 2, 2, new Color( 126f, 170f, 147f, 0.5f ) );
+
+		float size = Mathf.Min (height, width);
+		boxStyle.fontSize = (int)(size * 0.125f);
+		boxStyle.fontStyle = FontStyle.Bold;
+
+		return boxStyle;
+	}
+
 
 	private static Texture2D MakeTex( int width, int height, Color col )
 	{

@@ -9,23 +9,28 @@ public class StartScreen : MonoBehaviour
     void OnGUI()
     {
 		InitStyles();
-		GUI.contentColor = Color.black;
-		GUI.Box( new Rect ( 0, 0, Screen.width, Screen.height), "Building Blocks",_currentStyle);//, Lang.buttonStyle(Screen.height)); 
+		GUI.contentColor = new Color (140f, 156f, 179f);
+		GUI.Box( new Rect ( 0, 0, Screen.width, Screen.height), "Building Blocks",Lang.BoxStyle(Screen.height, Screen.width));//, Lang.buttonStyle(Screen.height)); 
 
-		GUI.backgroundColor = new Color(0f, 0f, 255f);
-		if (GUI.Button(new Rect((Screen.width / 2) - Screen.width * 0.25f, (Screen.height /2) - Screen.height * .1f, Screen.width * 0.5f, Screen.height * 0.1f), "Play The Game" , Lang.buttonStyle(Screen.height, Screen.width)))
+		GUI.backgroundColor = new Color(121f, 180f, 150f);
+		if (GUI.Button(new Rect((Screen.width / 2) - Screen.width * 0.25f, (Screen.height /2) - Screen.height * .1f, Screen.width * 0.5f, Screen.height * 0.1f), "Play" , Lang.ButtonStyle(Screen.height, Screen.width)))
         {
             Application.LoadLevel(2);
         }
 		//- ((Screen.width * 0.75f) /2))
 
-		if (GUI.Button(new Rect((Screen.width / 2) - Screen.width * 0.25f, (Screen.height /2) + Screen.height * .1f, Screen.width * 0.5f, Screen.height * 0.1f), "Spectate" , Lang.buttonStyle(Screen.height, Screen.width)))
+		if (GUI.Button(new Rect((Screen.width / 2) - Screen.width * 0.25f, (Screen.height /2) + Screen.height * .1f, Screen.width * 0.5f, Screen.height * 0.1f), "Spectate" , Lang.ButtonStyle(Screen.height, Screen.width)))
         {
             TeamSelector.IsSpectator = true;
             Application.LoadLevel(2);
         }  
 
-		GUI.Label (new Rect (Screen.width - 80, Screen.height - 20, 80, 20), "Team Cubed");//,Lang.labelStyle(Screen.height));
+		GUI.Label (new Rect (Screen.width - (Screen.width * 0.25f), Screen.height - (Screen.width * 0.1f), (Screen.width * 0.25f), (Screen.width * 0.1f)), "Team Cubed", Lang.LabelStyle(Screen.height,Screen.width));//,Lang.labelStyle(Screen.height));
+
+		if(Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
 
     }
 
