@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class RaycastHitWrapper :IRaycastHit 
+    public class RaycastHitWrapper : IRaycastHit
     {
         private RaycastHit nativeRaycastHit;
 
-        public void SetNativeRaycastHit(RaycastHit nativeRaycastHit)
+        public void SetNativeRaycastHit(RaycastHit hit)
         {
-            this.nativeRaycastHit = nativeRaycastHit;
+            nativeRaycastHit = hit;
         }
 
         public Transform transform()
@@ -22,6 +18,4 @@ public class RaycastHitWrapper :IRaycastHit
         {
             return nativeRaycastHit.point;
         }
-
-}
-
+    }

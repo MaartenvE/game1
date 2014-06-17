@@ -12,7 +12,7 @@ public class NetworkViewWrapper : INetworkView
         }
     }
 
-    public NetworkViewID networkViewId
+    public NetworkViewID viewID
     {
         get
         {

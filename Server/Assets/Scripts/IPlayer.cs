@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using BuildingBlocks.CubeFinger;
 
 public interface IPlayer
 {
     ITeam Team { get; set; }
     INetworkPlayer NetworkPlayer { get; }
 
-    CubeFingerBehaviour CubeFinger { get; set; }
+    ICubeFinger CubeFinger { get; set; }
 
     HalfBlock HalfBlock { get; set; }
     bool HasPlaceableBlock { get; set; }
@@ -13,12 +14,6 @@ public interface IPlayer
 	void GiveInventoryBlock();
 
 	void DestroyInventoryBlock();
-
-
-	[RPC]
-	void GiveServerAnError(string errorMessage);
-
-	void GivePlayerAnError(string errorMessage);
 
     void CombineBlock(IPlayer other);
 

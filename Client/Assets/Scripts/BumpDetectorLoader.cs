@@ -13,8 +13,6 @@ public class BumpDetectorLoader : MonoBehaviour
 			new Magnetometer(new UnityMagnetometerInput()));
 
         Detector.OnBump +=
-            (bump) => Handheld.Vibrate();
-        Detector.OnBump +=
             (bump) => networkView.RPC("Tap", RPCMode.Server, bump.Force);
 	}
 	
@@ -24,4 +22,10 @@ public class BumpDetectorLoader : MonoBehaviour
 
     [RPC]
     void Tap(float force) { }
+
+    [RPC]
+    void BumpMatch()
+    {
+        Handheld.Vibrate();
+    }
 }

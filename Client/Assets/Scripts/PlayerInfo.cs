@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using BuildingBlocks.CubeFinger;
 
 public class PlayerInfo : MonoBehaviour
 {
     public static bool IsSpectator = false;
-    public int Team;
-    public CubeFingerBehaviour CubeFinger;
+    public static int Team;
+    public static CubeFinger CubeFinger;
 
-    public bool HasFullBlock { get; private set; }
+    public static bool HasFullBlock { get; private set; }
 
-    private GameObject teamObject;
+    private static GameObject teamObject;
 
     [RPC]
     void SetPlayerInfo(int team)
@@ -21,7 +22,7 @@ public class PlayerInfo : MonoBehaviour
         foreach (TeamInfoLoader teamInfoLoader in GameObject.Find("Teams").GetComponentsInChildren<TeamInfoLoader>())
         {
             TeamInfo teamInfo = teamInfoLoader.TeamInfo;
-            if (teamInfo.IsMine())
+            if (teamInfo.IsMine)
             {
                 teamObject = teamInfoLoader.gameObject;
                 goalStructure.transform.parent = GameObject.Find(teamInfo.ImageTarget).transform;
@@ -42,6 +43,8 @@ public class PlayerInfo : MonoBehaviour
     {
         GameObject rotatingBlock = GameObject.Find("RotatingBlock");
         rotatingBlock.renderer.material.color = ColorModel.ConvertToUnityColor(color);
+        GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
+        rotatingHalfBlock.renderer.material.color = ColorModel.ConvertToUnityColor(color);
     }
 
     [RPC]
@@ -49,7 +52,9 @@ public class PlayerInfo : MonoBehaviour
     {
         HasFullBlock = false;
         GameObject rotatingBlock = GameObject.Find("RotatingBlock");
-        rotatingBlock.renderer.enabled = true;
+        rotatingBlock.renderer.enabled = false;
+        GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
+        rotatingHalfBlock.renderer.enabled = true;
     }
 
     [RPC]
@@ -57,7 +62,9 @@ public class PlayerInfo : MonoBehaviour
     {
         HasFullBlock = true;
         GameObject rotatingBlock = GameObject.Find("RotatingBlock");
-        rotatingBlock.renderer.enabled = false;
+        rotatingBlock.renderer.enabled = true;
+        GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
+        rotatingHalfBlock.renderer.enabled = false;
     }
 
     [RPC]
