@@ -2,10 +2,8 @@
 
 public interface IGameObject
 {
-    //GameObject GameObject { get; }
-
-    Renderer renderer { get; }
-    Transform transform { get; }
+    IRenderer renderer { get; }
+    ITransform transform { get; }
     INetworkView networkView { get; }
 
     T GetComponent<T>() where T : Component;

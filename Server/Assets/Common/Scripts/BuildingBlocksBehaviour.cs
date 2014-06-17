@@ -9,7 +9,11 @@ namespace BuildingBlocks
         protected BuildingBlocksBehaviour(IGameObject gameObject)
         {
             this.gameObject = gameObject;
-            this.networkView = gameObject.networkView;
+
+            if (gameObject != null)
+            {
+                this.networkView = gameObject.networkView;
+            }
         }
     }
 }

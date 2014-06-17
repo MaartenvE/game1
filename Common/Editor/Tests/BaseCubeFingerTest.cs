@@ -64,7 +64,23 @@ namespace BuildingBlocks.CubeFinger
             Assert.IsTrue(finger.IsMine);
         }
 
-        // todo: Test SetFingerParent
+        [Test]
+        public void TestRPC_SetFingerParent()
+        {
+            string parent = "Parent";
+
+            Mock<ITransform> transformMock = new Mock<ITransform>();
+            transformMock.SetupGet(t => t.transform).Returns(transformMock.Object);
+
+            gameObjectMock.SetupGet(g => g.transform).Returns(transformMock.Object);
+            gameObjectMock.Setup(g => g.Find(parent)).Returns(transformMock.Object);
+
+            finger.RPC_SetFingerParent(parent);
+
+            gameObjectMock.Verify(g => g.Find(parent));
+            transformMock.VerifySet(t => t.parent = transformMock.Object);
+            transformMock.VerifySet(t => t.localRotation = new Quaternion());
+        }
 
         [Test]
         public void TestRPC_SetFingerMode()

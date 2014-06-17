@@ -75,7 +75,7 @@ namespace BuildingBlocks.CubeFinger
         {
             base.RPC_SetPersonalFinger();
             clicker = GameObject.Find("Client").GetComponent<ClickEventHandler>();
-            GameObject.Find("Player").GetComponent<PlayerInfo>().CubeFinger = this;
+            PlayerInfo.CubeFinger = this;
         }
     }
 }

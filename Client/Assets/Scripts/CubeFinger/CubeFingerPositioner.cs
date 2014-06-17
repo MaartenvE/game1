@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using BuildingBlocks.Team;
 
 namespace BuildingBlocks.CubeFinger
 {
-    public class CubeFingerPositioner : BuildingBlocksBehaviour
+    public class CubeFingerPositioner
     {
         private const float MAX_PICKING_DISTANCE = 200000;
 
@@ -12,7 +13,7 @@ namespace BuildingBlocks.CubeFinger
 
         private BaseCubeFinger finger;
 
-        public CubeFingerPositioner(BaseCubeFinger finger) : base(finger.gameObject)
+        public CubeFingerPositioner(BaseCubeFinger finger)
         {
             this.finger = finger;
         }
@@ -27,15 +28,12 @@ namespace BuildingBlocks.CubeFinger
             Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
             RaycastHit hit = new RaycastHit();
 
-            // todo: refactor Player.HasFullBlock
-            //if ((finger.Mode == CubeFingerMode.Delete || GameObject.Find("Player").GetComponent<PlayerInfo>().HasFullBlock)
-            //    && Physics.Raycast(ray, out hit, MAX_PICKING_DISTANCE))
-            if (Physics.Raycast(ray, out hit, MAX_PICKING_DISTANCE))
+            // Only raycast when player has either a full block or is in delete mode.
+            if ((PlayerInfo.HasFullBlock || finger.Mode == CubeFingerMode.Delete)
+                && Physics.Raycast(ray, out hit, MAX_PICKING_DISTANCE))
             {
                 Transform picked = hit.transform;
-                Transform parent = picked.transform.parent;
-                // todo: refactor TeamInfo.IsMine
-                if (parent.CompareTag("imageTarget") && parent.parent.GetComponent<TeamInfoLoader>().TeamInfo.IsMine())
+                if (finger.Team.IsMine)
                 {
                     pickedObject = new GameObjectWrapper(picked.gameObject);
 

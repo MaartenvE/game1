@@ -5,6 +5,7 @@ namespace BuildingBlocks.Team
     public class TeamBehaviour : BuildingBlocksBehaviour
     {
         public ImageTargetBehaviour ImageTarget { get; private set; }
+        public TeamInfo Team { get; private set; }
 
         protected TeamBehaviour(IGameObject gameObject) : base(gameObject)
         {
@@ -13,10 +14,15 @@ namespace BuildingBlocks.Team
 
         protected void UpdateTeam()
         {
-            Transform parent = gameObject.transform.parent;
-            if (parent != null)
+            ITransform target = gameObject.transform.parent;
+            if (target != null)
             {
-                ImageTarget = parent.GetComponent<ImageTargetBehaviour>();
+                ImageTarget = target.GetComponent<ImageTargetBehaviour>();
+                ITransform parent = target.parent;
+                if (parent != null)
+                {
+                    Team = parent.GetComponent<TeamInfoLoader>().TeamInfo;
+                }
             }
         }
 

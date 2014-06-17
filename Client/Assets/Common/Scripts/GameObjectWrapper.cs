@@ -5,19 +5,19 @@ public class GameObjectWrapper : IGameObject
     private GameObject wrappedObject;
     private INetworkView wrappedNetworkView;
 
-    public Renderer renderer
+    public IRenderer renderer
     {
         get
         {
-            return wrappedObject ? wrappedObject.renderer : null;
+            return wrappedObject ? new RendererWrapper(wrappedObject.renderer) : null;
         }
     }
 
-    public Transform transform
+    public ITransform transform
     {
         get
         {
-            return wrappedObject.transform;
+            return new TransformWrapper(wrappedObject.transform);
         }
     }
 

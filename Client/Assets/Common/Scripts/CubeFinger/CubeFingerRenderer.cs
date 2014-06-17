@@ -30,6 +30,11 @@ namespace BuildingBlocks.CubeFinger
             this.finger.OnModeChanged += modeChanged;
         }
 
+        /// <summary>
+        /// Move the cube finger to a position relative to an existing block.
+        /// </summary>
+        /// <param name="pickedObject">The block against which to place the finger.</param>
+        /// <param name="displacement">A Vector3 with length 1 indicating the direction.</param>
         public void MoveFinger(IGameObject pickedObject, Vector3 displacement)
         {
             Vector3 localPosition = pickedObject.transform.localPosition 
@@ -113,7 +118,7 @@ namespace BuildingBlocks.CubeFinger
 
         /// <summary>
         /// Set the color of this finger. Since the finger color is controlled by the server,
-        /// no data is sent.
+        /// no data is sent by the client.
         /// </summary>
         /// <param name="color">The color the finger should get.</param>
         public void SetColor(Color color)
@@ -127,6 +132,10 @@ namespace BuildingBlocks.CubeFinger
             }
         }
 
+        /// <summary>
+        /// Show or hide the cubefinger depending on the new mode. If the new mode is not delete,
+        /// reset the selected block and finger color.
+        /// </summary>
         private void modeChanged(object sender, CubeFingerMode mode)
         {
             switch (mode)
