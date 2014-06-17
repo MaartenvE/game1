@@ -105,6 +105,9 @@ public class InGameOverlay : MonoBehaviour
         GUI.DrawTexture(new Rect(padding, padding, size, size), TrashcanIcon);
         if (GUI.Button(new Rect(padding, padding, size, size), GUIContent.none, GUIStyle.none))
         {
+            // Cycle between red and white crosshair
+            GameObject.Find("Crosshair").GetComponent<CrosshairBehaviour>().CycleModes();
+
             trashcanSelected = !trashcanSelected;
             CubeFinger cubeFinger = PlayerInfo.CubeFinger;
             if (cubeFinger != null)
