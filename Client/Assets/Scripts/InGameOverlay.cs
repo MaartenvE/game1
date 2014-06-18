@@ -42,15 +42,8 @@ public class InGameOverlay : MonoBehaviour
         AnimationDone = true;
     }
 
-    void Update()
-    {
-        // Draw the right blocks
-    }
-
     void OnGUI()
     {
-   
-        
 		iconXLocation = 0.0f;
 
 		drawTrashcanIcon();
@@ -82,15 +75,18 @@ public class InGameOverlay : MonoBehaviour
 		else {
 			iconXLocation += size + Screen.width * VIEW_SELECTOR_PADDING;
 		}
-		
+		 
+		float scalingCorrection = size - VIEW_SELECTOR_SIZE * Screen.width;
+
 		// Draw shadow
 		GUI.color = Color.gray;
-		GUI.DrawTexture(new Rect(iconXLocation, padding, size + 1, size + 1), TrashcanIcon);
+		GUI.DrawTexture(new Rect(iconXLocation - scalingCorrection, padding, size, size), TrashcanIcon);
 		// Draw button
 		GUI.color = trashcanSelected ? Color.red : Color.white;
-		GUI.DrawTexture(new Rect(iconXLocation, padding, size, size), TrashcanIcon);
-		if (GUI.Button(new Rect(iconXLocation, padding, size, size), GUIContent.none, GUIStyle.none))
+		GUI.DrawTexture(new Rect(iconXLocation - scalingCorrection, padding, size, size), TrashcanIcon);
+		if (GUI.Button(new Rect(iconXLocation - scalingCorrection, padding, size, size), GUIContent.none, GUIStyle.none))
 		{
+
 			switchMode();
 		}
     }
@@ -106,14 +102,16 @@ public class InGameOverlay : MonoBehaviour
 		else {
 			iconXLocation += size + Screen.width * VIEW_SELECTOR_PADDING;
 		}
-		
+
+		float scalingCorrection = size - VIEW_SELECTOR_SIZE * Screen.width;
+
 		// Draw shadow
 		GUI.color = Color.gray;
-		GUI.DrawTexture(new Rect(iconXLocation, padding, size + 1, size + 1), ConstructionIcon);
+		GUI.DrawTexture(new Rect(iconXLocation- scalingCorrection, padding, size , size), ConstructionIcon);
 		// Draw button
 		GUI.color = !trashcanSelected ? Color.green : Color.white;
-		GUI.DrawTexture(new Rect(iconXLocation, padding, size, size), ConstructionIcon);
-		if (GUI.Button(new Rect(iconXLocation, padding, size, size), GUIContent.none, GUIStyle.none))
+		GUI.DrawTexture(new Rect(iconXLocation - scalingCorrection, padding, size, size), ConstructionIcon);
+		if (GUI.Button(new Rect(iconXLocation - scalingCorrection, padding, size, size), GUIContent.none, GUIStyle.none))
 		{
 			switchMode();
 		}
@@ -140,58 +138,12 @@ public class InGameOverlay : MonoBehaviour
 	private void switchMode(){
 		trashcanSelected = !trashcanSelected;
 		CubeFinger cubeFinger = PlayerInfo.CubeFinger;
+		GameObject.Find("Crosshair").GetComponent<CrosshairBehaviour>().CycleModes();
 		if (cubeFinger != null)
 		{
 			cubeFinger.Mode = trashcanSelected ? CubeFingerMode.Delete : CubeFingerMode.Build;
 		}
 	}
-
-
-
-	/*
-    private void drawViewIcons()
-    {
-        float totalWidth = Screen.width * ((views.Count - 1) * VIEW_SELECTOR_SIZE + views.Count * VIEW_SELECTOR_PADDING + VIEW_SELECTOR_SELECTED_SIZE);
-        float padding = Screen.width * VIEW_SELECTOR_TOP;
-        float x = Screen.width / 2 - totalWidth / 2;
-
-        foreach (GuiView view in views)
-        {
-            float size = Screen.width * (activeView.SceneName == view.SceneName ? VIEW_SELECTOR_SELECTED_SIZE : VIEW_SELECTOR_SIZE);
-
-            // Draw shadow
-            GUI.color = Color.gray;
-            GUI.DrawTexture(new Rect(x, padding, size + 1, size + 1), view.Icon);
-
-            // Draw button
-            // For some reason, buttons are drawn smaller, so draw a Texture with underneath a button.
-            GUI.color = (activeView.SceneName == view.SceneName) ? Color.green : Color.white;
-            GUI.DrawTexture(new Rect(x, padding, size, size), view.Icon);
-            if (GUI.Button(new Rect(x, padding, size, size), GUIContent.none, GUIStyle.none))
-            {
-                activeView = view;
-            }
-
-            x += size + Screen.width * VIEW_SELECTOR_PADDING;
-        }
-    }
-	*/
-    private void ShowStructure(string _tag)
-    {
-        ToggleBlocksByTag("currentStructure", false);
-        ToggleBlocksByTag("goalStructure", false);
-        ToggleBlocksByTag(_tag, true);
-    }
-
-    private void ToggleBlocksByTag(string _tag, bool _show)
-    {
-        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag(_tag);
-        foreach (GameObject block in gameObjects)
-        {
-            block.renderer.enabled = _show;
-            block.layer = _show ? 0 : 2;
-        }
-    }
 
     private void drawProgressBar()
     {
@@ -213,17 +165,7 @@ public class InGameOverlay : MonoBehaviour
                 Screen.width * PROGRESSBAR_HEIGHT
             ), progress);
     }
-	/*
-    public static void AddView(GuiView view)
-    {
-        views.AddLast(view);
-    }
 
-    public static void AddView(string sceneName, Texture2D icon)
-    {
-        AddView(new GuiView(sceneName, icon));
-    }
-*/
     private void leaveGame()
     {
         GUI.color = Color.white;
