@@ -4,10 +4,6 @@ using BuildingBlocks.CubeFinger;
 
 public class InGameOverlay : MonoBehaviour
 {
-    private const float TRASHCAN_SIZE          = .1f;
-    private const float TRASHCAN_SELECTED_SIZE = .12f;
-    private const float TRASHCAN_PADDING       = .01f;
-
     private const float REFRESH_SIZE = .15f;
     private const float REFRESH_PADDING = .8f;
 
@@ -15,6 +11,7 @@ public class InGameOverlay : MonoBehaviour
     private const float VIEW_SELECTOR_SELECTED_SIZE = .12f;
     private const float VIEW_SELECTOR_TOP           = .01f;
     private const float VIEW_SELECTOR_PADDING       = .03f;
+	private float iconXLocation;
 
     public const float PROGRESSBAR_WIDTH   = .15f;
     public const float PROGRESSBAR_HEIGHT  = .03f;
@@ -22,19 +19,16 @@ public class InGameOverlay : MonoBehaviour
 
     public Texture2D TrashcanIcon;
     public Texture2D ConstructionIcon;
-    public Texture2D HouseIcon;
-    public Texture2D BlocksIcon;
     public Texture2D RefreshIcon;
 
     public bool AnimationDone;
-
-    private static LinkedList<GuiView> views;
-    private GuiView activeView;
 
     private GUIStyle progressStyle;
     private Texture2D progressTexture;
 
     private bool trashcanSelected = false;
+
+
 
     void Start()
     {
@@ -44,36 +38,23 @@ public class InGameOverlay : MonoBehaviour
 
         progressStyle = new GUIStyle();
         progressStyle.normal.background = progressTexture;
-
-        views = new LinkedList<GuiView>();
-        InGameOverlay.AddView(new GuiView("currentStructure", ConstructionIcon));
-        InGameOverlay.AddView(new GuiView("goalStructure", HouseIcon));
-        InGameOverlay.AddView(new GuiView("combinedStructure", BlocksIcon));
-        activeView = views.First.Value;
+		
         AnimationDone = true;
     }
 
     void Update()
     {
         // Draw the right blocks
-        if (activeView.SceneName == "combinedStructure")
-        {
-            ToggleBlocksByTag("currentStructure", true);
-            ToggleBlocksByTag("goalStructure", true);
-        }
-        else
-        {
-            ShowStructure(activeView.SceneName);
-        }  
     }
 
     void OnGUI()
     {
-        // Trashcan icon in top left
-        drawTrashcanIcon();
+   
+        
+		iconXLocation = 0.0f;
 
-        // View selectors in top middle
-        drawViewIcons();
+		drawTrashcanIcon();
+		drawBuildIcon ();
 
         // Percentage in top right
         drawProgressBar();
@@ -84,35 +65,59 @@ public class InGameOverlay : MonoBehaviour
             drawRefreshIcon();
         }
 
-        // Leave Game
-        //leaveGame();
-
 		//back button quits game
         backButton();
     }
 
+
+
     private void drawTrashcanIcon()
     {
-        float size = Screen.width * (trashcanSelected ? TRASHCAN_SELECTED_SIZE : TRASHCAN_SIZE);
-        float padding = Screen.width * TRASHCAN_PADDING;
-        
-        // Draw shadow
-        GUI.color = Color.gray;
-        GUI.DrawTexture(new Rect(padding, padding, size * 1.01f, size * 1.01f), TrashcanIcon);
-
-        // Draw button
-        GUI.color = trashcanSelected ? Color.red : Color.white;
-        GUI.DrawTexture(new Rect(padding, padding, size, size), TrashcanIcon);
-        if (GUI.Button(new Rect(padding, padding, size, size), GUIContent.none, GUIStyle.none))
-        {
-            trashcanSelected = !trashcanSelected;
-            CubeFinger cubeFinger = PlayerInfo.CubeFinger;
-            if (cubeFinger != null)
-            {
-                cubeFinger.Mode = trashcanSelected ? CubeFingerMode.Delete : CubeFingerMode.Build;
-            }
-        }
+		float totalWidth = Screen.width *  (VIEW_SELECTOR_SIZE + 2 * VIEW_SELECTOR_PADDING + VIEW_SELECTOR_SELECTED_SIZE);
+		float padding = Screen.width * VIEW_SELECTOR_TOP;
+		float size = Screen.width * (trashcanSelected ? VIEW_SELECTOR_SELECTED_SIZE : VIEW_SELECTOR_SIZE);
+		if (iconXLocation < 0.001f) {
+			iconXLocation = Screen.width / 2 - totalWidth / 2;
+		} 
+		else {
+			iconXLocation += size + Screen.width * VIEW_SELECTOR_PADDING;
+		}
+		
+		// Draw shadow
+		GUI.color = Color.gray;
+		GUI.DrawTexture(new Rect(iconXLocation, padding, size + 1, size + 1), TrashcanIcon);
+		// Draw button
+		GUI.color = trashcanSelected ? Color.red : Color.white;
+		GUI.DrawTexture(new Rect(iconXLocation, padding, size, size), TrashcanIcon);
+		if (GUI.Button(new Rect(iconXLocation, padding, size, size), GUIContent.none, GUIStyle.none))
+		{
+			switchMode();
+		}
     }
+
+	private void drawBuildIcon (){
+		
+		float totalWidth = Screen.width *  (VIEW_SELECTOR_SIZE + 2 * VIEW_SELECTOR_PADDING + VIEW_SELECTOR_SELECTED_SIZE);
+		float padding = Screen.width * VIEW_SELECTOR_TOP;
+		float size = Screen.width * (!trashcanSelected ? VIEW_SELECTOR_SELECTED_SIZE : VIEW_SELECTOR_SIZE);
+		if (iconXLocation < 0.001f) {
+			iconXLocation = Screen.width / 2 - totalWidth / 2;
+		} 
+		else {
+			iconXLocation += size + Screen.width * VIEW_SELECTOR_PADDING;
+		}
+		
+		// Draw shadow
+		GUI.color = Color.gray;
+		GUI.DrawTexture(new Rect(iconXLocation, padding, size + 1, size + 1), ConstructionIcon);
+		// Draw button
+		GUI.color = !trashcanSelected ? Color.green : Color.white;
+		GUI.DrawTexture(new Rect(iconXLocation, padding, size, size), ConstructionIcon);
+		if (GUI.Button(new Rect(iconXLocation, padding, size, size), GUIContent.none, GUIStyle.none))
+		{
+			switchMode();
+		}
+	}
 
     private void drawRefreshIcon()
     {
@@ -131,6 +136,19 @@ public class InGameOverlay : MonoBehaviour
         }
     }
 
+
+	private void switchMode(){
+		trashcanSelected = !trashcanSelected;
+		CubeFinger cubeFinger = PlayerInfo.CubeFinger;
+		if (cubeFinger != null)
+		{
+			cubeFinger.Mode = trashcanSelected ? CubeFingerMode.Delete : CubeFingerMode.Build;
+		}
+	}
+
+
+
+	/*
     private void drawViewIcons()
     {
         float totalWidth = Screen.width * ((views.Count - 1) * VIEW_SELECTOR_SIZE + views.Count * VIEW_SELECTOR_PADDING + VIEW_SELECTOR_SELECTED_SIZE);
@@ -157,7 +175,7 @@ public class InGameOverlay : MonoBehaviour
             x += size + Screen.width * VIEW_SELECTOR_PADDING;
         }
     }
-
+	*/
     private void ShowStructure(string _tag)
     {
         ToggleBlocksByTag("currentStructure", false);
@@ -195,7 +213,7 @@ public class InGameOverlay : MonoBehaviour
                 Screen.width * PROGRESSBAR_HEIGHT
             ), progress);
     }
-
+	/*
     public static void AddView(GuiView view)
     {
         views.AddLast(view);
@@ -205,7 +223,7 @@ public class InGameOverlay : MonoBehaviour
     {
         AddView(new GuiView(sceneName, icon));
     }
-
+*/
     private void leaveGame()
     {
         GUI.color = Color.white;
