@@ -4,26 +4,33 @@ using System.Collections;
 public class StartScreen : MonoBehaviour
 {
 	private GUIStyle _currentStyle = null;
+	private GUIStyle _buttonStyle = null;
 
     void OnGUI()
     {
 		InitStyles();
-		GUI.contentColor = Color.black;
-		GUI.Box( new Rect ( 0, 0, Screen.width, Screen.height), "Building Blocks", _currentStyle);
+		GUI.contentColor = new Color (140f, 156f, 179f);
+		GUI.Box( new Rect ( 0, 0, Screen.width, Screen.height), "Building Blocks",Lang.BoxStyle(Screen.height, Screen.width));//, Lang.buttonStyle(Screen.height)); 
 
-		GUI.backgroundColor = new Color(0f, 0f, 255f);
-        if (GUI.Button(new Rect((Screen.width / 2) - 150, (Screen.height /2)- 85, 300, 100), "Play The Game"))
+		GUI.backgroundColor = new Color(121f, 180f, 150f);
+		if (GUI.Button(new Rect((Screen.width / 2) - Screen.width * 0.25f, (Screen.height /2) - Screen.height * .1f, Screen.width * 0.5f, Screen.height * 0.1f), "Play" , Lang.ButtonStyle(Screen.height, Screen.width)))
         {
             Application.LoadLevel(2);
         }
+		//- ((Screen.width * 0.75f) /2))
 
-        if (GUI.Button(new Rect((Screen.width / 2) - 150, (Screen.height / 2) + 85, 300, 100), "Spectate"))
+		if (GUI.Button(new Rect((Screen.width / 2) - Screen.width * 0.25f, (Screen.height /2) + Screen.height * .1f, Screen.width * 0.5f, Screen.height * 0.1f), "Spectate" , Lang.ButtonStyle(Screen.height, Screen.width)))
         {
             TeamSelector.IsSpectator = true;
             Application.LoadLevel(2);
         }  
 
-		GUI.Label(new Rect(Screen.width - 80 , Screen.height- 20, 80, 20), "Team Cubed");
+		GUI.Label (new Rect (Screen.width - (Screen.width * 0.25f), Screen.height - (Screen.width * 0.1f), (Screen.width * 0.25f), (Screen.width * 0.1f)), "Team Cubed", Lang.LabelStyle(Screen.height,Screen.width));//,Lang.labelStyle(Screen.height));
+
+		if(Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
 
     }
 
@@ -38,7 +45,9 @@ public class StartScreen : MonoBehaviour
 			_currentStyle.fontSize = 32;
 			_currentStyle.fontStyle = FontStyle.Bold;
 		}
+
 	}
+
 
 	private Texture2D MakeTex( int width, int height, Color col )
 	{
