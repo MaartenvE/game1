@@ -5,12 +5,6 @@ using BuildingBlocks.Player;
 
 public class PlayerInfo : MonoBehaviour
 {
-    public static bool IsSpectator = false;
-
-    public static bool HasFullBlock { get; private set; }
-
-    private static GameObject teamObject;
-
     public void SendInfo(IPlayer player, int? teamId)
     {
         networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, teamId ?? player.Team.TeamId);
@@ -29,8 +23,7 @@ public class PlayerInfo : MonoBehaviour
     [RPC]
     public void ThrowAwayBlock(NetworkMessageInfo message)
     {
-        INetworkPlayer nPlayer = new NetworkPlayerWrapper(message.sender);
-        IPlayer player = Player.GetPlayer(nPlayer);
+        IPlayer player = Player.GetPlayer(new NetworkPlayerWrapper(message.sender));
         player.GiveNewInventoryBlock();
     }
 }

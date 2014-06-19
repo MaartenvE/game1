@@ -30,6 +30,7 @@ namespace BuildingBlocks.CubeFinger
             gameObjectMock = new Mock<IGameObject>();
             gameObjectMock.SetupGet(g => g.transform).Returns(transformMock.Object);
             gameObjectMock.SetupGet(g => g.renderer).Returns(rendererMock.Object);
+            gameObjectMock.SetupGet(g => g.network).Returns(Mock.Of<INetwork>());
 
             cubeFingerMock = new Mock<ICubeFinger>();
             cubeFingerMock.SetupGet(c => c.gameObject).Returns(gameObjectMock.Object);

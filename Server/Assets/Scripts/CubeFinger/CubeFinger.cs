@@ -2,7 +2,7 @@
 
 namespace BuildingBlocks.CubeFinger
 {
-    class CubeFinger : BaseCubeFinger
+    public class CubeFinger : BaseCubeFinger
     {
         public CubeFinger(IGameObject gameObject) : base(gameObject)
         {
@@ -25,9 +25,10 @@ namespace BuildingBlocks.CubeFinger
             networkView.RPC("ColorFinger", player, ColorModel.ConvertToVector3(Renderer.FingerColor));
         }
 
-        public override void Update()
+        public override void Destroy()
         {
-
+            network.RemoveRPCs(networkView.viewID);
+            network.Destroy(networkView.viewID);
         }
     }
 }

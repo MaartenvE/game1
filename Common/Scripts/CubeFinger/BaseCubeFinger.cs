@@ -43,6 +43,7 @@ namespace BuildingBlocks.CubeFinger
 
         public virtual void OnPlayerConnected(INetworkPlayer player) { }
         public virtual void Update() { }
+        public virtual void Destroy() { }
 
         public virtual void RPC_SetPersonalFinger()
         {

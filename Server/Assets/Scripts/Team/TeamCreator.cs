@@ -42,9 +42,7 @@ namespace BuildingBlocks.Team
 
             if (player != null)
             {
-                network.RemoveRPCs(player.CubeFinger.networkView.viewID);
-                network.Destroy(player.CubeFinger.networkView.viewID);
-
+                player.CubeFinger.Destroy();
                 Assigner.RemovePlayer(player);
             }
         }

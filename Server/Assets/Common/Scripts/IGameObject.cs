@@ -4,6 +4,7 @@ public interface IGameObject
 {
     IRenderer renderer { get; }
     ITransform transform { get; }
+    INetwork network { get; }
     INetworkView networkView { get; }
 
     T GetComponent<T>() where T : Component;

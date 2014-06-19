@@ -3,6 +3,8 @@
 public class GameObjectWrapper : IGameObject
 {
     private GameObject wrappedObject;
+
+    private INetwork wrappedNetwork;
     private INetworkView wrappedNetworkView;
 
     public IRenderer renderer
@@ -21,6 +23,14 @@ public class GameObjectWrapper : IGameObject
         }
     }
 
+    public INetwork network
+    {
+        get
+        {
+            return wrappedNetwork;
+        }
+    }
+
     public INetworkView networkView
     {
         get
@@ -32,6 +42,7 @@ public class GameObjectWrapper : IGameObject
     public GameObjectWrapper(GameObject wrappedObject)
     {
         this.wrappedObject = wrappedObject;
+        this.wrappedNetwork = new NetworkWrapper();
         this.wrappedNetworkView = new NetworkViewWrapper(wrappedObject.networkView);
     }
 

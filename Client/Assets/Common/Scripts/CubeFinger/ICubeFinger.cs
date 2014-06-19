@@ -22,5 +22,6 @@ namespace BuildingBlocks.CubeFinger
 
         void OnPlayerConnected(INetworkPlayer player);
         void Update();
+        void Destroy();
     }
 }
