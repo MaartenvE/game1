@@ -8,6 +8,7 @@ public class Player : IPlayer
 
     public HalfBlock HalfBlock { get; set; }
 
+    private INetworkView _networkView; 
     private INetworkPlayer networkPlayer;
     public INetworkPlayer NetworkPlayer
     {
@@ -25,11 +26,6 @@ public class Player : IPlayer
         _networkView = new NetworkViewWrapper(GameObject.Find("Player").networkView);
     }
 
-	private INetworkView _networkView; //this is the networkview on which the player exists.
-	private INetwork _Network;
-	private INetworkPlayer _NetworkPlayer; //this is the actual networkPlayer
-
-	private IInstantiatedBlock _Finger;
     public bool HasPlaceableBlock { get; set; }
 	
 	public void GiveInventoryBlock(){
