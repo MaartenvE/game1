@@ -1,33 +1,49 @@
 ﻿using UnityEngine;
+using BuildingBlocks.Team;
+using BuildingBlocks.Player;
 
 public class GroundBlockBehaviour : MonoBehaviour
 {
-    public void SetInfo(string parent, Vector3 location, Color color)
+    protected ITeam team { get; private set; }
+
+    public void SetInfo(int teamId, Vector3 location, Color color)
     {
-        networkView.RPC("SetBlockInfo", RPCMode.AllBuffered, parent, location, new Vector3(color.r, color.g, color.b));
+        networkView.RPC("SetBlockInfo", RPCMode.AllBuffered, teamId, location, new Vector3(color.r, color.g, color.b));
     }
 
     [RPC]
-    void SetBlockInfo(string parent, Vector3 location, Vector3 color)
+    void SetBlockInfo(int teamId, Vector3 location, Vector3 color)
     {
-        this.transform.parent = GameObject.Find(parent).transform;
+        this.team = Team.GetTeam(teamId);
+        this.transform.parent = team.gameObject.transform.Transform;
         this.transform.localPosition = location;
-        this.renderer.material.color = new Color(color.x, color.y, color.z);
+        this.renderer.material.color = ColorModel.ConvertToUnityColor(color);
+
+
+        //this.transform.parent = GameObject.Find(parent).transform;
+        //this.transform.localPosition = location;
+        //this.renderer.material.color = new Color(color.x, color.y, color.z);
     }
 
     [RPC]
     void PlaceNewBlock(Vector3 direction, NetworkMessageInfo info)
     {
-        IPlayer player = TeamLoader.TeamManager.GetPlayer(new NetworkPlayerWrapper(info.sender));
+        IPlayer player = Player.GetPlayer(new NetworkPlayerWrapper(info.sender));
+
+        Vector3 position = this.transform.localPosition + (direction * transform.localScale.x);
+        player.Team.StructureTracker.PlaceBlock(player, position, player.HalfBlock.CalculateUnityColor());
+        player.GiveNewInventoryBlock();
+
+        //IPlayer player = TeamLoader.TeamManager.GetPlayer(new NetworkPlayerWrapper(info.sender));
 
         // todo: remove
         //if (player.HasPlaceableBlock)
-        {
-            Vector3 position = this.transform.localPosition + (direction * transform.localScale.x);
-            player.Team.Tracker.PlaceBlock(player, position, player.HalfBlock.CalculateUnityColor());
-
-            player.GiveNewInventoryBlock();
-        }
+        //{
+        //    Vector3 position = this.transform.localPosition + (direction * transform.localScale.x);
+        //    player.Team.Tracker.PlaceBlock(player, position, player.HalfBlock.CalculateUnityColor());
+        //
+        //    player.GiveNewInventoryBlock();
+        //}
     }
 
     [RPC]

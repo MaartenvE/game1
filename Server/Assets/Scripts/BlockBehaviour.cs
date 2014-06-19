@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
+using BuildingBlocks.Team;
 
 public class BlockBehaviour : GroundBlockBehaviour
 {
     [RPC]
     void RemoveBlock()
     {
-        // todo: Create shortcut to get ITeam to which block belongs
+        team.StructureTracker.RemoveBlock(new GameObjectWrapper(gameObject));
+
+        /*// todo: Create shortcut to get ITeam to which block belongs
         Transform target = transform.parent;
         GameObject teamObject = target.parent.gameObject;
 
@@ -15,6 +18,6 @@ public class BlockBehaviour : GroundBlockBehaviour
         team.Tracker.RemoveBlock(transform.localPosition);
 
         Network.RemoveRPCs(networkView.viewID);
-        Network.Destroy(networkView.viewID);
+        Network.Destroy(networkView.viewID);*/
     }
 }

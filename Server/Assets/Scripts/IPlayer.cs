@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using BuildingBlocks.CubeFinger;
+using BuildingBlocks.Team;
 
 public interface IPlayer
 {
@@ -18,4 +19,6 @@ public interface IPlayer
     void CombineBlock(IPlayer other);
 
     void GiveNewInventoryBlock();
+
+    void InstantiateCubeFinger();
 }

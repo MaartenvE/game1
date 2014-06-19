@@ -25,7 +25,7 @@ namespace BuildingBlocks.CubeFinger
         public override void OnPlayerConnected(INetworkPlayer player)
         {
             networkView.RPC("SetFingerMode", player, (int) Mode);
-            networkView.RPC("ColorFinger", player, Renderer.FingerColor);
+            networkView.RPC("ColorFinger", player, ColorModel.ConvertToVector3(Renderer.FingerColor));
         }
 
         public override void Update()

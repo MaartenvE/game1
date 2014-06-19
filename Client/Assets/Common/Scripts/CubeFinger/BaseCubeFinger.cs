@@ -28,6 +28,8 @@ namespace BuildingBlocks.CubeFinger
             }
         }
 
+        public bool Hide { get; protected set; }
+
         public bool IsMine { get; private set; }
         public ICubeFingerRenderer Renderer { get; private set; }
 

@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using BuildingBlocks.Team;
+using BuildingBlocks.Player;
 
 public class BumpMatcherLoader : MonoBehaviour
 {
@@ -22,8 +24,8 @@ public class BumpMatcherLoader : MonoBehaviour
         networkView.RPC("BumpMatch", networkPlayer1.NetworkPlayer);
         networkView.RPC("BumpMatch", networkPlayer2.NetworkPlayer);
 
-        IPlayer player1 = TeamLoader.TeamManager.GetPlayer(networkPlayer1);
-        IPlayer player2 = TeamLoader.TeamManager.GetPlayer(networkPlayer2);
+        IPlayer player1 = Player.GetPlayer(networkPlayer1);
+        IPlayer player2 = Player.GetPlayer(networkPlayer2);
         if (Random.value < 0.5)
         {
             player1.CombineBlock(player2); 

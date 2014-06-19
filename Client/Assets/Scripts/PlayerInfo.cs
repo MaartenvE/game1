@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using BuildingBlocks.CubeFinger;
+using BuildingBlocks.Team;
 
 public class PlayerInfo : MonoBehaviour
 {

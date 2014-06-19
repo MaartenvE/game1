@@ -4,9 +4,8 @@ using System.Collections;
 /// <summary>
 /// INetwork interface used to enable implementing a mock network.
 /// </summary>
-public interface INetwork {
-
-
+public interface INetwork
+{
 	/// <summary>
 	/// Instantiate the specified prefab at location with the rotation for the group.
 	/// </summary>
@@ -28,5 +27,10 @@ public interface INetwork {
 
     void SetSendingEnabled(int group, bool enabled);
 
+    void RemoveRPCs(NetworkViewID viewId);
+    void Destroy(NetworkViewID viewId);
+
+    bool isClient { get; }
+    bool isServer { get; }
     bool isMessageQueueRunning { get; set; }
 }

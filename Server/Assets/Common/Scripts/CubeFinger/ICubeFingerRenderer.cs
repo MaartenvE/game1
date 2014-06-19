@@ -7,6 +7,7 @@ namespace BuildingBlocks.CubeFinger
         Color FingerColor { get; set; }
         bool IsObjectRemoved { get; set; }
 
+        void Update();
         void MoveFinger(IGameObject pickedObject, Vector3 displacement);
         void ShowFinger(bool show);
         void SetColor(Color color);

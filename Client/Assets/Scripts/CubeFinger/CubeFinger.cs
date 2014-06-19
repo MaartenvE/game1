@@ -4,7 +4,6 @@ using BuildingBlocks.Team;
 
 namespace BuildingBlocks.CubeFinger
 {
-
     public class CubeFinger : BaseCubeFinger
     {
         private CubeFingerPositioner positioner;
@@ -12,32 +11,37 @@ namespace BuildingBlocks.CubeFinger
 
         public CubeFinger(IGameObject gameObject) : base(gameObject)
         {
+            Hide = true;
             positioner = new CubeFingerPositioner(this);
         }
 
         public override void Update()
         {
-            if (ImageTarget != null && ImageTarget.CurrentStatus != TrackableBehaviour.Status.NOT_FOUND
-                && Mode != CubeFingerMode.None)
+            if (ImageTarget != null && ImageTarget.CurrentStatus != TrackableBehaviour.Status.NOT_FOUND)
             {
-                IGameObject pickedObject;
-                Vector3 displacement;
-                bool show = positioner.CalculateDisplacement(out pickedObject, out displacement);
-
-                if (show)
+                Hide = false;
+                if (IsMine && Mode != CubeFingerMode.None)
                 {
-                    Vector3 position = pickedObject.transform.localPosition;
-                    if (Mode == CubeFingerMode.Build)
+                    IGameObject pickedObject;
+                    Vector3 displacement;
+                    bool show = positioner.CalculateDisplacement(out pickedObject, out displacement);
+
+                    if (show)
                     {
-                        position += displacement * gameObject.transform.localScale.x;
+                        Vector3 position = pickedObject.transform.localPosition;
+                        if (Mode == CubeFingerMode.Build)
+                        {
+                            position += displacement * gameObject.transform.localScale.x;
+                        }
+
+                        Renderer.MoveFinger(pickedObject, displacement);
+                        show = !handleClick(pickedObject, displacement);
                     }
 
-                    Renderer.MoveFinger(pickedObject, displacement);
-                    show = !handleClick(pickedObject, displacement);
+                    Renderer.ShowFinger(show);
                 }
-
-                Renderer.ShowFinger(show);
             }
+            Renderer.Update();
         }
 
         private bool handleClick(IGameObject pickedObject, Vector3 displacement)

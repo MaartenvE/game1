@@ -40,6 +40,32 @@ public class NetworkWrapper : INetwork
         Network.SetSendingEnabled(group, enabled);
     }
 
+    public void RemoveRPCs(NetworkViewID viewId)
+    {
+        Network.RemoveRPCs(viewId);
+    }
+
+    public void Destroy(NetworkViewID viewId)
+    {
+        Network.Destroy(viewId);
+    }
+
+    public bool isClient
+    {
+        get
+        {
+            return Network.isClient;
+        }
+    }
+
+    public bool isServer
+    {
+        get
+        {
+            return Network.isServer;
+        }
+    }
+
     public bool isMessageQueueRunning
     {
         get

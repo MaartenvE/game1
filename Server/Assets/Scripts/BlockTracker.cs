@@ -1,14 +1,12 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
+using BuildingBlocks.Team;
 
-public class BlockTracker
+public class BlockTracker : TeamBehaviour
 {
     public event StructureCompleteHandler OnStructureComplete;
     public event StructureProgressHandler OnProgressChange;
 
-    private ITeam team;
-    private INetwork network;
     private GameObject prefab;
-
     private TeamStructureTracker structure;
 
     public float Progress
@@ -19,10 +17,8 @@ public class BlockTracker
         }
     }
 
-    public BlockTracker(ITeam team, INetwork network, Structure<Color?> goalStructure)
+    public BlockTracker(IGameObject gameObject, Structure<Color?> goalStructure) : base(gameObject)
     {
-        this.team = team;
-        this.network = network;
         this.prefab = Resources.Load("GameCube") as GameObject;
 
         this.structure = new TeamStructureTracker(goalStructure);
@@ -56,12 +52,12 @@ public class BlockTracker
         bool correct = checkBlock(location, color);
 
         // todo: pass correctness
-        block.GetComponent<GroundBlockBehaviour>().SetInfo(team.ImageTarget, location, color);
+        block.GetComponent<GroundBlockBehaviour>().SetInfo(TeamInfo.ImageTarget, location, color);
     }
 
     public void PlaceBlock(IPlayer player, Vector3 location, Color color)
     {
-        if (player.Team == team)
+        if (player.Team.ID == TeamInfo.ID)
         {
             instantiateBlock(location, color);
         }
@@ -78,3 +74,4 @@ public class BlockTracker
         return structure.CheckBlock(structure.Normalize(location, prefab.transform.localScale.x), color);
     }
 }
+*/

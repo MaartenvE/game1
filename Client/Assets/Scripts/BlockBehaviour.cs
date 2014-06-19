@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using BuildingBlocks.Team;
 
 public class BlockBehaviour : MonoBehaviour
 {
@@ -23,9 +24,11 @@ public class BlockBehaviour : MonoBehaviour
     }
 
     [RPC]
-    void SetBlockInfo(string parent, Vector3 location, Vector3 color)
+    void SetBlockInfo(int teamId, Vector3 location, Vector3 color)
     {
-        this.transform.parent = GameObject.Find(parent).transform as Transform;
+        TeamInfo team = TeamInfo.GetTeam(teamId);
+
+        this.transform.parent = GameObject.Find(team.ImageTarget).transform as Transform;
         this.transform.localPosition = location;
         this.transform.localRotation = new Quaternion(0, 0, 0, 0);
         this.renderer.material.color = new Color(color.x, color.y, color.z);

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using BuildingBlocks.Team;
+using BuildingBlocks.Player;
 
 public class PlayerInfo : MonoBehaviour
 {
     public static bool IsSpectator = false;
-    public static int Team;
 
     public static bool HasFullBlock { get; private set; }
 
@@ -12,38 +13,15 @@ public class PlayerInfo : MonoBehaviour
 
     public void SendInfo(IPlayer player, int? teamId)
     {
-        networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, teamId ?? player.Team.ID);
+        networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, teamId ?? player.Team.TeamId);
     }
 
 	public void SendInfo(IPlayer player){
-		networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, player.Team.ID);
+		networkView.RPC("SetPlayerInfo", player.NetworkPlayer.NetworkPlayer, player.Team.TeamId);
 	}
 
     [RPC]
-    void SetPlayerInfo(int team)
-    {
-        Team = team;
-
-        GameObject goalStructure = GameObject.Find("GoalStructure");
-
-        foreach (TeamInfoLoader teamInfoLoader in GameObject.Find("Teams").GetComponentsInChildren<TeamInfoLoader>())
-        {
-            TeamInfo teamInfo = teamInfoLoader.TeamInfo;
-            if (teamInfo.IsMine)
-            {
-                teamObject = teamInfoLoader.gameObject;
-                goalStructure.transform.parent = GameObject.Find(teamInfo.ImageTarget).transform;
-                goalStructure.transform.localPosition = Vector3.zero;
-            }
-
-            else
-            {
-                GameObject goalClone = GameObject.Instantiate(goalStructure) as GameObject;
-                goalClone.transform.parent = GameObject.Find(teamInfo.ImageTarget).transform;
-                goalClone.transform.localPosition = Vector3.zero;
-            }
-        }
-    }
+    void SetPlayerInfo(int team) { }
 
     [RPC]
     public void SetHalfBlockColor(Vector3 color)
@@ -74,7 +52,7 @@ public class PlayerInfo : MonoBehaviour
     public void ThrowAwayBlock(NetworkMessageInfo message)
     {
         INetworkPlayer nPlayer = new NetworkPlayerWrapper(message.sender);
-        IPlayer player = TeamLoader.TeamManager.GetPlayer(nPlayer);
+        IPlayer player = Player.GetPlayer(nPlayer);
         player.GiveNewInventoryBlock();
     }
 }
