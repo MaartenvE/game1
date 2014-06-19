@@ -7,12 +7,25 @@ namespace BuildingBlocks.Team
     {
         public ITeamAssigner Assigner { get; private set; }
 
-        public TeamCreator(IGameObject gameObject) : base(gameObject)
+        private ITeamInstantiator instantiator;
+
+        public TeamCreator(IGameObject gameObject, ITeamInstantiator teamInstantiator) : base(gameObject)
         {
+            this.instantiator = teamInstantiator;
+
             ITeam team1 = instantiateTeam("Team 1", "ImageTarget1");
             ITeam team2 = instantiateTeam("Team 2", "ImageTarget2");
 
             Assigner = new TeamAssigner(new[] { team1, team2 });
+        }
+
+        private ITeam instantiateTeam(string teamName, string imageTarget)
+        {
+            ITeam team = instantiator.InstantiateTeam();
+            team.Name = teamName;
+            team.Target = imageTarget;
+            team.SendInfo();
+            return team;
         }
 
         public void InstantiateGroundBlocks()
@@ -21,17 +34,6 @@ namespace BuildingBlocks.Team
             {
                 team.StructureTracker.PlaceGroundBlock();
             }
-        }
-
-        private ITeam instantiateTeam(string teamName, string imageTarget)
-        {
-            GameObject teamPrefab = Resources.Load("Team") as GameObject;
-            GameObject teamObject = network.Instantiate(teamPrefab, Vector3.zero, new Quaternion(), 1) as GameObject;
-            ITeam team = teamObject.GetComponent<TeamLoader>().Team;
-            team.Name = teamName;
-            team.Target = imageTarget;
-            team.SendInfo();
-            return team;
         }
 
         public void OnPlayerDisconnected(INetworkPlayer networkPlayer)

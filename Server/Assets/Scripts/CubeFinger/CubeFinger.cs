@@ -14,12 +14,9 @@ namespace BuildingBlocks.CubeFinger
             networkView.RPC("SetFingerParent", RPCMode.AllBuffered, parent);
         }
 
-        public void SetPlayer(IPlayer player)
+        public void SetPlayer(INetworkPlayer player)
         {
-            player.CubeFinger = this;
-            networkView.RPC("SetPersonalFinger", player.NetworkPlayer);
-            player.GiveInventoryBlock();
-            Renderer.SetColor(player.HalfBlock.CalculateUnityColor());
+            networkView.RPC("SetPersonalFinger", player);
         }
 
         public override void OnPlayerConnected(INetworkPlayer player)

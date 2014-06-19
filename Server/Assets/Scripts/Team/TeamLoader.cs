@@ -5,12 +5,12 @@ namespace BuildingBlocks.Team
     public class TeamLoader : MonoBehaviour
     {
         public ITeam Team { get; private set; }
-        private TeamInfoOverlay overlay;
+        private TeamProgressOverlay overlay;
 
         void OnNetworkInstantiate(NetworkMessageInfo info)
         {
             Team = new Team(new GameObjectWrapper(gameObject));
-            overlay = new TeamInfoOverlay(Team);
+            overlay = new TeamProgressOverlay(Team);
         }
 
         void OnGUI()

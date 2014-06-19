@@ -13,6 +13,15 @@ public class PlayerInfo : MonoBehaviour
 
     private static GameObject teamObject;
 
+    private GameObject fullBlock;
+    private GameObject halfBlock;
+
+    void Start()
+    {
+        fullBlock = GameObject.Find("RotatingBlock");
+        halfBlock = GameObject.Find("RotatingHalfBlock");
+    }
+
     [RPC]
     void SetPlayerInfo(int team)
     {
@@ -40,35 +49,25 @@ public class PlayerInfo : MonoBehaviour
     }
 
     [RPC]
-    public void SetHalfBlockColor(Vector3 color)
+    public void SetBlockType(int full, Vector3 color)
     {
-        GameObject rotatingBlock = GameObject.Find("RotatingBlock");
-        rotatingBlock.renderer.material.color = ColorModel.ConvertToUnityColor(color);
-        GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
-        rotatingHalfBlock.renderer.material.color = ColorModel.ConvertToUnityColor(color);
+        HasFullBlock = full != 0;
+        setupBlock(ColorModel.ConvertToUnityColor(color));
+        startAnimation();
     }
 
-    [RPC]
-    public void SetBlockHalf()
+    private void setupBlock(Color color)
     {
-        HasFullBlock = false;
-        GameObject rotatingBlock = GameObject.Find("RotatingBlock");
-        rotatingBlock.renderer.enabled = false;
-        GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
-        rotatingHalfBlock.renderer.enabled = true;
-        BlockAnimationBehaviour animation = rotatingHalfBlock.AddComponent<BlockAnimationBehaviour>();
-        animation.SetUpAnimation(new Vector3(0, 0.5f, 2), GameObject.Find("BlockPosition").transform.localPosition);
+        halfBlock.renderer.enabled = !HasFullBlock;
+        fullBlock.renderer.enabled = HasFullBlock;
+        halfBlock.renderer.material.color = color;
+        fullBlock.renderer.material.color = color;
     }
 
-    [RPC]
-    public void SetBlockFull()
+    private void startAnimation()
     {
-        HasFullBlock = true;
-        GameObject rotatingBlock = GameObject.Find("RotatingBlock");
-        rotatingBlock.renderer.enabled = true;
-        GameObject rotatingHalfBlock = GameObject.Find("RotatingHalfBlock");
-        rotatingHalfBlock.renderer.enabled = false;
-        BlockAnimationBehaviour animation = rotatingBlock.AddComponent<BlockAnimationBehaviour>();
+        GameObject block = HasFullBlock ? fullBlock : halfBlock;
+        BlockAnimationBehaviour animation = block.AddComponent<BlockAnimationBehaviour>();
         animation.SetUpAnimation(new Vector3(0, 0.5f, 2), GameObject.Find("BlockPosition").transform.localPosition);
     }
 

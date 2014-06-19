@@ -11,6 +11,6 @@ public interface IStructureTracker
     float Progress { get; }
 
     void PlaceGroundBlock();
-    void PlaceBlock(IPlayer player, Vector3 location, Color color);
+    void PlaceBlock(Vector3 location, Color color);
     void RemoveBlock(IGameObject block);
 }

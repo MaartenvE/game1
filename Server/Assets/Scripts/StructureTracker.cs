@@ -40,13 +40,10 @@ public class StructureTracker : IStructureTracker
         constructor.PlaceGroundBlock(goal[center].GetValueOrDefault());
     }
 
-    public void PlaceBlock(IPlayer player, Vector3 location, Color color)
+    public void PlaceBlock(Vector3 location, Color color)
     {
         checkBlock(goal.Normalize(location, constructor.Scale), color);
-        if (player.Team == team)
-        {
-            constructor.PlaceBlock(location, color);
-        }
+        constructor.PlaceBlock(location, color);
     }
 
     public void RemoveBlock(IGameObject block)

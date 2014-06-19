@@ -2,23 +2,18 @@
 using BuildingBlocks.CubeFinger;
 using BuildingBlocks.Team;
 
-public interface IPlayer
+namespace BuildingBlocks.Player
 {
-    ITeam Team { get; set; }
-    INetworkPlayer NetworkPlayer { get; }
+    public interface IPlayer : IBuildingBlocksBehaviour
+    {
+        ITeam Team { get; set; }
+        INetworkPlayer NetworkPlayer { get; }
+        ICubeFinger CubeFinger { get; }
+        HalfBlock HalfBlock { get; }
+        bool HasPlaceableBlock { get; }
 
-    ICubeFinger CubeFinger { get; set; }
-
-    HalfBlock HalfBlock { get; set; }
-    bool HasPlaceableBlock { get; set; }
-
-	void GiveInventoryBlock();
-
-	void DestroyInventoryBlock();
-
-    void CombineBlock(IPlayer other);
-
-    void GiveNewInventoryBlock();
-
-    void InstantiateCubeFinger();
+        void CombineBlock(IPlayer other);
+        void GiveNewInventoryBlock();
+        void InstantiateCubeFinger();
+    }
 }

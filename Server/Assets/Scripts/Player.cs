@@ -1,60 +1,32 @@
 using UnityEngine;
-using BuildingBlocks.CubeFinger;
 using BuildingBlocks.Team;
+using BuildingBlocks.CubeFinger;
 
 namespace BuildingBlocks.Player
 {
-    public class Player : IPlayer
+    public class Player : BuildingBlocksBehaviour, IPlayer
     {
-        public const float FULL_BLOCK_CHANCE = 0.4f;
+        private const float FULL_BLOCK_CHANCE = 0.4f;
+
         public ITeam Team { get; set; }
-
-        public HalfBlock HalfBlock { get; set; }
-
         public INetworkPlayer NetworkPlayer { get; private set; }
-        public ICubeFinger CubeFinger { get; set; }
+        public ICubeFinger CubeFinger { get; private set; }
+        public HalfBlock HalfBlock { get; private set; }
+        public bool HasPlaceableBlock { get; private set; }
 
-        public Player(INetworkPlayer player)
+        public Player(INetworkPlayer networkPlayer) : base(new GameObjectWrapper(GameObject.Find("Player")))
         {
-            NetworkPlayer = player;
-            _networkView = new NetworkViewWrapper(GameObject.Find("Player").networkView);
-        }
-
-        private INetworkView _networkView; //this is the networkview on which the player exists.
-        private INetwork _Network;
-        private INetworkPlayer _NetworkPlayer; //this is the actual networkPlayer
-
-        private IInstantiatedBlock _Finger;
-        public bool HasPlaceableBlock { get; set; }
-
-        public void GiveInventoryBlock()
-        {
-            if (HalfBlock == null)
-            {
-                HalfBlock = new HalfBlock(SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor());
-                Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
-                CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
-
-                if (Random.value < FULL_BLOCK_CHANCE)
-                {
-                    this.HasPlaceableBlock = true;
-                    _networkView.RPC("SetBlockFull", NetworkPlayer);
-                }
-                else
-                {
-                    this.HasPlaceableBlock = false;
-                    _networkView.RPC("SetBlockHalf", NetworkPlayer);
-                }
-                _networkView.RPC("SetHalfBlockColor", NetworkPlayer, color);
-
-            }
-
+            NetworkPlayer = networkPlayer;
         }
 
         public void GiveNewInventoryBlock()
         {
-            HalfBlock = null;
-            GiveInventoryBlock();
+            HalfBlock = new HalfBlock(SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor());
+            Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
+            CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
+
+            HasPlaceableBlock = Random.value < FULL_BLOCK_CHANCE;
+            networkView.RPC("SetBlockType", NetworkPlayer, HasPlaceableBlock ? 1 : 0, color);
         }
 
         public void CombineBlock(IPlayer other)
@@ -63,18 +35,13 @@ namespace BuildingBlocks.Player
             {
                 this.HalfBlock.CombineHalfBlock(other.HalfBlock);
                 this.HasPlaceableBlock = true;
-                Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
-                _networkView.RPC("SetHalfBlockColor", NetworkPlayer, color);
-                _networkView.RPC("SetBlockFull", NetworkPlayer);
-                CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
+
+                Color color = HalfBlock.CalculateUnityColor();
+                networkView.RPC("SetBlockType", NetworkPlayer, 1, ColorModel.ConvertToVector3(color));
+                CubeFinger.Renderer.SetColor(color);
+
                 other.GiveNewInventoryBlock();
             }
-        }
-
-
-        public void DestroyInventoryBlock()
-        {
-            HalfBlock = null;
         }
 
         public void InstantiateCubeFinger()
@@ -82,15 +49,18 @@ namespace BuildingBlocks.Player
             GameObject prefab = Resources.Load("CubeFinger") as GameObject;
             GameObject cubeFinger = Network.Instantiate(prefab, prefab.transform.position, prefab.transform.rotation, 1) as GameObject;
 
-            CubeFinger.CubeFinger finger = cubeFinger.GetComponent<CubeFingerLoader>().Finger as CubeFinger.CubeFinger;
+            CubeFinger = cubeFinger.GetComponent<CubeFingerLoader>().Finger;
+            CubeFinger.CubeFinger finger = CubeFinger as CubeFinger.CubeFinger;
             finger.SetParent(Team.Target);
-            finger.SetPlayer(this);
+            finger.SetPlayer(NetworkPlayer);
+
+            GiveNewInventoryBlock();
+            CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
         }
 
         public static IPlayer GetPlayer(INetworkPlayer player)
         {
             return TeamCreatorLoader.Creator.Assigner.GetPlayer(player);
         }
-
     }
 }
