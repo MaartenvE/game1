@@ -31,13 +31,24 @@ namespace BuildingBlocks.CubeFinger
         public bool IsMine { get; private set; }
         public ICubeFingerRenderer Renderer { get; private set; }
 
-        public BaseCubeFinger(IGameObject gameObject, ICubeFingerRenderer renderer = null) : base(gameObject)
+        public BaseCubeFinger(IGameObject gameObject, ICubeFingerRenderer renderer) : base(gameObject)
         {
             Renderer = renderer ?? new CubeFingerRenderer(this);
             OnModeChanged += SendModeChanged;
             Mode = CubeFingerMode.Build;
             Renderer.ShowFinger(false);
         }
+
+		public BaseCubeFinger(IGameObject gameObject) : base(gameObject)
+		{
+			ICubeFingerRenderer renderer = null;
+			Renderer = renderer ?? new CubeFingerRenderer(this);
+			OnModeChanged += SendModeChanged;
+			Mode = CubeFingerMode.Build;
+			Renderer.ShowFinger(false);
+		}
+
+
 
         public virtual void OnPlayerConnected(INetworkPlayer player) { }
         public virtual void Update() { }

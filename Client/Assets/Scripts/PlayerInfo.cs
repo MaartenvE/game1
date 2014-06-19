@@ -6,6 +6,7 @@ public class PlayerInfo : MonoBehaviour
 {
     public static bool IsSpectator = false;
     public static int Team;
+	public static TeamInfo myTeamInfo {get; private set; }
     public static CubeFinger CubeFinger;
 
     public static bool HasFullBlock { get; private set; }
@@ -24,6 +25,7 @@ public class PlayerInfo : MonoBehaviour
             TeamInfo teamInfo = teamInfoLoader.TeamInfo;
             if (teamInfo.IsMine)
             {
+				myTeamInfo = teamInfoLoader.TeamInfo;
                 teamObject = teamInfoLoader.gameObject;
                 goalStructure.transform.parent = GameObject.Find(teamInfo.ImageTarget).transform;
                 goalStructure.transform.localPosition = Vector3.zero;
@@ -37,6 +39,10 @@ public class PlayerInfo : MonoBehaviour
             }
         }
     }
+
+	public TeamInfo getTeamInfo(){
+		return myTeamInfo;
+	}
 
     [RPC]
     public void SetHalfBlockColor(Vector3 color)
