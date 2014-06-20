@@ -4,7 +4,7 @@ using BuildingBlocks.CubeFinger;
 
 namespace BuildingBlocks.Player
 {
-    public interface IPlayer
+    public interface IPlayer : IBuildingBlocksBehaviour
     {
         ITeam Team { get; }
         ICubeFinger CubeFinger { get; set; }

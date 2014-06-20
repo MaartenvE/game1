@@ -47,25 +47,9 @@ namespace BuildingBlocks.GUI
         public static Texture2D MakeTexture(Color color)
         {
             Texture2D texture = new Texture2D(1, 1);
-            texture.SetPixel(0, 0, Color.white);
+            texture.SetPixel(0, 0, color);
             texture.Apply();
             return texture;
         }
-
-
-        private static Texture2D MakeTex(int width, int height, Color col)
-        {
-            Color[] pix = new Color[width * height];
-            for (int i = 0; i < pix.Length; ++i)
-            {
-                pix[i] = col;
-            }
-            Texture2D result = new Texture2D(width, height);
-            result.SetPixels(pix);
-            result.Apply();
-            return result;
-        }
-
-
     }
 }
