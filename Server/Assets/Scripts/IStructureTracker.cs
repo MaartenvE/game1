@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using BuildingBlocks;
 
 public delegate void StructureCompleteHandler();
 public delegate void StructureProgressHandler(float progress);

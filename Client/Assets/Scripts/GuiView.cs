@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 
 public struct GuiView
 {
@@ -11,3 +11,4 @@ public struct GuiView
         Icon = icon;
     }
 }
+*/

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using BuildingBlocks;
 
 /// <summary>
 /// Server loader creates a new server using the NetworkWrapper.

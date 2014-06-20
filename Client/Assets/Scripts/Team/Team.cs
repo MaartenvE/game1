@@ -26,10 +26,7 @@ namespace BuildingBlocks.Team
         /// </summary>
         public Team(IGameObject gameObject) : base(gameObject)
         {
-            if (teamsObject == null)
-            {
-                teamsObject = gameObject.Find("Teams");
-            }
+            teamsObject = gameObject.Find("Teams");
             gameObject.transform.parent = teamsObject.transform;
         }
 

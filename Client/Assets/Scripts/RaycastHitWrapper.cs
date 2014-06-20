@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 
     public class RaycastHitWrapper : IRaycastHit
     {
@@ -19,3 +19,4 @@
             return nativeRaycastHit.point;
         }
     }
+*/

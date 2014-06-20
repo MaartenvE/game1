@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Moq;
+using BuildingBlocks;
 
 [TestFixture]
 public class BumpMatcherTest

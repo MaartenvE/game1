@@ -2,6 +2,7 @@
 using System.Collections;
 using NUnit.Framework;
 using Moq;
+using BuildingBlocks;
 
 [TestFixture]
 public class ServerTest

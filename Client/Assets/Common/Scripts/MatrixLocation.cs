@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 
 public class MatrixLocation : MonoBehaviour
 {
@@ -10,3 +10,4 @@ public class MatrixLocation : MonoBehaviour
 		index = newLocation;
 	}
 }
+*/

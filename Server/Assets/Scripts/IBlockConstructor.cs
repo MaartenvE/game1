@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using BuildingBlocks;
 
 public interface IBlockConstructor
 {

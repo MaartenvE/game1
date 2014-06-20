@@ -3,28 +3,31 @@ using System.Collections;
 using NUnit.Framework;
 using Moq;
 
-[TestFixture]
-public class ClientTest
+namespace BuildingBlocks.Client
 {
-    private Client client;
-    private Mock<INetwork> network;
-
-    [SetUp]
-    public void SetupClient()
+    [TestFixture]
+    public class ClientTest
     {
-        network = new Mock<INetwork>();
-        client = new Client(network.Object);
-    }
+        private Client client;
+        private Mock<INetwork> network;
 
-    [Test]
-    public void TestConnectToServer()
-    {
-        string ip = "1.2.3.4";
-        int port = 1234;
-        
-        client.ConnectToServer(ip, port);
+        [SetUp]
+        public void SetupClient()
+        {
+            network = new Mock<INetwork>();
+            client = new Client(network.Object);
+        }
 
-        network.Verify(n => n.Connect(ip, port));
+        [Test]
+        public void TestConnectToServer()
+        {
+            string ip = "1.2.3.4";
+            int port = 1234;
+
+            client.ConnectToServer(ip, port);
+
+            network.Verify(n => n.Connect(ip, port));
+        }
     }
 }
 

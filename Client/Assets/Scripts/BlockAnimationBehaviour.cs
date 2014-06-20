@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using BuildingBlocks.GUI;
 
 public class BlockAnimationBehaviour : MonoBehaviour {
 

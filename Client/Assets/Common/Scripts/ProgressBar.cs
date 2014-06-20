@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ProgressBar
+public static class ProgressBar
 {
     private static GUIStyle style;
 
@@ -9,6 +9,14 @@ public class ProgressBar
     {
         Color previousColor = GUI.color;
 
+        setStyle();
+
+        drawProgressBar(position, progress);
+        GUI.color = previousColor;
+    }
+
+    private static void setStyle()
+    {
         if (style == null)
         {
             Texture2D texture = new Texture2D(1, 1);
@@ -18,9 +26,6 @@ public class ProgressBar
             style = new GUIStyle();
             style.normal.background = texture;
         }
-
-        drawProgressBar(position, progress);
-        GUI.color = previousColor;
     }
 
     private static void drawProgressBar(Rect position, float progress)

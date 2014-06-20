@@ -1,21 +1,15 @@
 ﻿using UnityEngine;
+using BuildingBlocks.GUI;
 
 namespace BuildingBlocks.Team
 {
     public class TeamLoader : MonoBehaviour
     {
         public ITeam Team { get; private set; }
-        private TeamProgressOverlay overlay;
 
         void OnNetworkInstantiate(NetworkMessageInfo info)
         {
             Team = new Team(new GameObjectWrapper(gameObject));
-            overlay = new TeamProgressOverlay(Team);
-        }
-
-        void OnGUI()
-        {
-            overlay.OnGUI();
         }
 
         [RPC]

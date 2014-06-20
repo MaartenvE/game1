@@ -2,6 +2,7 @@
 using System.Collections;
 using BuildingBlocks.Team;
 using BuildingBlocks.Player;
+using BuildingBlocks;
 
 public class PlayerInfo : MonoBehaviour
 {
