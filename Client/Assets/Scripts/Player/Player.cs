@@ -6,7 +6,6 @@ namespace BuildingBlocks.Player
 {
     public class Player : BuildingBlocksBehaviour, IPlayer
     {
-        public static bool IsSpectator = false;
         public static IPlayer LocalPlayer { get; private set; }
 
         public ITeam Team { get; private set; }

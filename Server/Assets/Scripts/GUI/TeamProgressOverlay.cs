@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using BuildingBlocks.Team;
 
-namespace BuildingBlocks.Team
+namespace BuildingBlocks.GUI
 {
     public class TeamProgressOverlay
     {

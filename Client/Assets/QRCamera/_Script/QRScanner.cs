@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Text.RegularExpressions;
+using BuildingBlocks.GUI;
 
 using com.google.zxing.qrcode;
 
@@ -45,8 +46,8 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 	}
 	
 	void OnGUI () {
-		GUI.Box(new Rect(0, Screen.height - Screen.height*0.05f, Screen.width, Screen.height * 0.1f), qrText, Lang.QRStyle(Screen.height,Screen.width) );
-		GUI.Box (new Rect(0, 0, Screen.width, Screen.height * 0.1f), "Scan the QR code to join the game", Lang.QRStyle(Screen.height,Screen.width));
+		GUI.Box(new Rect(0, Screen.height - Screen.height*0.05f, Screen.width, Screen.height * 0.1f), qrText, GUIStyles.QRStyle(Screen.height,Screen.width) );
+		GUI.Box (new Rect(0, 0, Screen.width, Screen.height * 0.1f), "Scan the QR code to join the game", GUIStyles.QRStyle(Screen.height,Screen.width));
 
 		if(Input.GetKeyDown(KeyCode.Escape))
 		{
