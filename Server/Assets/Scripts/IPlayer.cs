@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using BuildingBlocks.CubeFinger;
+using BuildingBlocks.HalfBlock;
 
 public interface IPlayer
 {

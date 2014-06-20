@@ -1,12 +1,13 @@
 using UnityEngine;
 using BuildingBlocks.CubeFinger;
+using BuildingBlocks.HalfBlock;
 
 public class Player : IPlayer
 {
 	public const float FULL_BLOCK_CHANCE = 0.4f;
     public ITeam Team { get; set; }
 
-    public HalfBlock HalfBlock { get; set; }
+    public BuildingBlocks.HalfBlock.HalfBlock HalfBlock { get; set; }
 
     private INetworkView _networkView; 
     private INetworkPlayer networkPlayer;
