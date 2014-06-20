@@ -4,7 +4,7 @@ namespace BuildingBlocks.Input
 {
     public class TouchDetectorLoader : MonoBehaviour
     {
-        public static TouchDetector Detector { get; private set; }
+        public static ITouchDetector Detector { get; private set; }
 
         void Start()
         {
