@@ -30,7 +30,7 @@ public class StructureReaderTest {
 	}
 
 
-	private string adress = "/maps/testmaps/test1.structure";
+	private static string adress = "/maps/testmaps/test1.structure";
 	//each case has format {Color[][][] parsedResult, Color[][[][] expectedResult, int size}
 	private static object[] CorrectStructureReaderCases =
 	{
