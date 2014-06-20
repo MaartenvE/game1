@@ -30,11 +30,11 @@ public class StructureReaderTest {
 	}
 
 
-
+	private string adress = "/maps/testmaps/test1.structure";
 	//each case has format {Color[][][] parsedResult, Color[][[][] expectedResult, int size}
 	private static object[] CorrectStructureReaderCases =
 	{
-		new object[] {Application.dataPath+"/maps/testmaps/test1.structure", new Color?[2][][]{
+		new object[] {Application.dataPath+adress, new Color?[2][][]{
 				new Color?[2][]{new Color?[2] {ColorModel.RED, null}
 				 			 , new Color?[2]{null, ColorModel.PURPLE}}
 				, new Color?[2][]{new Color?[2] {ColorModel.BLUE, null}
