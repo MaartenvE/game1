@@ -13,5 +13,10 @@ public class GoalCubeBehaviour : MonoBehaviour
     {
         this.transform.parent = GameObject.Find(parent).transform;
         this.renderer.material.color = new Color(color.x, color.y, color.z, 0.5f);
+
+        if (Network.isClient)
+        {
+            this.renderer.enabled = false;
+        }
     }
 }

@@ -7,6 +7,9 @@ public interface IGameObject
     INetwork network { get; }
     INetworkView networkView { get; }
 
+    IGameObject Clone();
+
+    T AddComponent<T>() where T : Component;
     T GetComponent<T>() where T : Component;
     T[] GetComponentsInChildren<T>() where T : Component;
 

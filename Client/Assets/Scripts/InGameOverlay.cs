@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BuildingBlocks.CubeFinger;
 using BuildingBlocks.Team;
+using BuildingBlocks.Player;
 
 public class InGameOverlay : MonoBehaviour
 {
@@ -138,7 +139,7 @@ public class InGameOverlay : MonoBehaviour
 
 	private void switchMode(){
 		trashcanSelected = !trashcanSelected;
-		CubeFinger cubeFinger = PlayerInfo.CubeFinger;
+		ICubeFinger cubeFinger = Player.LocalPlayer.CubeFinger;
 		GameObject.Find("Crosshair").GetComponent<CrosshairBehaviour>().CycleModes();
 		if (cubeFinger != null)
 		{
@@ -149,22 +150,18 @@ public class InGameOverlay : MonoBehaviour
     private void drawProgressBar()
     {
         float progress = 0.0f;
-        int team = PlayerInfo.Team;
-        TeamInfoLoader[] teamLoaders = GameObject.Find("Teams").GetComponentsInChildren<TeamInfoLoader>();
-        foreach (TeamInfoLoader loader in teamLoaders)
+        ITeam team = Player.LocalPlayer.Team;
+        if (team != null)
         {
-            if (loader.TeamInfo.ID == team)
-            {
-                progress = loader.TeamInfo.Progress;
-            }
-        }
+            progress = team.Progress;
 
-        ProgressBar.Draw(new Rect(
-                (1f - PROGRESSBAR_WIDTH - PROGRESSBAR_PADDING) * Screen.width,
-                Screen.width * PROGRESSBAR_PADDING,
-                Screen.width * PROGRESSBAR_WIDTH,
-                Screen.width * PROGRESSBAR_HEIGHT
-            ), progress);
+            ProgressBar.Draw(new Rect(
+                    (1f - PROGRESSBAR_WIDTH - PROGRESSBAR_PADDING) * Screen.width,
+                    Screen.width * PROGRESSBAR_PADDING,
+                    Screen.width * PROGRESSBAR_WIDTH,
+                    Screen.width * PROGRESSBAR_HEIGHT
+                ), progress);
+        }
     }
 
     private void leaveGame()

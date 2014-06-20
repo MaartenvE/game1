@@ -90,6 +90,9 @@ namespace BuildingBlocks.Team
             networkView.RPC("SetTeamProgress", player, StructureTracker.Progress);
         }
 
+        public void RPC_SetTeamInfo(int teamId, string name, string target) { }
+        public void RPC_SetTeamProgress(float progress) { }
+
         public static ITeam GetTeam(int teamId)
         {
             return TeamCreatorLoader.Creator.Assigner.GetTeam(teamId);

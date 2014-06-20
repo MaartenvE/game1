@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
+using BuildingBlocks.Player;
 
-public interface ITeam
+namespace BuildingBlocks.Team
 {
-    int ID { get; }
-    int Size { get; }
-    string Name { get; set; }
+    public interface ITeam : IBuildingBlocksBehaviour
+    {
+        int TeamId { get; }
+        string Name { get; }
+        string Target { get; }
+        float Progress { get; }
+        bool IsMine { get; }
 
-    float Progress { get; set; }
-
-    IEnumerable<IPlayer> Players { get; }
-
-    void AddPlayer(IPlayer player);
-    void RemovePlayer(IPlayer player);
+        void RPC_SetTeamInfo(int teamId, string name, string target);
+        void RPC_SetTeamProgress(float progress);
+    }
 }

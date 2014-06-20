@@ -46,6 +46,16 @@ public class GameObjectWrapper : IGameObject
         this.wrappedNetworkView = new NetworkViewWrapper(wrappedObject.networkView);
     }
 
+    public IGameObject Clone()
+    {
+        return new GameObjectWrapper(GameObject.Instantiate(wrappedObject) as GameObject);
+    }
+
+    public T AddComponent<T>() where T : Component
+    {
+        return wrappedObject.AddComponent<T>();
+    }
+
     public T GetComponent<T>() where T : Component
     {
         return wrappedObject.GetComponent<T>();

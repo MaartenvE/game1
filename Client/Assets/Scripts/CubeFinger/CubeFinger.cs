@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using BuildingBlocks.Team;
+using BuildingBlocks.Player;
 
 namespace BuildingBlocks.CubeFinger
 {
@@ -79,7 +80,7 @@ namespace BuildingBlocks.CubeFinger
         {
             base.RPC_SetPersonalFinger();
             clicker = GameObject.Find("Client").GetComponent<ClickEventHandler>();
-            PlayerInfo.CubeFinger = this;
+            Player.Player.LocalPlayer.CubeFinger = this;
         }
     }
 }

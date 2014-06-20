@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using BuildingBlocks.Player;
 
 public class Client
 {
@@ -61,7 +62,7 @@ public class Client
 
     public void RPC_Win(int teamId)
     {
-        int myTeam = PlayerInfo.Team;
+        int myTeam = Player.LocalPlayer.Team.TeamId;
         this.won = teamId == myTeam;
     }
 }

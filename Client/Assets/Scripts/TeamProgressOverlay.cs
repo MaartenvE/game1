@@ -2,20 +2,20 @@
 using System.Collections;
 using BuildingBlocks.Team;
 
-public class TeamInfoOverlay
+public class TeamProgressOverlay
 {
-    private TeamInfo teamInfo;
+    private ITeam team;
 
-    public TeamInfoOverlay(TeamInfo teamInfo)
+    public TeamProgressOverlay(ITeam team)
     {
-        this.teamInfo = teamInfo;
+        this.team = team;
     }
 
     public void OnGUI()
     {
-        if (!teamInfo.IsMine)
+        if (!team.IsMine)
         {
-            string imageTarget = teamInfo.ImageTarget;
+            string imageTarget = team.Target;
             if (imageTarget != null)
             {
                 GameObject target = GameObject.Find(imageTarget);
@@ -28,7 +28,7 @@ public class TeamInfoOverlay
                         Screen.height - Screen.width * InGameOverlay.PROGRESSBAR_HEIGHT - Screen.width * InGameOverlay.PROGRESSBAR_PADDING,
                         Screen.width * InGameOverlay.PROGRESSBAR_WIDTH,
                         Screen.width * InGameOverlay.PROGRESSBAR_HEIGHT);
-                    ProgressBar.Draw(position, teamInfo.Progress);
+                    ProgressBar.Draw(position, team.Progress);
                 }
             }
         }

@@ -1,7 +1,17 @@
 ﻿using UnityEngine;
+using BuildingBlocks.Team;
+using BuildingBlocks.CubeFinger;
 
-public interface IPlayer
+namespace BuildingBlocks.Player
 {
-    ITeam Team { get; set; }
-    INetworkPlayer NetworkPlayer { get; }
+    public interface IPlayer
+    {
+        ITeam Team { get; }
+        ICubeFinger CubeFinger { get; set; }
+
+        bool HasFullBlock { get; }
+
+        void SetTeam(int teamId);
+        void SetBlockType(bool isFullBlock, Color color);
+    }
 }

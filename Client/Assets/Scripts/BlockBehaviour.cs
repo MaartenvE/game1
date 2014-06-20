@@ -26,9 +26,9 @@ public class BlockBehaviour : MonoBehaviour
     [RPC]
     void SetBlockInfo(int teamId, Vector3 location, Vector3 color)
     {
-        TeamInfo team = TeamInfo.GetTeam(teamId);
+        ITeam team = Team.GetTeam(teamId);
 
-        this.transform.parent = GameObject.Find(team.ImageTarget).transform as Transform;
+        this.transform.parent = GameObject.Find(team.Target).transform as Transform;
         this.transform.localPosition = location;
         this.transform.localRotation = new Quaternion(0, 0, 0, 0);
         this.renderer.material.color = new Color(color.x, color.y, color.z);

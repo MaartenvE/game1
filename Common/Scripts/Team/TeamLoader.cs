@@ -19,10 +19,16 @@ namespace BuildingBlocks.Team
         }
 
         [RPC]
-        void SetTeamInfo(int teamId, string teamName, string imageTarget) { }
+        void SetTeamInfo(int teamId, string teamName, string imageTarget)
+        {
+            Team.RPC_SetTeamInfo(teamId, teamName, imageTarget);
+        }
 
         [RPC]
-        void SetTeamProgress(float progress) { }
+        void SetTeamProgress(float progress)
+        {
+            Team.RPC_SetTeamProgress(progress);
+        }
     }
 }
 
