@@ -6,14 +6,19 @@ using NUnit.Framework;
 [TestFixture]
 public class StructureReaderTest {
 
-	Color?[,,] parsedResult;
+	//Color?[,,] parsedResult;
 	
+	//functions directly implemented instead of parameterized due to failure of unity jenkins.
+	[Test]
+	public void CheckStructureTest(){
+		string mapLocation = Application.dataPath+"/maps/testmaps/test1.structure";
+		Color?[][][] expectedResult = new Color?[2][][]{
+			new Color?[2][]{new Color?[2] {ColorModel.RED, null}
+				, new Color?[2]{null, ColorModel.PURPLE}}
+			, new Color?[2][]{new Color?[2] {ColorModel.BLUE, null}
+				, new Color?[2]{null, ColorModel.GREEN}}};
 
-	[Test, TestCaseSource("CorrectStructureReaderCases")]
-	public void CheckStructureTest(string mapLocation, Color?[][][] expectedResult){
-
-
-		parsedResult = StructureReader.loadLevel (mapLocation);
+		Color?[,,] parsedResult = StructureReader.loadLevel (mapLocation);
 
 
 		//Assert.Fail ("not implemented");
@@ -28,16 +33,4 @@ public class StructureReaderTest {
 			}
 		}
 	}
-
-
-	private static string adress = "/maps/testmaps/test1.structure";
-	//each case has format {Color[][][] parsedResult, Color[][[][] expectedResult, int size}
-	private static object[] CorrectStructureReaderCases =
-	{
-		new object[] {Application.dataPath+adress, new Color?[2][][]{
-				new Color?[2][]{new Color?[2] {ColorModel.RED, null}
-				 			 , new Color?[2]{null, ColorModel.PURPLE}}
-				, new Color?[2][]{new Color?[2] {ColorModel.BLUE, null}
-	     					 , new Color?[2]{null, ColorModel.GREEN}}}}
-	};
 }
