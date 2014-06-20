@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 //using UnityEditor;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 public static class StructureReader {
@@ -28,18 +29,29 @@ public static class StructureReader {
 
 	}
 
-	public static Color?[,,] loadRandomLevelFromMaps(){
+	public static Color?[,,] loadRandomLevelFromMaps() {
 		string directoryPath = Application.dataPath+"/maps/";
 		string[] maps = Directory.GetFiles (directoryPath);
 
-		string map = getRandomMap (maps);
 
-		while (true) {
-				if(map.Contains (".structure")){
-					if(!map.Contains (".meta"))
-						return loadLevel(map);
+		List<string> mapsList = new List<string> ();
+		foreach (string map in maps) {
+			mapsList.Add(map);
+		}
+
+		//ArrayList.
+		int times = maps.Length;
+
+		//string map = getRandomMap (maps);
+
+
+
+		while (mapsList.Count!=0) {
+			string mapCandidate = getAndRemoveRandomMap(mapsList);
+				if(mapCandidate.Contains (".structure")){
+					if(!mapCandidate.Contains (".meta"))
+						return loadLevel(mapCandidate);
 				}
-			map = getRandomMap(maps);
 		}
 
 		throw new System.ExecutionEngineException ("loadRandomLevel failed to load random level, do you have levels?");
@@ -61,9 +73,13 @@ public static class StructureReader {
 		return OtherArray;
 	}
 
-	private static string getRandomMap(string[] maps){
-		int random = Mathf.FloorToInt(Random.Range (0, maps.Length));
-		return maps [random];
+	private static string getAndRemoveRandomMap(List<string> maps){
+		int random = Mathf.FloorToInt(Random.Range (0, maps.Count));
+
+		string map = maps[random];
+		maps.RemoveAt (random);
+
+		return map;
 	}
 
 	private static Color?[][][] readLevel(StreamReader sr){

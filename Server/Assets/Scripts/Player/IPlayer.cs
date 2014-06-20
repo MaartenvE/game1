@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using BuildingBlocks.CubeFinger;
 using BuildingBlocks.Team;
+using BuildingBlocks.HalfBlock;
+using BuildingBlocks.CubeFinger;
 
 namespace BuildingBlocks.Player
 {
@@ -9,7 +10,7 @@ namespace BuildingBlocks.Player
         ITeam Team { get; set; }
         INetworkPlayer NetworkPlayer { get; }
         ICubeFinger CubeFinger { get; }
-        HalfBlock HalfBlock { get; }
+        HalfBlock.HalfBlock HalfBlock { get; }
         bool HasPlaceableBlock { get; }
 
         void CombineBlock(IPlayer other);

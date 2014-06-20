@@ -1,5 +1,6 @@
 using UnityEngine;
 using BuildingBlocks.Team;
+using BuildingBlocks.HalfBlock;
 using BuildingBlocks.CubeFinger;
 
 namespace BuildingBlocks.Player
@@ -11,7 +12,7 @@ namespace BuildingBlocks.Player
         public ITeam Team { get; set; }
         public INetworkPlayer NetworkPlayer { get; private set; }
         public ICubeFinger CubeFinger { get; private set; }
-        public HalfBlock HalfBlock { get; private set; }
+        public HalfBlock.HalfBlock HalfBlock { get; private set; }
         public bool HasPlaceableBlock { get; private set; }
 
         public Player(INetworkPlayer networkPlayer) : base(new GameObjectWrapper(GameObject.Find("Player")))
@@ -21,7 +22,7 @@ namespace BuildingBlocks.Player
 
         public void GiveNewInventoryBlock()
         {
-            HalfBlock = new HalfBlock(SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor());
+            HalfBlock = new HalfBlock.HalfBlock(SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor());
             Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
             CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
 

@@ -32,7 +32,7 @@ public class StructureReaderTest {
 
 
 	//each case has format {Color[][][] parsedResult, Color[][[][] expectedResult, int size}
-	public static object[] CorrectStructureReaderCases =
+	private static object[] CorrectStructureReaderCases =
 	{
 		new object[] {Application.dataPath+"/maps/testmaps/test1.structure", new Color?[2][][]{
 				new Color?[2][]{new Color?[2] {ColorModel.RED, null}
