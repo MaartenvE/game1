@@ -2,6 +2,7 @@ using UnityEngine;
 using BuildingBlocks.Team;
 using BuildingBlocks.HalfBlock;
 using BuildingBlocks.CubeFinger;
+using BuildingBlocks.Blocks;
 
 namespace BuildingBlocks.Player
 {

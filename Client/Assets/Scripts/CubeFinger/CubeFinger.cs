@@ -3,6 +3,7 @@ using UnityEngine;
 using BuildingBlocks.Team;
 using BuildingBlocks.Player;
 using BuildingBlocks.Input;
+using BuildingBlocks.Blocks;
 
 namespace BuildingBlocks.CubeFinger
 {

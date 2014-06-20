@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using BuildingBlocks.Team;
 using BuildingBlocks.CubeFinger;
+using BuildingBlocks.GUI;
 
 namespace BuildingBlocks.Player
 {
+    public delegate void TeamChangeHandler(ITeam team);
+
     public class Player : BuildingBlocksBehaviour, IPlayer
     {
+        public static event TeamChangeHandler OnTeamChange;
+
         public static IPlayer LocalPlayer { get; private set; }
 
         public ITeam Team { get; private set; }
@@ -25,6 +30,10 @@ namespace BuildingBlocks.Player
         public void SetTeam(int teamId)
         {
             Team = BuildingBlocks.Team.Team.GetTeam(teamId);
+            if (OnTeamChange != null)
+            {
+                OnTeamChange(Team);
+            }
         }
 
         public void SetBlockType(bool isFullBlock, Color color)
