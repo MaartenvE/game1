@@ -48,13 +48,6 @@ namespace BuildingBlocks.Player
                 this.HalfBlock.CombineHalfBlock(other.HalfBlock);
                 this.SetPlaceableBlock(this.HalfBlock);
                 other.SetPlaceableBlock(this.HalfBlock);
-                //this.HasPlaceableBlock = true;
-
-                //Color color = HalfBlock.CalculateUnityColor();
-                //networkView.RPC("SetBlockType", NetworkPlayer, 1, ColorModel.ConvertToVector3(color));
-                //CubeFinger.Renderer.SetColor(color);
-
-                //other.GiveNewInventoryBlock();
             }
         }
 
