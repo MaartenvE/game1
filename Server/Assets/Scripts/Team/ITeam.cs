@@ -9,6 +9,7 @@ namespace BuildingBlocks.Team
         string Name { get; set; }
         string Target { get; set; }
         float Progress { get; }
+        float RawProgress { get; }
 
         void SendInfo();
         void SendProgress(INetworkPlayer player);

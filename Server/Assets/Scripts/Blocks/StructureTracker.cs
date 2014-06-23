@@ -22,7 +22,15 @@ namespace BuildingBlocks.Blocks
         {
             get
             {
-                return Mathf.Max(0.0f, (correctBlockCount - (wrongBlockCount / 2f)) / totalBlockCount);
+                return Mathf.Max(0.0f, RawProgress);
+            }
+        }
+
+        public float RawProgress
+        {
+            get
+            {
+                return (correctBlockCount - (wrongBlockCount / 2f)) / totalBlockCount;
             }
         }
 
