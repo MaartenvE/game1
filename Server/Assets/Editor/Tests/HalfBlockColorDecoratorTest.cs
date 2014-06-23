@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NUnit.Framework;
+using BuildingBlocks.HalfBlock;
 
 [TestFixture]
 public class HalfBlockColorDecoratorTest {

@@ -1,0 +1,1 @@
+these are dummy maps used for testing StructureReader

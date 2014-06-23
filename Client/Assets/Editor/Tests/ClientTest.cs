@@ -6,6 +6,32 @@ using Moq;
 [TestFixture]
 public class ClientTest
 {
+    private Client client;
+    private Mock<INetwork> network;
+
+    [SetUp]
+    public void SetupClient()
+    {
+        network = new Mock<INetwork>();
+        client = new Client(network.Object);
+    }
+
+    [Test]
+    public void TestConnectToServer()
+    {
+        string ip = "1.2.3.4";
+        int port = 1234;
+        
+        client.ConnectToServer(ip, port);
+
+        network.Verify(n => n.Connect(ip, port));
+    }
+}
+
+/*
+[TestFixture]
+public class ClientTest
+{
 
     private Client _client;
     private Mock<INetwork> _network;
@@ -20,7 +46,7 @@ public class ClientTest
         _networkView = new Mock<INetworkView>();
         _client.networkView = _networkView.Object;
         _client.network = _network.Object;
-        block = Resources.Load("TestCube") as GameObject;
+        block = Resources.Load("GameCube") as GameObject;
     }
 
     [Test]
@@ -45,11 +71,11 @@ public class ClientTest
     public void DestroyAllBlocksTest()
     {
         GameObject instantiation = GameObject.Instantiate(block) as GameObject;
-        instantiation.name = "TestCube";
-        instantiation.tag = "block";
-        Assert.IsNotNull(GameObject.Find("TestCube"));
+        instantiation.name = "GameCube";
+        instantiation.tag = "currentStructure";
+        Assert.IsNotNull(GameObject.Find("GameCube"));
         _client.DestroyAllBlocks();
-        Assert.IsNull(GameObject.Find("TestCube"));
+        Assert.IsNull(GameObject.Find("GameCube"));
     }
 
     [Test]
@@ -75,3 +101,4 @@ public class ClientTest
     }
 
 }
+*/

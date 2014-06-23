@@ -1,102 +1,67 @@
 ﻿using UnityEngine;
-using AssemblyCSharp;
+using System.Collections;
 
+public class Client
+{
+    private const float TEXT_SIZE = 0.1f;
 
-public class Client : MonoBehaviour {
+    private bool? won;
+    private INetwork network;
 
-	public string ip = "145.94.197.173";
-	public int port = 36963;
+    private GUIStyle style;
 
-    private INetwork _network;
-    private INetworkView _networkView;
-
-    public INetwork network
+    public Client(INetwork network)
     {
-        get { return _network; }
-        set { _network = value; }
+        this.network = network;
     }
-
-    public INetworkView networkView
-    {
-        get { return _networkView; }
-        set { _networkView = value; }
-    }
-
-	public void Start (){
-        Input.compass.enabled = true;
-		ConnectToServer (ip, port);
-	}
 	
 	public NetworkConnectionError ConnectToServer(string ip, int port) 
     {
-	    return _network.Connect(ip, port);
+	    return network.Connect(ip, port);
 	}
 
-	void OnConnectedToServer() {
-		BumpDetectorLoader.Detector.OnBump +=
-			(bump) => Handheld.Vibrate();
-		BumpDetectorLoader.Detector.OnBump += 
-			(Bump bump) => networkView.RPC ("Tap", RPCMode.Server, bump.Force);
+	public void OnDisconnectedFromServer(NetworkDisconnection info) {
+		if (info == NetworkDisconnection.LostConnection)
+						Application.LoadLevel (0);
+		else
+			Debug.Log("Successfully diconnected from the server");
 	}
 
     public void OnGUI()
     {
-		//Create a GUI box to enable manually entiring the server IP and port
-		CreateConnectionBox ();
+        if (won != null)
+        {
+            GameObject crosshair = GameObject.Find("Crosshair");
+            if (crosshair != null)
+            {
+                crosshair.SetActive(false);
+            }
 
-		ReadConnectionBoxInput();
+            string text = won.GetValueOrDefault()
+                ? "Congratulations, your team won!"
+                : "Game over";
 
+            setStyle();
 
-		//If the button is pressed change the connection.
-        if(GUI.Button(new Rect(20, 110, Screen.width / 8, 20), "Connect")) {
-
-			ChangeConnection();
+            GUI.color = won.GetValueOrDefault() ? Color.green : Color.red;
+            GUI.Label(new Rect(0, 0, Screen.width, Screen.height), text, style);
         }
     }
 
-	public void ReadConnectionBoxInput(){
-		ip = GUI.TextField (new Rect (50, 30, Screen.width / 7, 20), ip);
-		port = int.Parse (GUI.TextField (new Rect (50, 70, Screen.width / 7, 20), "" + port));
-	}
-
-	public void CreateConnectionBox (){
-		GUI.Box(new Rect(5, 5, Screen.width / 5, Screen.height / 4),"Server information");
-		GUI.Label(new Rect(10, 30, Screen.width / 10, 20), "IP: ");
-		GUI.Label(new Rect(10, 70, Screen.width / 10, 20), "Port: ");
-	}
-
-	public void ChangeConnection(){
-		_network.Disconnect();
-		DestroyAllBlocks();
-		ConnectToServer(ip, port);
-	}
-
-    public void DestroyAllBlocks()
+    private void setStyle()
     {
-        foreach(GameObject g in GameObject.FindGameObjectsWithTag("block")){
-            DestroyImmediate(g);
+        if (style == null)
+        {
+            style = new GUIStyle(GUI.skin.label);
+            style.alignment = TextAnchor.MiddleCenter;
         }
+
+        style.fontSize = (int)(Screen.width * TEXT_SIZE);
     }
 
-	[RPC]
-	public void PlaceBlock(Vector3 location, Vector3 relativeLocation, NetworkViewID NVI){
-	}
-
-	[RPC]
-	Block Tap(float force)
-	{
-		return null;
-    }
-
-	public void RemoveBlock(NetworkViewID NVI)
+    public void RPC_Win(int teamId)
     {
-
-	}
-
-    [RPC]
-    public void ColorBlock(NetworkViewID NVI, Vector3 color)
-    {
-        GameObject block = _networkView.Find(NVI).gameObject();
-        block.renderer.material.color = new Color(color.x, color.y, color.z);
+        int myTeam = PlayerInfo.Team;
+        this.won = teamId == myTeam;
     }
 }

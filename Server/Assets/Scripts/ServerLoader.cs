@@ -1,30 +1,26 @@
 ﻿using UnityEngine;
-using System.Collections;
-using AssemblyCSharp;
 
 /// <summary>
-/// Server loader creates a new server using the NetworkWrapper and prefab object.
+/// Server loader creates a new server using the NetworkWrapper.
 /// </summary>
-public class ServerLoader : MonoBehaviour {
+public class ServerLoader : MonoBehaviour
+{
+    public int MaxPlayers = 32;
+    public int Port = 3825;
+    public bool UseNAT = false;
 
-    public int port = 3825;
+    public static Server Server { get; private set; }
 
-	/// <summary>
-	/// Start this instance.
-	/// </summary>
-	void Start () {
-		INetwork network = new NetworkWrapper ();
-		INetworkView networkView = new NetworkViewWrapper ();
+	void Start ()
+    {
 
-		NetworkView nativeNetworkView = this.GetComponent<NetworkView> ();
-		
-		networkView.SetNativeNetworkView (nativeNetworkView);
-		Server server = gameObject.AddComponent<Server>();
-		server.port = port;
-		server.network = network;
-		server.networkView = networkView;
-		server.LaunchServer ();
+        Server = new Server(new NetworkWrapper(), new NetworkViewWrapper(networkView));
+        Server.Launch(MaxPlayers, Port, UseNAT);
 	}
 
+    [RPC]
+    void Win(int teamId) { }
+
+    [RPC]
+    void SetTime(int secondsLeft) { }
 }
-	

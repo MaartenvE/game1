@@ -1,23 +1,34 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class ClientLoader : MonoBehaviour {
+public class ClientLoader : MonoBehaviour
+{
+    public string IP;
+    public int Port;
 
-    public string ip;
-    public int port;
+    public Client Client { get; private set; }
 
-	void Start () {
-        INetwork networkWrapper = new NetworkWrapper();
-        INetworkView networkViewWrapper = new NetworkViewWrapper();
+    void Start()
+    {
+        Input.compass.enabled = true;
+        Client = new Client(new NetworkWrapper());
+        Client.ConnectToServer(QRScanner.IP ?? IP, QRScanner.Port ?? Port);
+    }
 
-        NetworkView nativeNetworkView = gameObject.GetComponent<NetworkView>();
+    void OnGUI()
+    {
+        Client.OnGUI();
+    }
 
-        networkViewWrapper.SetNativeNetworkView(nativeNetworkView);
+    void Restart()
+    {
+        Application.LoadLevel("Client");
+    }
 
-        Client client = this.gameObject.AddComponent<Client>();
-        client.network = networkWrapper;
-        client.networkView = networkViewWrapper;
-        client.ip = ip;
-        client.port = port;        
-	}
+    [RPC]
+    void Win(int teamId)
+    {
+        Client.RPC_Win(teamId);
+        Network.SetSendingEnabled(1, false);
+        Invoke("Restart", 5);
+    }
 }

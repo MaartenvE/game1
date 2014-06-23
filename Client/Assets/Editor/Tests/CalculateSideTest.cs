@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using System.Collections;
 using NUnit.Framework;
 using Moq;
@@ -45,3 +45,4 @@ public class TouchBehaviourTest {
     }
 
 }
+*/
