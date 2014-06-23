@@ -9,7 +9,7 @@ namespace BuildingBlocks.GUI
     {
         public const int TIMELIMIT = 900;
 
-        private double startTime;
+        private double startTime = 0;
         private const float PADDING_TOP = .05f;
         private const float PADDING_RIGHT = .01f;
         private const float WIDTH = .15f;
@@ -18,14 +18,14 @@ namespace BuildingBlocks.GUI
         private double endTime;
         private GUIStyle style;
 
-        void OnServerInitialized()
-        {
-            this.startTime = Network.time;
-            Invoke("EndRound", TIMELIMIT);
-        }
-
         void OnPlayerConnected(NetworkPlayer player)
         {
+            if (this.startTime == 0)
+            {
+                this.startTime = Network.time;
+                Invoke("EndRound", TIMELIMIT);
+            }
+
             float timeRemaining = (float)(TIMELIMIT - (Network.time - startTime));
             networkView.RPC("SetTime", player, timeRemaining);
             endTime = Network.time + timeRemaining;

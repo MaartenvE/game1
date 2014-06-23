@@ -7,10 +7,20 @@ namespace BuildingBlocks.Client
 {
 	public class Client
     {
+        private enum EndStatus
+        {
+            None,
+            Lost,
+            Draw,
+            Won
+        };
+
         private const float TEXT_SIZE = 0.1f;
 
 		private bool disconnected = false;
-        private bool? won;
+
+        private EndStatus endStatus;
+
         private INetwork network;
 
         private GUIStyle style;
@@ -32,45 +42,72 @@ namespace BuildingBlocks.Client
 
         public void OnDisconnectedFromServer(NetworkDisconnection info)
         {
-            if (info == NetworkDisconnection.LostConnection) {
+            if (info == NetworkDisconnection.LostConnection) 
+			{
 				Debug.Log ("Disconnected unexpectedly from the server");
 				disconnected = true;
 
 			} 
-			else {
+			else 
+			{
 				Debug.Log ("Successfully disconnected from the server");
 			}
         }
 
-		void PopUp() {
+		void PopUp() 
+		{
 			UnityEngine.GUI.Box(new Rect( Screen.width/2 - width/2, Screen.height/2 - height/2, width, height), "Disconnected from Server", GUIStyles.QRStyle(Screen.height,Screen.width) );
-			if (UnityEngine.GUI.Button (new Rect (Screen.width/2 - width/2, Screen.height/2 - height/4, width, height), "Tap to return to QR scanner", GUIStyles.ButtonStyle(Screen.height/1.3f,Screen.width/1.3f))) {
+			if (UnityEngine.GUI.Button (new Rect (Screen.width/2 - width/2, Screen.height/2 - height/4, width, height), "Tap to return to QR scanner", GUIStyles.ButtonStyle(Screen.height/1.3f,Screen.width/1.3f))) 
+			{
 				Application.LoadLevel (0);
 			}
 		}
 
         public void OnGUI()
         {
-			if (disconnected) {
+			if (disconnected) 
+			{
 				PopUp ();
 			}
-            if (won != null)
-            {
-                GameObject crosshair = GameObject.Find("Crosshair");
-                if (crosshair != null)
+     
+            if (endStatus != EndStatus.None)
+			{
+                string text = "";
+                Color color = Color.black;
+                switch (endStatus)
                 {
-                    crosshair.SetActive(false);
+                    case EndStatus.Lost:
+                        text = "Game over";
+                        color = Color.red;
+                        break;
+                    case EndStatus.Draw:
+                        text = "It's a draw!";
+                        color = Color.yellow;
+                        break;
+                    case EndStatus.Won:
+                        text = "Congratulations, your team won!";
+                        color = Color.green;
+                        break;
                 }
-
-                string text = won.GetValueOrDefault()
-                    ? "Congratulations, your team won!"
-                    : "Game over";
-
-                setStyle();
-
-                UnityEngine.GUI.color = won.GetValueOrDefault() ? Color.green : Color.red;
-                UnityEngine.GUI.Label(new Rect(0, 0, Screen.width, Screen.height), text, style);
+                disableCrosshair();
+                drawText(text, color);
             }
+        }
+
+        private void disableCrosshair()
+        {
+            GameObject crosshair = GameObject.Find("Crosshair");
+            if (crosshair != null)
+            {
+                crosshair.SetActive(false);
+            }
+        }
+
+        private void drawText(string text, Color color)
+        {
+            setStyle();
+            UnityEngine.GUI.color = color;
+            UnityEngine.GUI.Label(new Rect(0, 0, Screen.width, Screen.height), text, style);
         }
 
         private void setStyle()
@@ -87,7 +124,18 @@ namespace BuildingBlocks.Client
         public void RPC_Win(int teamId)
         {
             int myTeam = Player.Player.LocalPlayer.Team.TeamId;
-            this.won = teamId == myTeam;
+            if (teamId == -1)
+            {
+                endStatus = EndStatus.Draw;
+            }
+            else if (teamId == myTeam)
+            {
+                endStatus = EndStatus.Won;
+            }
+            else
+            {
+                endStatus = EndStatus.Lost;
+            }
         }
     }
 }
