@@ -49,6 +49,14 @@ namespace BuildingBlocks.Team
             }
         }
 
+        public float RawProgress
+        {
+            get
+            {
+                return StructureTracker.RawProgress;
+            }
+        }
+
         public IEnumerable<IPlayer> Players
         {
             get

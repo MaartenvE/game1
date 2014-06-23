@@ -11,6 +11,7 @@ namespace BuildingBlocks.Blocks
         event StructureProgressHandler OnProgressChange;
 
         float Progress { get; }
+        float RawProgress { get; }
 
         void PlaceGroundBlock();
         void PlaceBlock(Vector3 location, Color color);
