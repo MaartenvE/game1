@@ -26,6 +26,10 @@ namespace BuildingBlocks.Client
             Application.LoadLevel("Client");
         }
 
+		public void OnDisconnectedFromServer(NetworkDisconnection info){
+			Client.OnDisconnectedFromServer (info);
+		}
+
         [RPC]
         void Win(int teamId)
         {
