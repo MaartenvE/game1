@@ -10,9 +10,10 @@ namespace BuildingBlocks.GUI
 {
     public class QRWriter : MonoBehaviour
     {
+        public float sizePercentage;
 
-        public int width;
-        public int height;
+        private int size;
+
 
         // Use this for initialization
         void Start()
@@ -21,12 +22,16 @@ namespace BuildingBlocks.GUI
 
             GameObject server = GameObject.Find("Server");
             int port = server.GetComponent<ServerLoader>().Port;
-            BitMatrix qrcode = writer.encode("BuildingBlocksServer=" + Network.player.ipAddress + ":" + port, BarcodeFormat.QR_CODE, width, height);
+            size = ((int)(sizePercentage * Screen.height));
+            BitMatrix qrcode = writer.encode("BuildingBlocksServer=" + Network.player.ipAddress + ":" + port, BarcodeFormat.QR_CODE, size, size);
 
-            var texture = new Texture2D(width, height);
-            for (int w = 0; w < width; w++)
+            GUITexture GUItexture = GetComponent<GUITexture>();
+            GUItexture.pixelInset = new Rect( -size / 2, 0, size, size);
+
+            var texture = new Texture2D(size, size);
+            for (int w = 0; w < size; w++)
             {
-                for (int h = 0; h < height; h++)
+                for (int h = 0; h < size; h++)
                 {
                     texture.SetPixel(h, w, getColorFromBinary(qrcode[w, h]));
                 }

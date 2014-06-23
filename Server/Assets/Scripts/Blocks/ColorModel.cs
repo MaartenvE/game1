@@ -10,8 +10,8 @@ namespace BuildingBlocks.Blocks
         public static Color YELLOW = Color.yellow;
         public static Color BLUE = Color.blue;
         public static Color ORANGE = new Color(1, 0.5f, 0);
-        public static Color PURPLE = new Color(0.5f, 0, 1);
-        public static Color GREEN = Color.green;
+        public static Color PURPLE = new Color(0.8f, 0, 1);
+        public static Color GREEN = new Color(0, 0.8f, 0);
         public static Color NONE = new Color(0f, 0f, 0f);
 
         public static char REDCHAR = 'r';
