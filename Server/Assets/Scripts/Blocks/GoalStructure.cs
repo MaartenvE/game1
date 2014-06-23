@@ -23,6 +23,7 @@ namespace BuildingBlocks.Blocks
             foreach (Vector3 position in Structure.Keys)
             {
                 Vector3 location = Structure.Denormalize(position, prefab.transform.localScale.x);
+                location.y += gameObject.transform.localPosition.y;
                 GameObject blockObject = network.Instantiate(prefab, location, prefab.transform.rotation, 1) as GameObject;
                 blockObject.GetComponent<GoalCubeBehaviour>().SetInfo("GoalStructure", Structure[position].GetValueOrDefault());
             }

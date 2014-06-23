@@ -35,12 +35,6 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 		CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_TRIGGERAUTO);
 	}
 
-	/*void Update () {
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-			Application.Quit();
-		}
-	}*/
-
 	public void OnInitialized() {
 		Debug.Log ("started a new imageAnalyser");
 	}
@@ -69,12 +63,6 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 			string adress = findAndMatch (tempText, "BuildingBlocksServer=([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})(?:\\:[0-9]{1,5})");
 			//does the same for port
 			string port = findAndMatch (tempText, "BuildingBlocksServer=(?:[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\:)([0-9]{1,5})");
-
-			//adress = "adress";
-			//	port = "port";
-			/*if(adress== null || adress==""){
-				adress = "adress size is 0 or null";
-			}*/
 
 			//if either is null, the tempText was not of the proper format (false qrcode found)
 			if((port != null && port != "")){
