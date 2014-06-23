@@ -8,8 +8,15 @@ namespace BuildingBlocks.GUI
     {
         void Start()
         {
-            colorTarget(false);
             Player.Player.OnTeamChange += changeTeam;
+            if (Player.Player.LocalPlayer.Team != null)
+            {
+                changeTeam(Player.Player.LocalPlayer.Team);
+            }
+            else
+            {
+                colorTarget(false);
+            }
         }
 
         private void changeTeam(ITeam team)

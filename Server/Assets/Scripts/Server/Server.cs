@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using System.Linq;
+using System.Collections.Generic;
+using BuildingBlocks.Team;
 
 namespace BuildingBlocks.Server
 {
@@ -23,11 +26,22 @@ namespace BuildingBlocks.Server
             networkView.RPC("Win", RPCMode.OthersBuffered, team);
             network.SetSendingEnabled(1, false);
             network.isMessageQueueRunning = false;
+            Application.LoadLevel(0);
         }
 
         public void TimeUp()
         {
-            Win(0);
+            IEnumerable<ITeam> teams = TeamCreatorLoader.Creator.Assigner.Teams;
+            float maxProgress = teams.Max(t => t.RawProgress);
+            IEnumerable<ITeam> maxTeams = teams.Where(t => Mathf.Approximately(t.RawProgress, maxProgress));
+            if (maxTeams.Count() == teams.Count())
+            {
+                Win(-1);
+            }
+            else
+            {
+                Win(maxTeams.First().TeamId);
+            }
         }
     }
 }

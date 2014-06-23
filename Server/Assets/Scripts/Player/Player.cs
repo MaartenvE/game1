@@ -21,6 +21,16 @@ namespace BuildingBlocks.Player
             NetworkPlayer = networkPlayer;
         }
 
+        public void SetPlaceableBlock(HalfBlock.HalfBlock block)
+        {
+            this.HalfBlock = block;
+            this.HasPlaceableBlock = true;
+
+            Color color = HalfBlock.CalculateUnityColor();
+            networkView.RPC("SetBlockType", NetworkPlayer, 1, ColorModel.ConvertToVector3(color));
+            CubeFinger.Renderer.SetColor(color);
+        }
+
         public void GiveNewInventoryBlock()
         {
             HalfBlock = new HalfBlock.HalfBlock(SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor());
@@ -36,13 +46,8 @@ namespace BuildingBlocks.Player
             if (!this.HasPlaceableBlock && !other.HasPlaceableBlock)
             {
                 this.HalfBlock.CombineHalfBlock(other.HalfBlock);
-                this.HasPlaceableBlock = true;
-
-                Color color = HalfBlock.CalculateUnityColor();
-                networkView.RPC("SetBlockType", NetworkPlayer, 1, ColorModel.ConvertToVector3(color));
-                CubeFinger.Renderer.SetColor(color);
-
-                other.GiveNewInventoryBlock();
+                this.SetPlaceableBlock(this.HalfBlock);
+                other.SetPlaceableBlock(this.HalfBlock);
             }
         }
 

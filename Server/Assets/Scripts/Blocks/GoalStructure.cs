@@ -4,17 +4,11 @@ namespace BuildingBlocks.Blocks
 {
     public class GoalStructure : BuildingBlocksBehaviour
     {
-        private static Structure<Color?> structure;
-        public static Structure<Color?> Structure
+        public static Structure<Color?> Structure { get; private set; }
+
+        public static void Awake()
         {
-            get
-            {
-                if (structure == null)
-                {
-                    structure = new Structure<Color?>(StructureReader.loadRandomLevelFromMaps());
-                }
-                return structure;
-            }
+            Structure = new Structure<Color?>(StructureReader.loadRandomLevelFromMaps());
         }
 
         public GoalStructure(IGameObject gameObject)
