@@ -21,7 +21,9 @@ namespace BuildingBlocks.Blocks
         {
             BlockBehaviourFactory f = prefab.GetComponent<BlockBehaviourFactory>();
             f.BlockBehaviourType = "BlockBehaviour";
-            PlaceBlock(Vector3.zero, color);
+            Vector3 position = Vector3.zero;
+            position.y = 0.1f;
+            PlaceBlock(position, color);
             f.BlockBehaviourType = "RemovableBlockBehaviour";
         }
 
