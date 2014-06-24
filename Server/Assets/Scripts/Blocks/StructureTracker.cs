@@ -42,16 +42,19 @@ namespace BuildingBlocks.Blocks
             {
                 this.goal = goalStructure;
                 this.current = new Structure<Color?>(goal.GetLength(0), goal.GetLength(1), goal.GetLength(2));
-                this.constructor = new BlockConstructor(team);
 
                 initializeCorrectness();
+
+                this.constructor = new BlockConstructor(team);
             }
         }
 
         public void PlaceGroundBlock()
         {
             Vector3 center = goal.Normalize(Vector3.zero, constructor.Scale);
-            constructor.PlaceGroundBlock(goal[center].GetValueOrDefault());
+            Color color = goal[center].GetValueOrDefault();
+            checkBlock(center, color);
+            constructor.PlaceGroundBlock(color);
         }
 
         public void PlaceBlock(Vector3 location, Color color)

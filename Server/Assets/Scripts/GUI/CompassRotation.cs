@@ -8,11 +8,11 @@ namespace BuildingBlocks.GUI
 
         void Update()
         {
-            foreach (Transform transform in this.transform)
+            foreach (Transform direction in this.transform)
             {
-                transform.transform.LookAt(GameCamera.transform.position);
+                direction.transform.LookAt(GameCamera.transform.position);
                 //rotate letters right side up
-                transform.transform.Rotate(new Vector3(180f, 0f, 180f));
+                direction.transform.Rotate(new Vector3(180f, 0f, 180f));                
             }
         }
     }
