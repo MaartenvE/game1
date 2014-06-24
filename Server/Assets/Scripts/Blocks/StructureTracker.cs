@@ -37,11 +37,15 @@ namespace BuildingBlocks.Blocks
         public StructureTracker(ITeam team, Structure<Color?> goalStructure)
         {
             this.team = team;
-            this.goal = goalStructure;
-            this.current = new Structure<Color?>(goal.GetLength(0), goal.GetLength(1), goal.GetLength(2));
-            this.constructor = new BlockConstructor(team);
 
-            initializeCorrectness();
+            if (goalStructure != null)
+            {
+                this.goal = goalStructure;
+                this.current = new Structure<Color?>(goal.GetLength(0), goal.GetLength(1), goal.GetLength(2));
+                this.constructor = new BlockConstructor(team);
+
+                initializeCorrectness();
+            }
         }
 
         public void PlaceGroundBlock()
