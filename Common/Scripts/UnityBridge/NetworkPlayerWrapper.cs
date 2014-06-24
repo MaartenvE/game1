@@ -33,5 +33,10 @@ namespace BuildingBlocks
             }
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            return wrappedObject.GetHashCode();
+        }
     }
 }

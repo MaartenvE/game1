@@ -43,18 +43,18 @@ namespace BuildingBlocks.HalfBlock
         }
 
         static object[] Colors = 
-    {
-        new object[] {ColorModel.RED, ColorModel.RED,ColorModel.RED},
-        new object[] {ColorModel.YELLOW, ColorModel.YELLOW,ColorModel.YELLOW},
-        new object[] {ColorModel.BLUE, ColorModel.BLUE,ColorModel.BLUE},
+        {
+            new object[] {ColorModel.RED, ColorModel.RED,ColorModel.RED},
+            new object[] {ColorModel.YELLOW, ColorModel.YELLOW,ColorModel.YELLOW},
+            new object[] {ColorModel.BLUE, ColorModel.BLUE,ColorModel.BLUE},
 
-        new object[] {ColorModel.RED, ColorModel.YELLOW,ColorModel.ORANGE},
-        new object[] {ColorModel.YELLOW, ColorModel.RED,ColorModel.ORANGE},
-        new object[] {ColorModel.RED, ColorModel.BLUE,ColorModel.PURPLE},
-        new object[] {ColorModel.BLUE, ColorModel.RED,ColorModel.PURPLE},
-        new object[] {ColorModel.YELLOW, ColorModel.BLUE,ColorModel.GREEN},
-        new object[] {ColorModel.BLUE, ColorModel.YELLOW,ColorModel.GREEN},
-    };
+            new object[] {ColorModel.RED, ColorModel.YELLOW,ColorModel.ORANGE},
+            new object[] {ColorModel.YELLOW, ColorModel.RED,ColorModel.ORANGE},
+            new object[] {ColorModel.RED, ColorModel.BLUE,ColorModel.PURPLE},
+            new object[] {ColorModel.BLUE, ColorModel.RED,ColorModel.PURPLE},
+            new object[] {ColorModel.YELLOW, ColorModel.BLUE,ColorModel.GREEN},
+            new object[] {ColorModel.BLUE, ColorModel.YELLOW,ColorModel.GREEN},
+        };
 
         [Test, TestCaseSource("Colors")]
         public void CombineColorTest(Color firstColor, Color secondColor, Color expectedColor)

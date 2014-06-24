@@ -44,13 +44,6 @@ namespace BuildingBlocks.Blocks
                 mapsList.Add(map);
             }
 
-            //ArrayList.
-            int times = maps.Length;
-
-            //string map = getRandomMap (maps);
-
-
-
             while (mapsList.Count != 0)
             {
                 string mapCandidate = getAndRemoveRandomMap(mapsList);

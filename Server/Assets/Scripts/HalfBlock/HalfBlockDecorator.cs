@@ -6,7 +6,7 @@ namespace BuildingBlocks.HalfBlock
     public class HalfBlockDecorator : HalfBlock
     {
 
-        public virtual Color CalculateUnityColor()
+        public override Color CalculateUnityColor()
         {
             return wrappedObject.CalculateUnityColor();
         }

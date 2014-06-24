@@ -7,7 +7,7 @@ namespace BuildingBlocks.Player
     {
         public static IPlayer Player { get; private set; }
 
-        void Start()
+        void Awake()
         {
             Player = new Player(new GameObjectWrapper(gameObject));
         }

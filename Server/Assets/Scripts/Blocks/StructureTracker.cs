@@ -8,7 +8,6 @@ namespace BuildingBlocks.Blocks
         public event StructureCompleteHandler OnCompletion;
         public event StructureProgressHandler OnProgressChange;
 
-        private ITeam team;
         private IBlockConstructor constructor;
 
         private Structure<Color?> goal;
@@ -36,8 +35,6 @@ namespace BuildingBlocks.Blocks
 
         public StructureTracker(ITeam team, Structure<Color?> goalStructure)
         {
-            this.team = team;
-
             if (goalStructure != null)
             {
                 this.goal = goalStructure;
