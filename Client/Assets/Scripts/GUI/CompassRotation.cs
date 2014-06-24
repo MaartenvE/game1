@@ -4,7 +4,12 @@ namespace BuildingBlocks.GUI
 {
     public class CompassRotation : MonoBehaviour
     {
-        public GameObject GameCamera;
+        private GameObject GameCamera;
+
+        void Start()
+        {
+            GameCamera = GameObject.Find("ARCamera");
+        }
 
         void Update()
         {

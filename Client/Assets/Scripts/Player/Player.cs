@@ -29,11 +29,9 @@ namespace BuildingBlocks.Player
 
         public void SetTeam(int teamId)
         {
-            Debug.Log("Setting team");
             Team = BuildingBlocks.Team.Team.GetTeam(teamId);
             if (OnTeamChange != null)
             {
-                Debug.Log("Calling team change handler");
                 OnTeamChange(Team);
             }
         }
