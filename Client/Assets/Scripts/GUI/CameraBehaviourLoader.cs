@@ -5,8 +5,6 @@ namespace BuildingBlocks.GUI
 {
     public class CameraBehaviourLoader : MonoBehaviour, ILoadLevelEventHandler
     {
-        private GameObject textureBufferCamera;
-
         void Start()
         {
             KeepAliveAbstractBehaviour keepAlive = KeepAliveBehaviour.Instance;
@@ -20,20 +18,15 @@ namespace BuildingBlocks.GUI
 
         public void OnLevelLoaded(IEnumerable<TrackableBehaviour> keptAliveTrackables)
         {
-            if (textureBufferCamera == null)
-            {
-                textureBufferCamera = GameObject.Find("TextureBufferCamera");
-            }
-
             switch (Application.loadedLevel)
             {
                 case 1: // StartScreenScene
+                    CameraDevice.Instance.Stop();
                     Destroy(gameObject.GetComponent<QRScanner>());
-                    textureBufferCamera.SetActive(false);
                     break;
                 case 2: // Client
-                    textureBufferCamera.SetActive(true);
                     transform.Find("Crosshair").gameObject.SetActive(true);
+                    CameraDevice.Instance.Start();
                     break;
             }
         }
