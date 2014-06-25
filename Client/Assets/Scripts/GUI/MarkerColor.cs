@@ -21,7 +21,7 @@ namespace BuildingBlocks.GUI
 
         private void changeTeam(ITeam team)
         {
-            bool isMine = team.Target == transform.parent.name;
+            bool isMine = team != null && (team.Target == transform.parent.name);
             colorTarget(isMine);
         }
 

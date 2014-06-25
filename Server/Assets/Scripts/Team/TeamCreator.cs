@@ -38,6 +38,8 @@ namespace BuildingBlocks.Team
 
         public void OnPlayerDisconnected(INetworkPlayer networkPlayer)
         {
+            Debug.Log("Player " + networkPlayer + " disconnected.");
+
             IPlayer player = Player.Player.GetPlayer(networkPlayer);
 
             if (player != null)

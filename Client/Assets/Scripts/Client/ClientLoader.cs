@@ -23,7 +23,7 @@ namespace BuildingBlocks.Client
 
         void Restart()
         {
-            Application.LoadLevel("Client");
+            Application.LoadLevel(Application.loadedLevel);
         }
 
 		public void OnDisconnectedFromServer(NetworkDisconnection info){

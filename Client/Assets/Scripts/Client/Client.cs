@@ -59,7 +59,7 @@ namespace BuildingBlocks.Client
 			UnityEngine.GUI.Box(new Rect( Screen.width/2 - width/2, Screen.height/2 - height/2, width, height), "Disconnected from Server", GUIStyles.QRStyle(Screen.height,Screen.width) );
 			if (UnityEngine.GUI.Button (new Rect (Screen.width/2 - width/2, Screen.height/2 - height/4, width, height), "Tap to return to QR scanner", GUIStyles.ButtonStyle(Screen.height-height,Screen.width-width))) 
 			{
-				Application.LoadLevel (0);
+				Application.LoadLevel("QRCodeScanner");
 			}
 		}
 
@@ -123,18 +123,21 @@ namespace BuildingBlocks.Client
 
         public void RPC_Win(int teamId)
         {
-            int myTeam = Player.Player.LocalPlayer.Team.TeamId;
-            if (teamId == -1)
+            if (Player.Player.LocalPlayer.Team != null)
             {
-                endStatus = EndStatus.Draw;
-            }
-            else if (teamId == myTeam)
-            {
-                endStatus = EndStatus.Won;
-            }
-            else
-            {
-                endStatus = EndStatus.Lost;
+                int myTeam = Player.Player.LocalPlayer.Team.TeamId;
+                if (teamId == -1)
+                {
+                    endStatus = EndStatus.Draw;
+                }
+                else if (teamId == myTeam)
+                {
+                    endStatus = EndStatus.Won;
+                }
+                else
+                {
+                    endStatus = EndStatus.Lost;
+                }
             }
         }
     }

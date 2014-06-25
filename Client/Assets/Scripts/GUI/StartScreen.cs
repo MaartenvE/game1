@@ -39,7 +39,8 @@ namespace BuildingBlocks.GUI
                     width, height),
                 "Play", GUIStyles.ButtonStyle(Screen.height, Screen.width)))
             {
-                Application.LoadLevel(2);
+                TeamSelector.IsSpectator = false;
+                Application.LoadLevel(Application.loadedLevel + 1);
             }
         }
 
@@ -52,7 +53,7 @@ namespace BuildingBlocks.GUI
                 "Spectate", GUIStyles.ButtonStyle(Screen.height, Screen.width)))
             {
                 TeamSelector.IsSpectator = true;
-                Application.LoadLevel(2);
+                Application.LoadLevel(Application.loadedLevel + 1);
             }
         }
 
