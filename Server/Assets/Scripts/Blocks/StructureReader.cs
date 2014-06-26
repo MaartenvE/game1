@@ -140,7 +140,6 @@ namespace BuildingBlocks.Blocks
         {
             //find Size times a pattern according to {"anything without { or }"}
             string[] rows = findAndMatchAsSingleLine(block, "(?:\\{([^\\{\\}])*\\})", size);
-            string[] colors = findAndMatchAsSingleLine(block, "(?:\\{([^\\{\\}])*\\})", 1);
 
             Color?[][] result = new Color?[size][];
 
@@ -196,7 +195,7 @@ namespace BuildingBlocks.Blocks
 
             if (matches.Count != times)
             {
-               // throw new System.FormatException("did not find as many groups as expected in regex expression, found: " + matches.Count + "but expected: " + times);
+               throw new System.FormatException("did not find as many groups as expected in regex expression, found: " + matches.Count + "but expected: " + times);
             }
 
             //if a match is found, and the correct number of matches are found

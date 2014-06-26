@@ -36,8 +36,14 @@ namespace BuildingBlocks.Player
             HalfBlock = new HalfBlock.HalfBlock(SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor());
             Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
             CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
-
-            HasPlaceableBlock = Random.value < FULL_BLOCK_CHANCE;
+            if (HalfBlock.wrappedObject.color.isSecondaryColor)
+            {
+                HasPlaceableBlock = false;
+            }
+            else
+            {
+                HasPlaceableBlock = Random.value < FULL_BLOCK_CHANCE;
+            }
             networkView.RPC("SetBlockType", NetworkPlayer, HasPlaceableBlock ? 1 : 0, color);
         }
 

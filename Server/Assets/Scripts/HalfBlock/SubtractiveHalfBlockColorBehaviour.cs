@@ -50,6 +50,7 @@ namespace BuildingBlocks.HalfBlock
 
         public static AbstractHalfBlockColor RandomPrimaryColor()
         {
+            HalfBlockColor color;
             ArrayList primaryColors = new ArrayList();
             primaryColors.Add(ColorModel.RED);
             primaryColors.Add(ColorModel.YELLOW);
@@ -70,9 +71,13 @@ namespace BuildingBlocks.HalfBlock
             if (!primaryColors.Contains(c))
             {
                 c = splitSecondary(c);
+                color = new HalfBlockColor(c);
+                color.isSecondaryColor = true;
+                return color;
             }
-
-            return new HalfBlockColor(c);
+            color = new HalfBlockColor(c);
+            color.isSecondaryColor = false;
+            return color;
         }
 
         private static Color splitSecondary(Color c)
