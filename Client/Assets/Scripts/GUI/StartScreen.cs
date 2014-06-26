@@ -27,7 +27,6 @@ namespace BuildingBlocks.GUI
             float height = Screen.height * BUTTON_HEIGHT;
             drawPlayButton(width, height);
             drawSpectateButton(width, height);
-            drawCreator(width, height);
         }
 
         private void drawPlayButton(float width, float height)
@@ -55,15 +54,6 @@ namespace BuildingBlocks.GUI
                 TeamSelector.IsSpectator = true;
                 Application.LoadLevel(Application.loadedLevel + 1);
             }
-        }
-
-        private void drawCreator(float width, float height)
-        {
-            UnityEngine.GUI.Label(new Rect(
-                    Screen.width - width,
-                    Screen.height - height,
-                    width, height),
-                "Team Cubed", GUIStyles.LabelStyle(Screen.height, Screen.width));
         }
 
         private void handleQuit()
