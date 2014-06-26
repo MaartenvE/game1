@@ -54,10 +54,16 @@ namespace BuildingBlocks.Blocks
             constructor.PlaceGroundBlock(color);
         }
 
-        public void PlaceBlock(Vector3 location, Color color)
+        public bool PlaceBlock(Vector3 location, Color color)
         {
-            checkBlock(goal.Normalize(location, constructor.Scale), color);
-            constructor.PlaceBlock(location, color);
+            Vector3 position = goal.Normalize(location, constructor.Scale);
+            if (current[position] == null)
+            {
+                checkBlock(position, color);
+                constructor.PlaceBlock(location, color);
+                return true;
+            }
+            return false;
         }
 
         public void RemoveBlock(IGameObject block)
