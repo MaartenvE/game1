@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace BuildingBlocks.Blocks
 {
@@ -21,6 +22,25 @@ namespace BuildingBlocks.Blocks
         public static Color ConvertToUnityColor(Vector3 color)
         {
             return new Color(color.x, color.y, color.z);
+        }
+
+        public static IEnumerable<Color> Colors
+        {
+            get
+            {
+                yield return RED;
+                yield return YELLOW;
+                yield return BLUE;
+                yield return ORANGE;
+                yield return PURPLE;
+                yield return GREEN;
+            }
+        }
+
+        public static Color RandomColor()
+        {
+            int index = Random.Range(0, Colors.Count());
+            return Colors.ElementAt(index);
         }
     }
 }

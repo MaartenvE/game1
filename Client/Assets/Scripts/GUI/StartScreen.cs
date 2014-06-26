@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using BuildingBlocks.Team;
+using BuildingBlocks.Blocks;
 
 namespace BuildingBlocks.GUI
 {
@@ -7,6 +8,11 @@ namespace BuildingBlocks.GUI
     {
         private const float BUTTON_WIDTH = .5f;
         private const float BUTTON_HEIGHT = .1f;
+
+        void Start()
+        {
+            GameObject.Find("RotatingBlock").renderer.material.color = ColorModel.RandomColor();
+        }
 
         void OnGUI()
         {
