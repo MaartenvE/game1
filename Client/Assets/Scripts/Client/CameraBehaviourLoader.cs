@@ -40,7 +40,7 @@ namespace BuildingBlocks.Client
 
         private void setFocus()
         {
-            CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_NORMAL);
+            CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_TRIGGERAUTO);
         }
 
         // UNUSED
