@@ -30,7 +30,11 @@ namespace BuildingBlocks.Client
 			Client.OnDisconnectedFromServer (info);
 		}
 
-        [RPC]
+		public void OnFailedToConnect(NetworkConnectionError error){
+			Client.OnFailedToConnect (error);
+		}
+
+		[RPC]
         void Win(int teamId)
         {
             Client.RPC_Win(teamId);
