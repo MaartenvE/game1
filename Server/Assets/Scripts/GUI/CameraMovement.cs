@@ -29,7 +29,7 @@ namespace BuildingBlocks.GUI
         {
             GameObject camera = getObject();
 
-            currentAngle += MovementSpeed;
+            currentAngle += MovementSpeed*Time.deltaTime;
             camera.transform.position = CenterOfMove + rotateVector(RadiusVector, currentAngle);
 
             camera.transform.LookAt(getCameraRotationTo(CenterOfMove));
