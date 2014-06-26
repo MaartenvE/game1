@@ -38,6 +38,8 @@ namespace BuildingBlocks.Team
 
         public void OnPlayerDisconnected(INetworkPlayer networkPlayer)
         {
+            Debug.Log("Player " + networkPlayer + " disconnected.");
+
             IPlayer player = Player.Player.GetPlayer(networkPlayer);
 
             if (player != null)
@@ -55,12 +57,16 @@ namespace BuildingBlocks.Team
             {
                 Assigner.AddPlayer(player);
                 playerInfo.SendInfo(player);
-                player.Team.SendProgress(networkPlayer);
                 player.InstantiateCubeFinger();
             }
             else
             {
                 playerInfo.SendInfo(player, 0);
+            }
+
+            foreach (ITeam team in TeamCreatorLoader.Creator.Assigner.Teams)
+            {
+                team.SendProgress(networkPlayer);
             }
         }
     }

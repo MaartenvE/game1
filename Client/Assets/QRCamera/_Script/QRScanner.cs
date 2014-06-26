@@ -36,7 +36,7 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 	}
 
 	public void OnInitialized() {
-		Debug.Log ("started a new imageAnalyser");
+        // Empty method required by ITrackerEventHandler
 	}
 	
 	void OnGUI () {
@@ -99,7 +99,14 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 
 
 	private void loadGame(){
-		Application.LoadLevel(1);
+        QCARBehaviour qcarBehaviour = GetComponent<QCARBehaviour>();
+
+        if (qcarBehaviour)
+        {
+            qcarBehaviour.UnregisterTrackerEventHandler(this);
+        }
+
+		Application.LoadLevel(Application.loadedLevel + 1);
 	}
 
 }

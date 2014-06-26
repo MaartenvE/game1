@@ -14,7 +14,7 @@ namespace BuildingBlocks.Blocks
         float RawProgress { get; }
 
         void PlaceGroundBlock();
-        void PlaceBlock(Vector3 location, Color color);
+        bool PlaceBlock(Vector3 location, Color color);
         void RemoveBlock(IGameObject block);
     }
 }

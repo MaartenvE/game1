@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using BuildingBlocks.Team;
+using BuildingBlocks.Blocks;
 
 namespace BuildingBlocks.GUI
 {
@@ -7,6 +8,11 @@ namespace BuildingBlocks.GUI
     {
         private const float BUTTON_WIDTH = .5f;
         private const float BUTTON_HEIGHT = .1f;
+
+        void Start()
+        {
+            GameObject.Find("RotatingBlock").renderer.material.color = ColorModel.RandomColor();
+        }
 
         void OnGUI()
         {
@@ -27,7 +33,6 @@ namespace BuildingBlocks.GUI
             float height = Screen.height * BUTTON_HEIGHT;
             drawPlayButton(width, height);
             drawSpectateButton(width, height);
-            drawCreator(width, height);
         }
 
         private void drawPlayButton(float width, float height)
@@ -39,7 +44,8 @@ namespace BuildingBlocks.GUI
                     width, height),
                 "Play", GUIStyles.ButtonStyle(Screen.height, Screen.width)))
             {
-                Application.LoadLevel(2);
+                TeamSelector.IsSpectator = false;
+                Application.LoadLevel(Application.loadedLevel + 1);
             }
         }
 
@@ -52,17 +58,8 @@ namespace BuildingBlocks.GUI
                 "Spectate", GUIStyles.ButtonStyle(Screen.height, Screen.width)))
             {
                 TeamSelector.IsSpectator = true;
-                Application.LoadLevel(2);
+                Application.LoadLevel(Application.loadedLevel + 1);
             }
-        }
-
-        private void drawCreator(float width, float height)
-        {
-            UnityEngine.GUI.Label(new Rect(
-                    Screen.width - width,
-                    Screen.height - height,
-                    width, height),
-                "Team Cubed", GUIStyles.LabelStyle(Screen.height, Screen.width));
         }
 
         private void handleQuit()

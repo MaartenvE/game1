@@ -26,7 +26,10 @@ namespace BuildingBlocks.Player
         public void ThrowAwayBlock(NetworkMessageInfo message)
         {
             IPlayer player = Player.GetPlayer(new NetworkPlayerWrapper(message.sender));
-            player.GiveNewInventoryBlock();
+            if (player != null)
+            {
+                player.GiveNewInventoryBlock();
+            }
         }
     }
 }

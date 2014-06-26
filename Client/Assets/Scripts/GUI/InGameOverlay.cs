@@ -23,7 +23,7 @@ namespace BuildingBlocks.GUI
         public Texture2D ConstructionIcon;
         public Texture2D RefreshIcon;
 
-        public bool AnimationDone;
+        public bool AnimationDone { get; set; }
 
         private bool trashcanSelected = false;
 
@@ -45,9 +45,6 @@ namespace BuildingBlocks.GUI
             {
                 drawRefreshIcon();
             }
-
-            // Back button quits game
-            backButton();
         }
 
         private void drawTrashcanIcon()
@@ -109,14 +106,6 @@ namespace BuildingBlocks.GUI
                         Screen.width * PROGRESSBAR_WIDTH,
                         Screen.width * PROGRESSBAR_HEIGHT
                     ), team.Progress);
-            }
-        }
-
-        private void backButton()
-        {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
-            {
-                Application.LoadLevel(1);
             }
         }
     }

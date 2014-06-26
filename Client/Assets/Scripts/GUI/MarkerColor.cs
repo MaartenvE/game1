@@ -9,7 +9,7 @@ namespace BuildingBlocks.GUI
         void Start()
         {
             Player.Player.LocalPlayer.OnTeamChange += changeTeam;
-            if (Player.Player.LocalPlayer != null && Player.Player.LocalPlayer.Team != null)
+            if (Player.Player.LocalPlayer.Team != null)
             {
                 changeTeam(Player.Player.LocalPlayer.Team);
             }
@@ -21,7 +21,7 @@ namespace BuildingBlocks.GUI
 
         private void changeTeam(ITeam team)
         {
-            bool isMine = team.Target == transform.parent.name;
+            bool isMine = team != null && (team.Target == transform.parent.name);
             colorTarget(isMine);
         }
 

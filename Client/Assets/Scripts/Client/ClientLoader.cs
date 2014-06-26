@@ -23,14 +23,18 @@ namespace BuildingBlocks.Client
 
         void Restart()
         {
-            Application.LoadLevel("Client");
+            Application.LoadLevel(Application.loadedLevel);
         }
 
 		public void OnDisconnectedFromServer(NetworkDisconnection info){
 			Client.OnDisconnectedFromServer (info);
 		}
 
-        [RPC]
+		public void OnFailedToConnect(NetworkConnectionError error){
+			Client.OnFailedToConnect (error);
+		}
+
+		[RPC]
         void Win(int teamId)
         {
             Client.RPC_Win(teamId);

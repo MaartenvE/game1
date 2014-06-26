@@ -58,6 +58,7 @@ namespace BuildingBlocks.Team
 
         public void RPC_SetTeamProgress(float progress)
         {
+            Debug.Log("Received progress " + progress + " for team " + Name);
             Progress = progress;
         }
 
