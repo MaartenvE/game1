@@ -1,0 +1,222 @@
+\documentclass{chi-ext}
+% Please be sure that you have the dependencies (i.e., additional LaTeX packages) to compile this example.
+% See http://personales.upv.es/luileito/chiext/
+
+%% EXAMPLE BEGIN -- HOW TO OVERRIDE THE DEFAULT COPYRIGHT STRIP -- (July 22, 2013 - Paul Baumann)
+ \copyrightinfo{Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components of this work owned by others than ACM must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. Request permissions from permissions@acm.org. \\
+ {\emph{CHI'14}}, April 26--May 1, 2014, Toronto, Canada. \\
+ Copyright \copyright~2014 ACM ISBN/14/04...\$15.00. \\
+ DOI string from ACM form confirmation}
+%% EXAMPLE END -- HOW TO OVERRIDE THE DEFAULT COPYRIGHT STRIP -- (July 22, 2013 - Paul Baumann)
+\usepackage{mathtools}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{color}
+\title{Building Blocks: Build Your Social Circle!}
+
+\numberofauthors{5}
+% Notice how author names are alternately typesetted to appear ordered in 2-column format;
+% i.e., the first 4 autors on the first column and the other 4 auhors on the second column.
+% Actually, it's up to you to strictly adhere to this author notation.
+\author{
+	\alignauthor{
+    	\textbf{Niels C. Bakker, Jehan da Camara, Maarten van Elsas, Leon J. Helsloot, Gert Spek, Isha J. van Baar} \\
+        \affaddr{Delft University of Technology}
+        \affaddr{Delft, The Netherlands}
+        \email{n.c.bakker@student.tudelft.nl}
+        \email{j.r.s.dacamara@student.tudelft.nl}
+        \email{m.vanelsas@student.tudelft.nl}
+        \email{l.j.helsloot@student.tudelft.nl}
+        \email{g.spek@student.tudelft.nl}
+        \email{i.j.vanbaar@student.tudelft.nl}
+    }
+}
+
+% Paper metadata (use plain text, for PDF inclusion and later re-using, if desired)
+\def\plaintitle{Building Blocks: Build Your Social Circle!}
+\def\plainauthor{Bakker, Niels C. and Helsloot, Leon J.}
+\def\plainkeywords{Student game design competition, augmented reality, collaborative gaming}
+%\def\plaingeneralterms{extended abstract}
+
+\hypersetup{
+  % Your metadata go here
+  pdftitle={\plaintitle},
+  pdfauthor={\plainauthor},  
+  pdfkeywords={\plainkeywords},
+  %pdfsubject={\plaingeneralterms},
+  % Quick access to color overriding:
+  %citecolor=black,
+  %linkcolor=black,
+  %menucolor=black,
+  %urlcolor=black,
+}
+
+\usepackage{graphicx}   % for EPS use the graphics package instead
+\usepackage{balance}    % useful for balancing the last columns
+\usepackage{bibspacing} % save vertical space in references
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+As humans, we spend a large amount of our time waiting. Although technologies such as smartphones and tablet computers provide a measure of distraction, the experience is mostly individual. Building Blocks is a mobile game that strives to transform waiting into a social and fun activity. Players of the game will compete in a team-based effort to be the first to build a virtual structure of blocks in the real world. They need to walk around their structure to place blocks, find the blocks they need and, most of all, cooperate to mix their colored blocks.
+\end{abstract}
+
+\keywords{\plainkeywords}
+
+
+% ============================================================================
+\section{Introduction}
+% ============================================================================
+Despite the large number of sensors modern smartphones are equipped with, most applications use few or none of these possibilities. Building Blocks makes use of the mobility and sensory capabilities of smartphones to let players interact with their environment and with other players. Augmented reality (AR) is used to display virtual structures as if they exist in the real world, binding all players to a single physical location. The accelerometer and compass are used to detect two phones being bumped back to back, an action used to mix colored blocks. This way, real-life movement, augmented reality and team play combine into a fun and challenging game experience.
+
+
+% ============================================================================
+\section{Game Concept}
+% ============================================================================
+
+\marginpar{
+	\begin{figure}
+  		\begin{center}
+  			\includegraphics[width=.8\marginparwidth]{pictures/ui_screen.png}
+  			\caption{A description of the interface.}
+  			\label{fig:clientgui}
+  		\end{center}  
+	\end{figure}
+}
+
+\marginpar{
+	\begin{figure}
+  		\begin{center}
+  			\includegraphics[width=.8\marginparwidth]{pictures/imagetarget.png}
+  			\caption{An image target with a structure drawn on top.}
+  			\label{fig:imagetarget}
+  		\end{center}  
+	\end{figure}
+}
+
+The objective of Building Blocks is for a team to replicate a structure of blocks (the goal structure) that is visible on a public screen. An example of such a structure is shown in \autoref{fig:serverscreen}.
+
+\begin{figure}
+	\begin{center}
+    	\includegraphics[width=\linewidth]{pictures/serverscreen_full.png}
+        \caption{The server screen, with in the middle the goal structure, underneath the QR code to join the game and on the left and right the progress of the teams.}
+        \label{fig:serverscreen}
+    \end{center}
+\end{figure}
+
+To join a game, a user has to scan a Quick Response (QR) code. This will take them to a screen where they can choose to either play or spectate. In spectate mode, a player can see the structure, but they cannot modify it.
+
+In order to build the structure, players need blocks. After joining the game, a player will get a half or full block in a primary color. The block is displayed in the lower right corner of the player's screen. If players cannot directly use the block they received, they can tap the refresh icon drawn over the block to receive a new block. (\autoref{fig:clientgui}).
+
+Only full blocks can be used to build the structure, so if a player has a half block, they will have to combine it with the half block of another player. Combining is done by bumping the phones of the players back to back (\autoref{fig:bumping}). After combining, both players get a full block with a mix of the colors of the half blocks. Blocks with secondary colors can be created by combining two half blocks of different colors. After a player places a block, they receive a new block - half or full - of a primary color.
+
+Players can see the structure they are building by aiming the camera of their phone at a specific AR image target (\autoref{fig:imagetarget}). The structure will be drawn on top of the image target on the phone's screen. By moving the phone around, a player can aim at the location they want to place their block at. If a player wants to remove a block that was previously (incorrectly) placed, they can tap the destroy icon to switch to destroy mode, where blocks can be removed in a similar fashion. A tap on the screen will place or remove the block. A progress bar shows how complete the structure is.
+
+Currently, players of Building Blocks are divided into two teams. The team that finishes the goal structure first, or has most progress when the set time has elapsed, wins the game.
+
+Apart from the goal structure and the QR code, the public screen shows the progress of both teams, as shown in \autoref{fig:serverscreen}. This includes the structure they have built so far, as well as a progress bar showing how complete the structure is. This allows prospective users to enjoy watching the game.
+
+\balance
+\newpage
+
+
+% ============================================================================
+\section{Target Audience}
+% ============================================================================
+
+Building Blocks was created primarily for groups of waiting people. Apart from owning an Android smartphone and being willing to play a game, there is no limitation to the audience. Ideally, people who have never met before can play the game together regardless of age and background.
+
+Since people are rarely waiting without a purpose, our audience has limited time to play the game. It is important that people can join and leave the game easily and at any time. In order to accomodate this, location managers should set up a server with the required screen, giving people the opportunity to play the game.
+
+
+% ============================================================================
+\section{Innovations}
+% ============================================================================
+\marginpar{
+\begin{figure} 
+    \begin{center}
+    \includegraphics[width=.8\marginparwidth]{pictures/largestructure.png}
+  \caption{A structure nearing completion.}
+  \label{fig:largestructure}
+  \end{center}
+\end{figure}
+}
+
+\marginpar{
+\begin{figure} 
+    \begin{center}
+    \includegraphics[width=.8\marginparwidth]{pictures/bumping.jpg}
+  \caption{Two players bumping their phones.}
+  \label{fig:bumping}
+  \end{center}
+\end{figure}
+}
+
+Although none of the technologies used in Building Blocks are new by themselves, the innovation originates in combining these technologies into a game. Collaborative gaming, augmented reality and real-world movement provide a unique gaming experience.
+
+What makes Building Blocks stand out is the amount of interaction players have with their surroundings. In a time where many people are glued to the screen of their smartphone, Building Blocks uses that very same screen to make people who might have never met before interact with one another.
+
+The basic concept described above left us room for the following innovative gameplay features:
+
+\begin{itemize}
+\item The use of augmented reality leads to an immersive gaming experience. Because players see the world around them with the game state drawn on top, they feel more connected to their environment. Being able to modify the structure in the augmented reality environment enhances this experience.
+
+\item Players are bound to a specific location by the public screen and the image targets. Because players of the game are physically together, they will be more inclined to start a conversation.
+
+\item All players share the same augmented reality state. Members of a team can all modify the shared structure of that team. Changes to that structure will be visible for every player. The sense of belonging to a team is increased by being able to see the actions of other team members in real time.
+
+\item The structure can be built in three dimensions. To be able to build on all sides of the structure, players can walk around the structure and move their phone up or down.
+
+\item To be able to finish the goal structure, players have to combine half blocks to create blocks with secondary colors. This forces players to interact with one another in the real world by bumping their phones back to back. Furthermore, to find a player who has a half block of the required color, one has to communicate with other players.
+
+\item Near Field Communication (NFC), a technique to communicate between devices in close proximity, which is currently not supported on many smartphones. Instead, the bump detection algorithm uses a combination of accelerometer, magnetometer (compass) and timing information.
+
+\item The public screen shows the progress of the game to every person around. This allows people who are not playing to watch and possibly be drawn into the game.
+\end{itemize}
+
+
+%==============================================================================
+\section{Used Technologies}
+%==============================================================================
+Building Blocks relies on various existing technologies. The game is built using the Unity game engine~\cite{Unity}. For recognizing image targets and extended tracking, Qualcomm\textsuperscript\textregistered Vuforia\textsuperscript\texttrademark is used~\cite{Vuforia}. The ZXing (``Zebra Crossing'') library~\cite{ZXing} is used for generating and reading QR codes.
+
+Building Blocks uses a custom bump detection algorithm. The algorithm uses accelerometer input to detect peaks in acceleration, as would occur when bumping phones together. Furthermore, raw compass data is used as magnetometer to detect changes in the magnetic field possibly caused by another phone. The sensor data is combined with timing information to detect phones being bumped together.
+
+
+%==============================================================================
+\section{Gameplay Video}
+%==============================================================================
+A gameplay video of Building Blocks can be found at \url{http://youtu.be/p8bu2bqPSKQ}
+
+\begin{figure} 
+  \begin{subfigure}[b]{1\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{pictures/movie1.png}
+  \end{subfigure}%% 
+  \\
+  \begin{subfigure}[b]{1\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{pictures/movie2.png}
+  \end{subfigure} 
+  \caption{Stills from the gameplay video.}
+  \label{fig:movie2} 
+\end{figure}
+
+
+%==============================================================================
+\section{Acknowledgements}
+%==============================================================================
+We would like to thank our professors and student assistants for their intensive guidance and helpful comments, which made the creation of Building Blocks an incredible learning experience for all of us. We also want to thank all testers, who sacrificed their valuable time to help us improve the game.
+
+% REFERENCES FORMAT
+% References must be the same font size as other body text.
+\balance
+\bibliography{sample}
+\bibliographystyle{acm-sigchi}
+
+
+
+\end{document}
