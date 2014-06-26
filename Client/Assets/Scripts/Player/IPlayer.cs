@@ -6,6 +6,8 @@ namespace BuildingBlocks.Player
 {
     public interface IPlayer : IBuildingBlocksBehaviour
     {
+        event TeamChangeHandler OnTeamChange;
+
         ITeam Team { get; }
         ICubeFinger CubeFinger { get; set; }
 

@@ -9,7 +9,7 @@ namespace BuildingBlocks.Player
 
     public class Player : BuildingBlocksBehaviour, IPlayer
     {
-        public static event TeamChangeHandler OnTeamChange;
+        public event TeamChangeHandler OnTeamChange;
 
         public static IPlayer LocalPlayer { get; private set; }
 
@@ -29,9 +29,11 @@ namespace BuildingBlocks.Player
 
         public void SetTeam(int teamId)
         {
+            Debug.Log("Setting team");
             Team = BuildingBlocks.Team.Team.GetTeam(teamId);
             if (OnTeamChange != null)
             {
+                Debug.Log("Calling team change handler");
                 OnTeamChange(Team);
             }
         }

@@ -8,7 +8,7 @@ namespace BuildingBlocks.GUI
     {
         void Start()
         {
-            Player.Player.OnTeamChange += changeTeam;
+            Player.Player.LocalPlayer.OnTeamChange += changeTeam;
             if (Player.Player.LocalPlayer != null && Player.Player.LocalPlayer.Team != null)
             {
                 changeTeam(Player.Player.LocalPlayer.Team);

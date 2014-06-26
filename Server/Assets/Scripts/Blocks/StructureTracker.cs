@@ -8,7 +8,6 @@ namespace BuildingBlocks.Blocks
         public event StructureCompleteHandler OnCompletion;
         public event StructureProgressHandler OnProgressChange;
 
-        private ITeam team;
         private IBlockConstructor constructor;
 
         private Structure<Color?> goal;
@@ -36,22 +35,23 @@ namespace BuildingBlocks.Blocks
 
         public StructureTracker(ITeam team, Structure<Color?> goalStructure)
         {
-            this.team = team;
-
             if (goalStructure != null)
             {
                 this.goal = goalStructure;
                 this.current = new Structure<Color?>(goal.GetLength(0), goal.GetLength(1), goal.GetLength(2));
-                this.constructor = new BlockConstructor(team);
 
                 initializeCorrectness();
+
+                this.constructor = new BlockConstructor(team);
             }
         }
 
         public void PlaceGroundBlock()
         {
             Vector3 center = goal.Normalize(Vector3.zero, constructor.Scale);
-            constructor.PlaceGroundBlock(goal[center].GetValueOrDefault());
+            Color color = goal[center].GetValueOrDefault();
+            checkBlock(center, color);
+            constructor.PlaceGroundBlock(color);
         }
 
         public void PlaceBlock(Vector3 location, Color color)
