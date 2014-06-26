@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using UnityEditor;
 
 namespace BuildingBlocks.Blocks
 {
@@ -10,6 +11,9 @@ namespace BuildingBlocks.Blocks
     {
 
         private static string levelName;
+        public static Dictionary<Color, float> colorsMap = new Dictionary<Color,float>();
+
+
 
         //returns a level read as Color[z][y][x]
         /// <exception cref="FormatException">thrown because the format is wrong, or the implementation of the documentation (see maps/readme.txt).</exception>
@@ -19,7 +23,9 @@ namespace BuildingBlocks.Blocks
             {
                 using (StreamReader sr = new StreamReader(specificLevelPath))
                 {
+                    
                     Color?[][][] level = readLevel(sr);
+
                     return ArrayToOtherArray(level, level.Length);
                 }
             }
@@ -90,9 +96,11 @@ namespace BuildingBlocks.Blocks
         private static Color?[][][] readLevel(StreamReader sr)
         {
             int size = readSizeOption(sr.ReadLine());
+            readBlockPercentageOption(sr.ReadLine());
 
+            sr.ReadLine();
             string test = sr.ReadToEnd();
-            //EditorUtility.DisplayDialog ("info", test+"show it", "ok");
+            //EditorUtility.DisplayDialog ("info", test, "ok");
 
             //find Size times a pattern according to ["anything without [ or ]"]
             string[] blocks = findAndMatchAsSingleLine(test, "(?:\\[([^\\[\\]]*)\\])", size);
@@ -104,7 +112,21 @@ namespace BuildingBlocks.Blocks
                 level[i] = readBlock(blocks[i], size);
             }
 
+
             return level;
+        }
+
+        private static void readBlockPercentageOption(string colorPercentage)
+        {
+            string temp = colorPercentage.Substring(1, colorPercentage.Length - 2);
+            string[] colors = temp.Split(',');
+
+            for (int i = 0; i < colors.Length; i++)
+            {
+                string[] keyValuePair = colors[i].Split('=');
+                colorsMap[ColorModel.matchColor(char.Parse(keyValuePair[0]))] = float.Parse(keyValuePair[1]);
+            }
+
         }
 
         private static int readSizeOption(string sizeOption)
@@ -118,8 +140,10 @@ namespace BuildingBlocks.Blocks
         {
             //find Size times a pattern according to {"anything without { or }"}
             string[] rows = findAndMatchAsSingleLine(block, "(?:\\{([^\\{\\}])*\\})", size);
+            string[] colors = findAndMatchAsSingleLine(block, "(?:\\{([^\\{\\}])*\\})", 1);
 
             Color?[][] result = new Color?[size][];
+
 
             //fill the y dimension with x dimension array
             for (int i = 0; i < size; i++)
@@ -141,7 +165,8 @@ namespace BuildingBlocks.Blocks
 
             for (int i = 0; i < size; i++)
             {
-                result[i] = ColorModel.matchColor(char.Parse(colorChars[i]));
+                Color c = ColorModel.matchColor(char.Parse(colorChars[i]));
+                result[i] = c;
                 if (char.Parse(colorChars[i]) == ColorModel.NONECHAR)
                     result[i] = null;
 
@@ -171,7 +196,7 @@ namespace BuildingBlocks.Blocks
 
             if (matches.Count != times)
             {
-                throw new System.FormatException("did not find as many groups as expected in regex expression, found: " + matches.Count + "but expected: " + times);
+               // throw new System.FormatException("did not find as many groups as expected in regex expression, found: " + matches.Count + "but expected: " + times);
             }
 
             //if a match is found, and the correct number of matches are found
