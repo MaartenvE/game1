@@ -18,22 +18,29 @@ namespace BuildingBlocks.Client
 
         public void OnLevelLoaded(IEnumerable<TrackableBehaviour> keptAliveTrackables)
         {
+            setFocus();
+
             switch (Application.loadedLevel)
             {
                 case 1: // QRCodeScene
                     gameObject.AddComponent<QRScanner>();
-                    CameraDevice.Instance.Start();
+                    //CameraDevice.Instance.Start();
                     break;
                 case 2: // StartScreenScene
-                    CameraDevice.Instance.Stop();
+                    //CameraDevice.Instance.Stop();
                     Destroy(gameObject.GetComponent<QRScanner>());
                     transform.Find("Crosshair").gameObject.SetActive(false);
                     break;
                 case 3: // Client
                     transform.Find("Crosshair").gameObject.SetActive(true);
-                    CameraDevice.Instance.Start();
+                    //CameraDevice.Instance.Start();
                     break;
             }
+        }
+
+        private void setFocus()
+        {
+            CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_NORMAL);
         }
 
         // UNUSED

@@ -29,11 +29,13 @@ namespace BuildingBlocks.CubeFinger
             RaycastHit hit = new RaycastHit();
 
             // Only raycast when player has either a full block or is in delete mode.
-            if ((Player.Player.LocalPlayer.HasFullBlock || finger.Mode == CubeFingerMode.Delete)
+            if (finger.Team.IsMine &&
+                (Player.Player.LocalPlayer.HasFullBlock || finger.Mode == CubeFingerMode.Delete)
                 && Physics.Raycast(ray, out hit, MAX_PICKING_DISTANCE))
             {
                 Transform picked = hit.transform;
-                if (finger.Team.IsMine)
+
+                if (picked.parent.name == finger.Team.Target)
                 {
                     pickedObject = new GameObjectWrapper(picked.gameObject);
 

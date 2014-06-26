@@ -59,7 +59,7 @@ namespace BuildingBlocks.Client
 			UnityEngine.GUI.Box(new Rect( Screen.width/2 - width/2, Screen.height/2 - height/2, width, height), "Disconnected from Server", GUIStyles.QRStyle(Screen.height,Screen.width) );
 			if (UnityEngine.GUI.Button (new Rect (Screen.width/2 - width/2, Screen.height/2 - height/4, width, height), "Tap to return to QR scanner", GUIStyles.ButtonStyle(Screen.height-height,Screen.width-width))) 
 			{
-				Application.LoadLevel("QRCodeScanner");
+				Application.LoadLevel("QRCodeScene");
 			}
 		}
 
