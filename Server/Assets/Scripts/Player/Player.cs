@@ -33,7 +33,7 @@ namespace BuildingBlocks.Player
 
         public void GiveNewInventoryBlock()
         {
-            HalfBlock = new HalfBlock.HalfBlock(SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor());
+            HalfBlock = new HalfBlock.HalfBlock(getNewHalfBlockColor());
             Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
             CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
             if (HalfBlock.wrappedObject.color.isSecondaryColor)
@@ -45,6 +45,25 @@ namespace BuildingBlocks.Player
                 HasPlaceableBlock = Random.value < FULL_BLOCK_CHANCE;
             }
             networkView.RPC("SetBlockType", NetworkPlayer, HasPlaceableBlock ? 1 : 0, color);
+        }
+
+        private AbstractHalfBlockColor getNewHalfBlockColor()
+        {
+            if (HalfBlock != null)
+            {
+                AbstractHalfBlockColor HalfBlockColor = SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor();
+                int colorTries = 1;
+                while (HalfBlock.wrappedObject.color.Equals(HalfBlockColor) && colorTries < 5)
+                {
+                    HalfBlockColor = SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor();
+                    colorTries++;
+                }
+                return HalfBlockColor;
+            }
+            else
+            {
+                return SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor();
+            }
         }
 
         public void CombineBlock(IPlayer other)
