@@ -1,4 +1,4 @@
-﻿/*==============================================================================
+/*==============================================================================
 Copyright (c) 2013-2014 Qualcomm Connected Experiences, Inc.
 All Rights Reserved.
 Qualcomm Confidential and Proprietary

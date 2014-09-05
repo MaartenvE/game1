@@ -1,9 +1,9 @@
-Vuforia SDK v2.8.9 
+Vuforia SDK v3.0.9
  Qualcomm Connected Experiences, Inc
 =============================================================
 
 This Readme file contains certain notices of software components
-included with the Vuforia SDK v2.8.9  that 
+included with the Vuforia SDK v3.0.9 that 
 Qualcomm Connected Experiences is required to provide you. Notwithstanding anything in the
  notices in this file, your use of these software components together
 with the Vuforia SDK is subject to the terms of your license from 

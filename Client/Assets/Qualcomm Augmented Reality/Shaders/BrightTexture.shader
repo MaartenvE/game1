@@ -36,7 +36,7 @@ Shader "Custom/BrightTexture" {
             half4 c = tex2D (_MainTex, i.uv);
 
             float scale = 0.2f;
-            c.rgb = c.rgb * scale + 1f - scale;
+            c.rgb = c.rgb * scale + 1.0f - scale;
 
             return c;
         }

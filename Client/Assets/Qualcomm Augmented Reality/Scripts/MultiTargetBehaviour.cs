@@ -4,6 +4,8 @@ All Rights Reserved.
 Confidential and Proprietary - Qualcomm Connected Experiences, Inc.
 ==============================================================================*/
 
+using UnityEngine;
+
 /// <summary>
 /// This class serves both as an augmentation definition for a MultiTarget in the editor
 /// as well as a tracked MultiTarget result at runtime

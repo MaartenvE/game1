@@ -46,7 +46,7 @@ class AndroidUnityPlayer : IAndroidUnityPlayer
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            if (QCARWrapper.Instance.HasSurfaceBeenRecreated())
+            if (SurfaceUtilities.HasSurfaceBeenRecreated())
             {
                 InitializeSurface();
             }
@@ -63,7 +63,7 @@ class AndroidUnityPlayer : IAndroidUnityPlayer
                 {
                     mScreenWidth = Screen.width;
                     mScreenHeight = Screen.height;
-                    QCARWrapper.Instance.OnSurfaceChanged(mScreenWidth, mScreenHeight);
+                    SurfaceUtilities.OnSurfaceChanged(mScreenWidth, mScreenHeight);
                 }
             }
 
@@ -93,7 +93,7 @@ class AndroidUnityPlayer : IAndroidUnityPlayer
 
     private void InitializeSurface()
     {
-        QCARWrapper.Instance.OnSurfaceCreated();
+        SurfaceUtilities.OnSurfaceCreated();
 
         AndroidJavaClass javaUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         mCurrentActivity = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
@@ -107,7 +107,7 @@ class AndroidUnityPlayer : IAndroidUnityPlayer
 
         mScreenWidth = Screen.width;
         mScreenHeight = Screen.height;
-        QCARWrapper.Instance.OnSurfaceChanged(mScreenWidth, mScreenHeight);
+        SurfaceUtilities.OnSurfaceChanged(mScreenWidth, mScreenHeight);
     }
 
     private void ResetUnityScreenOrientation()
@@ -134,7 +134,7 @@ class AndroidUnityPlayer : IAndroidUnityPlayer
                     correctScreenOrientation = activityOrientation;
             }
 
-            QCARWrapper.Instance.SetSurfaceOrientation(correctScreenOrientation);
+            SurfaceUtilities.SetSurfaceOrientation(correctScreenOrientation);
         }
     }
 

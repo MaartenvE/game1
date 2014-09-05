@@ -12,7 +12,7 @@
 # needed to build a QCAR app then add calls to the QCAR library into the Unity
 # generated C code
 
-# version date 30/1/13
+# version date 6/6/14
 
 import sys
 import os
@@ -24,7 +24,7 @@ UNITY_40 = 40
 UNITY_41 = 41
 UNITY_42 = 42
 UNITY_45 = 45
-
+UNITY_451 = 451
 
 #default to Unity 3.5.x, but based on discovery of certain files
 # 1) iPhone_View.mm > UNITY_40
@@ -231,7 +231,7 @@ def process_pbxproj(xcodeproj_filename, frameworks, resfiles):
 
         # change for Unity 4.2 because header search path needs to be in HEADER_SEARCH_PATHS group
         if section == 'XCBuildConfiguration':
-            if (UnityVersion == UNITY_42 or UnityVersion == UNITY_45):
+            if (UnityVersion == UNITY_42 or UnityVersion == UNITY_45 or UnityVersion == UNITY_451):
                 if line.strip()[0:23] == 'HEADER_SEARCH_PATHS = (':
                     pbxproj.write('\t\t\t\t\t\"$(SRCROOT)/Libraries\",\n')
             else:
@@ -476,7 +476,7 @@ def process_UnityAppController(UnityAppController_filename):
                 
                 if UnityVersion == UNITY_42:
                     UnityAppController.write('\tQCARUnityPlayer::getInstance().QCARSetOrientation(_curOrientation);\n');
-                elif UnityVersion == UNITY_45:
+                elif UnityVersion == UNITY_45 or UnityVersion == UNITY_451:
                     UnityAppController.write('\tQCARUnityPlayer::getInstance().QCARSetOrientation([_unityView contentOrientation]);\n');
 
             if line.strip()[0:17] == 'UnityPause(true);':
@@ -497,7 +497,7 @@ def process_UnityAppController(UnityAppController_filename):
 
 
 
-# For Unity 4.2 Processes a Unity generated UnityView.mm to handle autorotation
+# For Unity 4.2 upwards Processes a Unity generated UnityView.mm to handle autorotation
 def process_UnityView(UnityView_filename):
     global UnityVersion
     
@@ -528,6 +528,10 @@ def process_UnityView(UnityView_filename):
             if line.strip()[0:43] == 'UnitySetScreenOrientation(_curOrientation);' :
                 UnityView.write('\tQCARUnityPlayer::getInstance().QCARSetOrientation(_curOrientation);\n');
             
+            # fix for 4.5.1 - write this out in LayoutSubviews instead
+            if UnityVersion == UNITY_451 and line.strip()[0:23] == '[super layoutSubviews];' :
+                UnityView.write('\tQCARUnityPlayer::getInstance().QCARSetOrientation(_curOrientation);\n');
+            
             # write out original line of code if it has not been replaced
             # note that at present skip is always False, because the original line will always get written out.
             # It has been left in here in case where lines in the future may need to be replaced rather than just appended to.
@@ -538,7 +542,7 @@ def process_UnityView(UnityView_filename):
         UnityView.close()
 
 
-# in here it will just parse to see if it is Unity_45
+# in here it will just parse to see if it is Unity_45, or Unity_451
 def process_UnityViewCheckUnity45(UnityView_filename):
     global UnityVersion
     
@@ -563,6 +567,9 @@ def process_UnityViewCheckUnity45(UnityView_filename):
             # test for Unity_45
             if line.strip()[0:25] == '@implementation UnityView' :
                 UnityVersion = UNITY_45
+
+            if line.strip()[0:21] == 'UnityReportResizeView' :
+                UnityVersion = UNITY_451
 
 
 # Script start
@@ -593,7 +600,7 @@ if sys.argv[2] == "iPhone":
     process_UnityAppController(UnityAppController_full_path_name)
     
     # Fix for autorotation issue just on Unity 4.2
-    if (UnityVersion == UNITY_42 or UnityVersion == UNITY_45):
+    if (UnityVersion == UNITY_42 or UnityVersion == UNITY_45 or UnityVersion == UNITY_451):
         UnityView_full_path_name = sys.argv[1] + '/Classes/UI/UnityView.mm'
         process_UnityView(UnityView_full_path_name)
     

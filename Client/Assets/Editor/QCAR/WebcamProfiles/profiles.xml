@@ -8,7 +8,7 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
+            <!-- <resampledTextureHeight>480</resampledTextureHeight> -->
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -16,15 +16,18 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
+            <!-- <resampledTextureHeight>480</resampledTextureHeight> -->
         </osx>
     </default>
 	<!-- these are examples of configured web cam profiles. -->
 	<!-- please enter the name of your camera as shown in the popup dialog. -->
-	<!-- Please note that in Unity 3.5 on Mac, some webcam models will deliver a distorted image
-		that has to be resampled to 640x360 even if a 640x480 resolution has been requested. 
-		This issue has been fixed in Unity 4.0 To get consistent behaviour with both Unity versions,
-		for these webcams always a resolution of 640x360 should be requested on Mac. -->
+	<!-- Unity does not guarantee to deliver a webcam texture in the requested size,
+		therefore it may need to be resampled to the required size.
+		If no resampledTextureHeight is specified, the aspect ratio will be kept when resampling is done.
+		Specifying a resampledTextureHeight will enforce a certain aspect ratio, even if it's different from the
+		created web cam texture. This can be used to fixe cases where the webcam textue is distorted.
+		Please note that in Unity 4.5 on Mac, different web cam models that deliver different aspect ratios 
+		identify themselves with the same name (e.g. Logitech C910 and C920 are both just 'Logitech Camera') -->
     <webcam deviceName="Built-in iSight">
         <windows>
             <!-- size of the web cam texture requested from Unity -->
@@ -32,7 +35,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -40,7 +42,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="Integrated Camera">
@@ -50,7 +51,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
 	<osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -58,7 +58,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="Logitech HD Pro Webcam C910">
@@ -68,7 +67,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -76,7 +74,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="Microsoft® LifeCam HD-6000 for Notebooks">
@@ -86,7 +83,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -94,7 +90,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="Microsoft® LifeCam HD-3000">
@@ -104,7 +99,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -112,7 +106,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="HD Pro Webcam C920">
@@ -122,7 +115,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -130,7 +122,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="Logitech Camera">
@@ -140,7 +131,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -148,7 +138,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="Logitech Webcam Pro 9000">
@@ -158,7 +147,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -166,7 +154,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
 
@@ -177,7 +164,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -185,7 +171,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="Logitech HD Pro Webcam C920">
@@ -195,7 +180,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -203,7 +187,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="Microsoft LifeCam HD-6000">
@@ -213,7 +196,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -221,7 +203,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="Microsoft LifeCam HD-3000">
@@ -231,7 +212,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -239,7 +219,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </osx>
     </webcam>
     <webcam deviceName="FaceTime HD Camera (Built-in)">
@@ -249,7 +228,6 @@
             <requestedTextureHeight>480</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>480</resampledTextureHeight>
         </windows>
         <osx>
             <!-- size of the web cam texture requested from Unity -->
@@ -257,7 +235,6 @@
             <requestedTextureHeight>720</requestedTextureHeight>
             <!-- size of the texture Unity's web cam texture will be rescaled to -->
             <resampledTextureWidth>640</resampledTextureWidth>
-            <resampledTextureHeight>360</resampledTextureHeight>
         </osx>
     </webcam>
 </profiles>
