@@ -28,10 +28,12 @@ namespace BuildingBlocks.CubeFinger
             }
         }
 
+        public bool Hide { get; protected set; }
+
         public bool IsMine { get; private set; }
         public ICubeFingerRenderer Renderer { get; private set; }
 
-        public BaseCubeFinger(IGameObject gameObject, ICubeFingerRenderer renderer = null) : base(gameObject)
+        public BaseCubeFinger(IGameObject gameObject, ICubeFingerRenderer renderer) : base(gameObject)
         {
             Renderer = renderer ?? new CubeFingerRenderer(this);
             OnModeChanged += SendModeChanged;
@@ -39,8 +41,13 @@ namespace BuildingBlocks.CubeFinger
             Renderer.ShowFinger(false);
         }
 
+        public BaseCubeFinger(IGameObject gameObject) : this(gameObject, null) { }
+
+
+
         public virtual void OnPlayerConnected(INetworkPlayer player) { }
         public virtual void Update() { }
+        public virtual void Destroy() { }
 
         public virtual void RPC_SetPersonalFinger()
         {

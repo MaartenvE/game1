@@ -14,6 +14,7 @@ namespace BuildingBlocks.CubeFinger
     {
         event CubeFingerModeChangedHandler OnModeChanged;
 
+        bool Hide { get; }
         CubeFingerMode Mode { get; set; }
         ICubeFingerRenderer Renderer { get; }
 
@@ -21,5 +22,6 @@ namespace BuildingBlocks.CubeFinger
 
         void OnPlayerConnected(INetworkPlayer player);
         void Update();
+        void Destroy();
     }
 }

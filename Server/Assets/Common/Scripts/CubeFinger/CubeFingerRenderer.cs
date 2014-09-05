@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using BuildingBlocks.Blocks;
 
 namespace BuildingBlocks.CubeFinger
 {
@@ -30,6 +31,11 @@ namespace BuildingBlocks.CubeFinger
             this.finger.OnModeChanged += modeChanged;
         }
 
+        public void Update()
+        {
+            gameObject.renderer.enabled = !finger.Hide && isVisible;
+        }
+
         /// <summary>
         /// Move the cube finger to a position relative to an existing block.
         /// </summary>
@@ -42,19 +48,29 @@ namespace BuildingBlocks.CubeFinger
 
             if (finger.Mode == CubeFingerMode.Delete)
             {
-                enableHiddenBlock();
-                Color color = pickedObject.renderer.material.color;
-                color.a = CUBEFINGER_ALPHA;
-                gameObject.renderer.material.color = color;
-                pickedObject.renderer.enabled = false;
-                hiddenBlock = pickedObject;
+                hideBlock(pickedObject);
             }
 
-            if (finger.Mode != CubeFingerMode.None && (localPosition != previousPosition || forceSendMove && !IsObjectRemoved))
+            if (shouldSendMove(localPosition))
             {
                 sendMove(pickedObject, displacement);
                 setPosition(localPosition);
             }
+        }
+
+        private bool shouldSendMove(Vector3 position)
+        {
+            return finger.Mode != CubeFingerMode.None && (position != previousPosition || forceSendMove && !IsObjectRemoved);
+        }
+
+        private void hideBlock(IGameObject pickedObject)
+        {
+            enableHiddenBlock();
+            Color color = pickedObject.renderer.material.color;
+            color.a = CUBEFINGER_ALPHA;
+            gameObject.renderer.material.color = color;
+            pickedObject.renderer.enabled = false;
+            hiddenBlock = pickedObject;
         }
 
         private void enableHiddenBlock()
@@ -72,7 +88,7 @@ namespace BuildingBlocks.CubeFinger
             {
                 networkView.RPC("MoveFinger", RPCMode.Server, pickedObject.networkView.viewID, displacement);
             }
-            else if (Network.isServer)
+            else if (network.isServer)
             {
                 networkView.RPC("MoveFinger", RPCMode.Others, pickedObject.networkView.viewID, displacement);
             }
@@ -100,19 +116,23 @@ namespace BuildingBlocks.CubeFinger
             if (show != isVisible)
             {
                 isVisible = show;
-                gameObject.renderer.enabled = show;
+                gameObject.renderer.enabled = !finger.Hide && show;
                 enableHiddenBlock();
 
-                forceSendMove = true;
+                sendShow(show);
+            }
+        }
 
-                if (finger.IsMine)
-                {
-                    networkView.RPC("ShowFinger", RPCMode.Server, show ? 1 : 0);
-                }
-                else if (Network.isServer)
-                {
-                    networkView.RPC("ShowFinger", RPCMode.Others, show ? 1 : 0);
-                }
+        private void sendShow(bool show)
+        {
+            if (finger.IsMine)
+            {
+                forceSendMove = true;
+                networkView.RPC("ShowFinger", RPCMode.Server, show ? 1 : 0);
+            }
+            else if (network.isServer)
+            {
+                networkView.RPC("ShowFinger", RPCMode.Others, show ? 1 : 0);
             }
         }
 
@@ -126,7 +146,7 @@ namespace BuildingBlocks.CubeFinger
             color.a = CUBEFINGER_ALPHA;
             this.FingerColor = color;
             gameObject.renderer.material.color = color;
-            if (Network.isServer)
+            if (network.isServer)
             {
                 networkView.RPC("ColorFinger", RPCMode.Others, ColorModel.ConvertToVector3(color));
             }

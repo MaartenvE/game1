@@ -7,6 +7,7 @@ namespace BuildingBlocks.HalfBlock
     public abstract class AbstractHalfBlockColor : IEquatable<AbstractHalfBlockColor>
     {
         private Color _color;
+        public bool isSecondaryColor;
 
         public Color color
         {

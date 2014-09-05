@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using BuildingBlocks.Blocks;
 
 namespace BuildingBlocks.CubeFinger
 {
-    class CubeFinger : BaseCubeFinger
+    public class CubeFinger : BaseCubeFinger
     {
         public CubeFinger(IGameObject gameObject) : base(gameObject)
         {
@@ -14,23 +15,21 @@ namespace BuildingBlocks.CubeFinger
             networkView.RPC("SetFingerParent", RPCMode.AllBuffered, parent);
         }
 
-        public void SetPlayer(IPlayer player)
+        public void SetPlayer(INetworkPlayer player)
         {
-            player.CubeFinger = this;
-            networkView.RPC("SetPersonalFinger", player.NetworkPlayer);
-            player.GiveInventoryBlock();
-            Renderer.SetColor(player.HalfBlock.CalculateUnityColor());
+            networkView.RPC("SetPersonalFinger", player);
         }
 
         public override void OnPlayerConnected(INetworkPlayer player)
         {
             networkView.RPC("SetFingerMode", player, (int) Mode);
-            networkView.RPC("ColorFinger", player, Renderer.FingerColor);
+            networkView.RPC("ColorFinger", player, ColorModel.ConvertToVector3(Renderer.FingerColor));
         }
 
-        public override void Update()
+        public override void Destroy()
         {
-
+            network.RemoveRPCs(networkView.viewID);
+            network.Destroy(networkView.viewID);
         }
     }
 }

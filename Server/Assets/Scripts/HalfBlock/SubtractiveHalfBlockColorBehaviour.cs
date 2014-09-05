@@ -1,8 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BuildingBlocks.Blocks;
 
 namespace BuildingBlocks.HalfBlock
 {
@@ -50,9 +50,53 @@ namespace BuildingBlocks.HalfBlock
 
         public static AbstractHalfBlockColor RandomPrimaryColor()
         {
-            Color[] primaryColors = { ColorModel.RED, ColorModel.YELLOW, ColorModel.BLUE };
-            int index = UnityEngine.Random.Range(0, 3);
-            return new HalfBlockColor(primaryColors[index]);
+            HalfBlockColor color;
+            ArrayList primaryColors = new ArrayList();
+            primaryColors.Add(ColorModel.RED);
+            primaryColors.Add(ColorModel.YELLOW);
+            primaryColors.Add(ColorModel.BLUE);
+
+            float random = UnityEngine.Random.value;
+            Color c  = new Color();
+
+            foreach (KeyValuePair<Color, float> entry in StructureReader.colorsMap)
+            {
+                if (random <= entry.Value)
+                {
+                    c = entry.Key;
+                    break;
+                }
+            }
+
+            if (!primaryColors.Contains(c))
+            {
+                c = splitSecondary(c);
+                color = new HalfBlockColor(c);
+                color.isSecondaryColor = true;
+                return color;
+            }
+            color = new HalfBlockColor(c);
+            color.isSecondaryColor = false;
+            return color;
+        }
+
+        private static Color splitSecondary(Color c)
+        {
+            if (c.Equals(ColorModel.ORANGE))
+            {
+                return UnityEngine.Random.value < 0.5 ? ColorModel.RED : ColorModel.YELLOW;
+            }
+
+            if (c.Equals(ColorModel.PURPLE))
+            {
+                return UnityEngine.Random.value < 0.5 ? ColorModel.RED : ColorModel.BLUE;
+            }
+
+            if (c.Equals(ColorModel.GREEN))
+            {
+                return UnityEngine.Random.value < 0.5 ? ColorModel.BLUE : ColorModel.YELLOW;
+            }
+            return ColorModel.NONE;
         }
     }
 }

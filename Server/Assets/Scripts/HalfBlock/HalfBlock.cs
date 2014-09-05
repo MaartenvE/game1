@@ -38,10 +38,9 @@ namespace BuildingBlocks.HalfBlock
             while (currentWrappedObject.wrappedObject != null)
             {
                 currentWrappedObject = currentWrappedObject.wrappedObject;
-
             }
             currentWrappedObject.wrappedObject = other.wrappedObject;
-            other = null;
+            other.wrappedObject = currentWrappedObject.wrappedObject;
         }
     }
 }

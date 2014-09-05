@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Text.RegularExpressions;
+using BuildingBlocks.GUI;
 
 using com.google.zxing.qrcode;
 
@@ -34,19 +35,13 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 		CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_TRIGGERAUTO);
 	}
 
-	/*void Update () {
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-			Application.Quit();
-		}
-	}*/
-
 	public void OnInitialized() {
-		Debug.Log ("started a new imageAnalyser");
+        // Empty method required by ITrackerEventHandler
 	}
 	
 	void OnGUI () {
-		GUI.Box(new Rect(0, Screen.height - Screen.height*0.05f, Screen.width, Screen.height * 0.1f), qrText, Lang.QRStyle(Screen.height,Screen.width) );
-		GUI.Box (new Rect(0, 0, Screen.width, Screen.height * 0.1f), "Scan the QR code to join the game", Lang.QRStyle(Screen.height,Screen.width));
+		GUI.Box(new Rect(0, Screen.height - Screen.height*0.05f, Screen.width, Screen.height * 0.1f), qrText, GUIStyles.QRStyle(Screen.height,Screen.width) );
+		GUI.Box (new Rect(0, 0, Screen.width, Screen.height * 0.1f), "Scan the QR code to join the game", GUIStyles.QRStyle(Screen.height,Screen.width));
 
 		if(Input.GetKeyDown(KeyCode.Escape))
 		{
@@ -68,12 +63,6 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 			string adress = findAndMatch (tempText, "BuildingBlocksServer=([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})(?:\\:[0-9]{1,5})");
 			//does the same for port
 			string port = findAndMatch (tempText, "BuildingBlocksServer=(?:[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\:)([0-9]{1,5})");
-
-			//adress = "adress";
-			//	port = "port";
-			/*if(adress== null || adress==""){
-				adress = "adress size is 0 or null";
-			}*/
 
 			//if either is null, the tempText was not of the proper format (false qrcode found)
 			if((port != null && port != "")){
@@ -110,7 +99,14 @@ public class QRScanner : MonoBehaviour, ITrackerEventHandler {
 
 
 	private void loadGame(){
-		Application.LoadLevel(1);
+        QCARBehaviour qcarBehaviour = GetComponent<QCARBehaviour>();
+
+        if (qcarBehaviour)
+        {
+            qcarBehaviour.UnregisterTrackerEventHandler(this);
+        }
+
+		Application.LoadLevel(Application.loadedLevel + 1);
 	}
 
 }

@@ -13,6 +13,7 @@ namespace BuildingBlocks.HalfBlock
         public HalfBlockColor(Color color)
         {
             this.color = color;
+            isSecondaryColor = false;
             if (_colorBehaviour == null)
             {
                 _colorBehaviour = new SubtractiveHalfBlockColorBehaviour();
