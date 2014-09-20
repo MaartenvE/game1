@@ -6,7 +6,7 @@ namespace BuildingBlocks.Input
     /// <summary>
     /// Get the average luminance of the camera image by analyzing pixel data.
     /// </summary>
-    public class Luminance : MonoBehaviour, ITrackerEventHandler
+    public class Luminance : MonoBehaviour
     {
         /// <summary>
         /// Number of pixels to skip after every analyzed pixel. Lower values increase
@@ -20,32 +20,23 @@ namespace BuildingBlocks.Input
         private const float ALPHA = 0.15f;
 
         public float Average { get; private set; }
-        public float Score { get; private set; }
+        public float Score
+        {
+            get
+            {
+                return checkBump();
+            }
+        }
 
         private Image.PIXEL_FORMAT pixelFormat = Image.PIXEL_FORMAT.RGB888;
         private bool registeredFormat = false;
 
-        /// <summary>
-        /// On start, register this object as a TrackerEventHandler to QCAR, which allows
-        /// getting the captured camera image to analyze luminance.
-        /// </summary>
         void Start()
         {
             Average = -1;
-
-            QCARBehaviour qcarBehaviour = FindObjectOfType<QCARBehaviour>();
-            if (qcarBehaviour)
-            {
-                qcarBehaviour.RegisterTrackerEventHandler(this);
-            }
         }
 
-        /* Required by ITrackerEventHandler, but unused */
-        public void OnInitialized()
-        {
-        }
-
-        public void OnTrackablesUpdated()
+        private float checkBump()
         {
             if (!registeredFormat)
             {
@@ -77,8 +68,10 @@ namespace BuildingBlocks.Input
                 {
                     Average = (1 - ALPHA) * Average + ALPHA * totalLuminance;
                 }
-                Score = Average - totalLuminance;
+                return Average - totalLuminance;
             }
+
+            return 0;
         }
     }
 }

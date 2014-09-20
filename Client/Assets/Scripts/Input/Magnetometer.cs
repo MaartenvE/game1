@@ -10,19 +10,20 @@ namespace BuildingBlocks.Input
         /// </summary>
         private const float ALPHA = 0.1f;
 
-        public float Average;
-        public float Score;
+        public float Average { get; private set; }
+        public float Score
+        {
+            get
+            {
+                float magnitude = UnityEngine.Input.compass.rawVector.magnitude;
+                Average = (1 - ALPHA) * Average + ALPHA * magnitude;
+                return Mathf.Abs((magnitude - Average) / 100);
+            }
+        }
 
         void Awake()
         {
             UnityEngine.Input.compass.enabled = true;
-        }
-
-        void Update()
-        {
-            float magnitude = UnityEngine.Input.compass.rawVector.magnitude;
-            Average = (1 - ALPHA) * Average + ALPHA * magnitude;
-            Score = Mathf.Abs((magnitude - Average) / 100);
         }
     }
 }

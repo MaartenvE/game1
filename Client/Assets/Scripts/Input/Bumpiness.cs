@@ -6,10 +6,7 @@ namespace BuildingBlocks.Input
 {
     public class Bumpiness : MonoBehaviour
     {
-        public delegate void BumpEvent(float score);
-        public event BumpEvent OnBump;
-
-        private const int HISTORY_SIZE = 15;
+        private const int HISTORY_SIZE = 10;
 
         private const float LUMINANCE_FACTOR = 1f;
         private const float MAGNETOMETER_FACTOR = 1f;
@@ -30,7 +27,12 @@ namespace BuildingBlocks.Input
             luminance = gameObject.AddComponent<Luminance>();
         }
 
-        void LateUpdate()
+        public void Reset()
+        {
+            history.Clear();
+        }
+
+        public bool CheckBump(out float score)
         {
             float bumpiness = (
                 (LUMINANCE_FACTOR * luminance.Score) *
@@ -41,20 +43,20 @@ namespace BuildingBlocks.Input
             {
                 history.Dequeue();
             }
-
             history.Enqueue(bumpiness);
 
-            if (bumpiness < -0.05f)
+            if (history.Count == HISTORY_SIZE && bumpiness < -0.05f)
             {
                 float max = history.Max();
                 if (max > 0.08f || bumpiness < -0.08f && max > 0.05f)
                 {
-                    if (OnBump != null)
-                    {
-                        OnBump(max - bumpiness);
-                    }
+                    score = max - bumpiness;
+                    return true;
                 }
             }
+
+            score = 0;
+            return false;
         }
     }
 }

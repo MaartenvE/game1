@@ -5,21 +5,23 @@ namespace BuildingBlocks.Input
     public class BumpDetector : MonoBehaviour
     {
         private Bumpiness bumpiness;
+        private const int CHECK_RATE = 15;
+        private const float CHECK_DELAY = 1f / CHECK_RATE;
 
         void Start()
         {
             bumpiness = gameObject.AddComponent<Bumpiness>();
-            bumpiness.OnBump += (score) => networkView.RPC("Tap", RPCMode.Server, score);
+            InvokeRepeating("checkBump", CHECK_DELAY, CHECK_DELAY);
         }
 
-        void EnableDetector()
+        void checkBump()
         {
-
-        }
-
-        void DisableDetector()
-        {
-
+            float score;
+            if (bumpiness.CheckBump(out score))
+            {
+                networkView.RPC("Tap", RPCMode.Server, score);
+                bumpiness.Reset();
+            }
         }
 
         [RPC]
