@@ -93,10 +93,9 @@ namespace BuildingBlocks.Blocks
 
         private void checkBlock(Vector3 position, Color? color)
         {
-            int i = 0;
             foreach (StructureProgress p in progress)
             {
-                Debug.Log("Check in structure " + i++ + ": " + p.CheckBlock(position, current[position], color));
+                p.CheckBlock(position, current[position], color);
             }
 
             current[position] = color;
