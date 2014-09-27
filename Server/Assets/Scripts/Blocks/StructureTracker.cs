@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using BuildingBlocks.Team;
 
 namespace BuildingBlocks.Blocks
@@ -12,10 +13,9 @@ namespace BuildingBlocks.Blocks
 
         private Structure<Color?> goal;
         private Structure<Color?> current;
+        private StructureProgress[] progress;
 
-        private int totalBlockCount;
-        private int correctBlockCount = 0;
-        private int wrongBlockCount = 0;
+        private int totalBlockCount;        
 
         public float Progress
         {
@@ -29,7 +29,7 @@ namespace BuildingBlocks.Blocks
         {
             get
             {
-                return (correctBlockCount - (wrongBlockCount / 2f)) / totalBlockCount;
+                return progress.Max(p => p.RawProgress);
             }
         }
 
@@ -38,9 +38,15 @@ namespace BuildingBlocks.Blocks
             if (goalStructure != null)
             {
                 this.goal = goalStructure;
-                this.current = new Structure<Color?>(goal.GetLength(0), goal.GetLength(1), goal.GetLength(2));
+                this.current = new Structure<Color?>(goalStructure.GetLength(0), goalStructure.GetLength(1), goalStructure.GetLength(2));
 
-                initializeCorrectness();
+                int blockCount = getBlockCount(goalStructure);
+                progress = new StructureProgress[4];
+                for (int i = 0; i < 4; i++)
+                {
+                    progress[i] = new StructureProgress(goalStructure, blockCount);
+                    goalStructure = goalStructure.Rotate();
+                }
 
                 this.constructor = new BlockConstructor(team);
             }
@@ -72,36 +78,29 @@ namespace BuildingBlocks.Blocks
             constructor.RemoveBlock(block);
         }
 
-        private void initializeCorrectness()
+        private int getBlockCount(Structure<Color?> goal)
         {
+            int count = 0;
             foreach (Color? color in goal)
             {
                 if (color != null)
                 {
-                    this.totalBlockCount++;
+                    count++;
                 }
             }
+            return count;
         }
 
-        private bool checkBlock(Vector3 position, Color? color)
+        private void checkBlock(Vector3 position, Color? color)
         {
-            bool wasCorrect = goal[position] == current[position];
-            bool isCorrect = goal[position] == color;
-
-            if (color == null)
+            int i = 0;
+            foreach (StructureProgress p in progress)
             {
-                if (!isCorrect && wasCorrect) correctBlockCount--;
-                else wrongBlockCount--;
-            }
-            else
-            {
-                if (isCorrect) correctBlockCount++;
-                else wrongBlockCount++;
+                Debug.Log("Check in structure " + i++ + ": " + p.CheckBlock(position, current[position], color));
             }
 
             current[position] = color;
             invokeHandlers();
-            return isCorrect;
         }
 
         private void invokeHandlers()

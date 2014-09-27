@@ -20,6 +20,23 @@ namespace BuildingBlocks.Blocks
             elements = new T[xLength, yLength, zLength];
         }
 
+        public Structure<T> Rotate()
+        {
+            Structure<T> newStructure = new Structure<T>(elements.GetLength(1), elements.GetLength(0), elements.GetLength(2));
+            for (int z = 0; z < elements.GetLength(1); z++)
+            {
+                for (int y = 0; y < elements.GetLength(0); y++)
+                {
+                    for (int x = 0; x < elements.GetLength(2); x++)
+                    {
+                        newStructure[elements.GetLength(2) - x - 1, z, y] = elements[y, z, x];
+                    }
+                }
+            }
+
+            return newStructure;
+        }
+
         public int GetLength(int dimension)
         {
             return elements.GetLength(dimension);
