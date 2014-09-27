@@ -12,7 +12,7 @@ namespace BuildingBlocks.Input
         /// Number of pixels to skip after every analyzed pixel. Lower values increase
         /// accuracy, but also the number of operations required.
         /// </summary>
-        private const int PIXEL_SKIP = 3;
+        private const int PIXEL_SKIP = 5;
 
         /// <summary>
         /// Smoothing factor for the exponential smoothing average.

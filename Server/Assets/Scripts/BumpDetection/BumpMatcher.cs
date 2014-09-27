@@ -6,8 +6,8 @@ namespace BuildingBlocks.BumpDetection
 {
     public class BumpMatcher : IBumpMatcher
     {
-        const double BUMP_BACKLOG_TIME = 3.0;
-        const double MAX_BUMP_TIME = 0.1;
+        const float BUMP_BACKLOG_TIME = 3f;
+        const float MAX_BUMP_TIME = 0.5f;
 
         LinkedList<Bump> bumpHistory = new LinkedList<Bump>();
 
