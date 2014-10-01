@@ -24,7 +24,7 @@ namespace BuildingBlocks.GUI
         private void drawTitle()
         {
             UnityEngine.GUI.contentColor = new Color(140f, 156f, 179f);
-            UnityEngine.GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "Building Blocks", GUIStyles.BoxStyle(Screen.height, Screen.width));
+            UnityEngine.GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "BloxAR", GUIStyles.BoxStyle(Screen.height, Screen.width));
         }
 
         private void drawButtons()
