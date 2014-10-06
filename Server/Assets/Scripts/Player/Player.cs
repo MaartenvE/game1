@@ -13,15 +13,22 @@ namespace BuildingBlocks.Player
         public ITeam Team { get; set; }
         public INetworkPlayer NetworkPlayer { get; private set; }
         public ICubeFinger CubeFinger { get; private set; }
-        public HalfBlock.HalfBlock HalfBlock { get; private set; }
-        public bool HasPlaceableBlock { get; private set; }
+        public Block Block { get; private set; }
 
         public Player(INetworkPlayer networkPlayer) : base(new GameObjectWrapper(GameObject.Find("Player")))
         {
             NetworkPlayer = networkPlayer;
         }
 
-        public void SetPlaceableBlock(HalfBlock.HalfBlock block)
+        public void SetBlock(Block block)
+        {
+            this.Block = block;
+            Color color = Block.Color;
+            networkView.RPC("SetBlockType", NetworkPlayer, 1, ColorModel.ConvertToVector3(color));
+            CubeFinger.Renderer.SetColor(color);
+        }
+
+        /*public void SetPlaceableBlock(HalfBlock.HalfBlock block)
         {
             this.HalfBlock = block;
             this.HasPlaceableBlock = true;
@@ -29,8 +36,16 @@ namespace BuildingBlocks.Player
             Color color = HalfBlock.CalculateUnityColor();
             networkView.RPC("SetBlockType", NetworkPlayer, 1, ColorModel.ConvertToVector3(color));
             CubeFinger.Renderer.SetColor(color);
-        }
+        }*/
 
+        
+        public void GiveBlock()
+        {
+            SetBlock(new Block());
+        }
+        
+
+        /*
         public void GiveNewInventoryBlock()
         {
             HalfBlock = new HalfBlock.HalfBlock(getNewHalfBlockColor());
@@ -46,7 +61,9 @@ namespace BuildingBlocks.Player
             }
             networkView.RPC("SetBlockType", NetworkPlayer, HasPlaceableBlock ? 1 : 0, color);
         }
+        */
 
+        /*
         private AbstractHalfBlockColor getNewHalfBlockColor()
         {
             if (HalfBlock != null)
@@ -65,15 +82,24 @@ namespace BuildingBlocks.Player
                 return SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor();
             }
         }
+        */
 
-        public void CombineBlock(IPlayer other)
+        public bool CombineBlock(IPlayer other)
         {
-            if (!this.HasPlaceableBlock && !other.HasPlaceableBlock)
+            if (Block.Mix(other.Block))
+            {
+                this.SetBlock(Block);
+                other.SetBlock(Block);
+                return true;
+            }
+            return false;
+
+            /*if (!this.HasPlaceableBlock && !other.HasPlaceableBlock)
             {
                 this.HalfBlock.CombineHalfBlock(other.HalfBlock);
                 this.SetPlaceableBlock(this.HalfBlock);
                 other.SetPlaceableBlock(this.HalfBlock);
-            }
+            }*/
         }
 
         public void InstantiateCubeFinger()
@@ -86,8 +112,11 @@ namespace BuildingBlocks.Player
             finger.SetParent(Team.Target);
             finger.SetPlayer(NetworkPlayer);
 
-            GiveNewInventoryBlock();
-            CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
+            GiveBlock();
+            CubeFinger.Renderer.SetColor(Block.Color);
+
+            //GiveNewInventoryBlock();
+            //CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
         }
 
         public static IPlayer GetPlayer(INetworkPlayer player)

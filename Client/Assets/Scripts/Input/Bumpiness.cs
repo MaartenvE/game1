@@ -11,8 +11,8 @@ namespace BuildingBlocks.Input
         private const float LUMINANCE_FACTOR = 1f;
         private const float MAGNETOMETER_FACTOR = 1.5f;
 
-        private const float BUMPINESS_PEAK_MIN = 0.07f;
-        private const float BUMPINESS_REBOUND_MIN = 0.05f;
+        private const float BUMPINESS_PEAK_MIN = 0.05f;
+        private const float BUMPINESS_REBOUND_MIN = 0.04f;
 
         private Queue<float> history;
         public IEnumerable<float> History

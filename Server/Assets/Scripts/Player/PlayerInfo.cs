@@ -28,7 +28,7 @@ namespace BuildingBlocks.Player
             IPlayer player = Player.GetPlayer(new NetworkPlayerWrapper(message.sender));
             if (player != null)
             {
-                player.GiveNewInventoryBlock();
+                player.GiveBlock();
             }
         }
     }

@@ -23,7 +23,7 @@ namespace BuildingBlocks.GUI
             GameObject server = GameObject.Find("Server");
             int port = server.GetComponent<ServerLoader>().Port;
             size = ((int)(sizePercentage * Screen.height));
-            BitMatrix qrcode = writer.encode("BuildingBlocksServer=" + Network.player.ipAddress + ":" + port, BarcodeFormat.QR_CODE, size, size);
+            BitMatrix qrcode = writer.encode("http://is.gd/bloxar#" + Network.player.ipAddress + ":" + port, BarcodeFormat.QR_CODE, size, size);
 
             GUITexture GUItexture = GetComponent<GUITexture>();
             GUItexture.pixelInset = new Rect( -size / 2, 0, size, size);
