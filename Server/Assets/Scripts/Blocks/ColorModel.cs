@@ -59,6 +59,24 @@ namespace BuildingBlocks.Blocks
             }
         }
 
+        public static Color RandomPrimaryColor()
+        {
+            int r = Random.Range(1, 4);
+            switch (r)
+            {
+                case 1:
+                    return RED;
+                case 2:
+                    return YELLOW;
+                default:
+                    return BLUE;
+            }
+        }
+
+        public static bool IsPrimaryColor(Color color)
+        {
+            return color == RED || color == YELLOW || color == BLUE;
+        }
 
         public static Vector3 ConvertToVector3(Color color)
         {

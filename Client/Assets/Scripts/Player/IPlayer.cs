@@ -11,8 +11,6 @@ namespace BuildingBlocks.Player
         ITeam Team { get; }
         ICubeFinger CubeFinger { get; set; }
 
-        bool HasFullBlock { get; }
-
         void SetTeam(int teamId);
         void SetBlockType(bool isFullBlock, Color color);
     }

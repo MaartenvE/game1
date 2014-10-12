@@ -30,9 +30,9 @@ namespace BuildingBlocks.Blocks
             if (player.Team == this.team)
             {
                 Vector3 position = this.transform.localPosition + (direction * transform.localScale.x);
-                if (player.Team.StructureTracker.PlaceBlock(position, player.HalfBlock.CalculateUnityColor()))
+                if (player.Team.StructureTracker.PlaceBlock(position, player.Block.Color))
                 {
-                    player.GiveNewInventoryBlock();
+                    player.GiveBlock();
                 }
             }
         }

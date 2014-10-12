@@ -15,16 +15,13 @@ namespace BuildingBlocks.Player
 
         public ITeam Team { get; private set; }
         public ICubeFinger CubeFinger { get; set; }
-        public bool HasFullBlock { get; private set; }
 
-        private IGameObject fullBlock;
-        private IGameObject halfBlock;
+        private IGameObject block;
 
         public Player(IGameObject gameObject) : base(gameObject)
         {
             LocalPlayer = this;
-            fullBlock = gameObject.Find("RotatingBlock");
-            halfBlock = gameObject.Find("RotatingHalfBlock");
+            block = gameObject.Find("RotatingBlock");
         }
 
         public void SetTeam(int teamId)
@@ -38,22 +35,17 @@ namespace BuildingBlocks.Player
 
         public void SetBlockType(bool isFullBlock, Color color)
         {
-            HasFullBlock = isFullBlock;
             setupBlock(color);
             startAnimation();
         }
 
         private void setupBlock(Color color)
         {
-            halfBlock.renderer.enabled = !HasFullBlock;
-            fullBlock.renderer.enabled = HasFullBlock;
-            halfBlock.renderer.material.color = color;
-            fullBlock.renderer.material.color = color;
+            block.renderer.material.color = color;
         }
 
         private void startAnimation()
         {
-            IGameObject block = HasFullBlock ? fullBlock : halfBlock;
             BlockAnimationBehaviour animation = block.AddComponent<BlockAnimationBehaviour>();
             animation.SetUpAnimation(new Vector3(0, 0.5f, 2), gameObject.Find("BlockPosition").transform.localPosition);
         }

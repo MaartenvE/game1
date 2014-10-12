@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using BuildingBlocks.Team;
-using BuildingBlocks.HalfBlock;
+using BuildingBlocks.Blocks;
 using BuildingBlocks.CubeFinger;
 
 namespace BuildingBlocks.Player
@@ -10,12 +10,11 @@ namespace BuildingBlocks.Player
         ITeam Team { get; set; }
         INetworkPlayer NetworkPlayer { get; }
         ICubeFinger CubeFinger { get; }
-        HalfBlock.HalfBlock HalfBlock { get; }
-        bool HasPlaceableBlock { get; }
+        Block Block { get; }
 
-        void CombineBlock(IPlayer other);
-        void SetPlaceableBlock(HalfBlock.HalfBlock block);
-        void GiveNewInventoryBlock();
+        void SetBlock(Block block);
+        void GiveBlock();
+        bool CombineBlock(IPlayer other);
         void InstantiateCubeFinger();
     }
 }

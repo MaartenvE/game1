@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using BuildingBlocks.Player;
 
 namespace BuildingBlocks.BumpDetection
 {
@@ -66,7 +67,12 @@ namespace BuildingBlocks.BumpDetection
                 // Check if two bumps are within the maximum time in between bumps.
                 else if (Math.Abs(oldBump.Time - bump.Time) <= MAX_BUMP_TIME)
                 {
-                    matches.AddFirst(oldBump);
+                    IPlayer player = Player.Player.GetPlayer(bump.Sender);
+                    IPlayer other = Player.Player.GetPlayer(oldBump.Sender);
+                    if (player.Team.TeamId == other.Team.TeamId || player.Team.Size < 2 || other.Team.Size < 2)
+                    {
+                        matches.AddFirst(oldBump);
+                    }
                 }
 
                 node = next;

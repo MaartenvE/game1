@@ -23,19 +23,24 @@ namespace BuildingBlocks.BumpDetection
 
         private void HandleBumpEvent(INetworkPlayer networkPlayer1, INetworkPlayer networkPlayer2)
         {
-            networkView.RPC("BumpMatch", networkPlayer1.NetworkPlayer);
-            networkView.RPC("BumpMatch", networkPlayer2.NetworkPlayer);
-
             IPlayer player1 = Player.Player.GetPlayer(networkPlayer1);
             IPlayer player2 = Player.Player.GetPlayer(networkPlayer2);
-            if (Random.value < 0.5)
+
+            if (player1.CombineBlock(player2))
+            {
+                networkView.RPC("BumpMatch", networkPlayer1.NetworkPlayer);
+                networkView.RPC("BumpMatch", networkPlayer2.NetworkPlayer);
+            }
+
+
+            /*if (Random.value < 0.5)
             {
                 player1.CombineBlock(player2);
             }
             else
             {
                 player2.CombineBlock(player1);
-            }
+            }*/
 
         }
 
