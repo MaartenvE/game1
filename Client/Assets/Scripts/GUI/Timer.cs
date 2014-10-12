@@ -31,8 +31,8 @@ namespace BuildingBlocks.GUI
             {
                 style = new GUIStyle(UnityEngine.GUI.skin.label);
                 style.alignment = TextAnchor.MiddleRight;
+                style.fontSize = (int)(Screen.width * HEIGHT - 2);
             }
-            style.fontSize = (int)(Screen.width * HEIGHT - 2);
         }
 
         private void drawTime(float width, string text)

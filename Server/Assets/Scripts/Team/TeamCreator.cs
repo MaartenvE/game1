@@ -13,8 +13,8 @@ namespace BuildingBlocks.Team
         {
             this.instantiator = teamInstantiator;
 
-            ITeam team1 = instantiateTeam("Team 1", "ImageTarget1");
-            ITeam team2 = instantiateTeam("Team 2", "ImageTarget2");
+            ITeam team1 = instantiateTeam("Team Red", "ImageTarget1");
+            ITeam team2 = instantiateTeam("Team Blue", "ImageTarget2");
 
             Assigner = new TeamAssigner(new[] { team1, team2 });
         }

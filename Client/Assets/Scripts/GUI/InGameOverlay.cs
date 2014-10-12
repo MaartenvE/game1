@@ -19,9 +19,16 @@ namespace BuildingBlocks.GUI
         public const float PROGRESSBAR_HEIGHT = .03f;
         public const float PROGRESSBAR_PADDING = .01f;
 
+        public const float TEAMNAME_LEFT = .01f;
+        public const float TEAMNAME_TOP = .01f;
+        public const float TEAMNAME_WIDTH = .33f;
+        public const float TEAMNAME_HEIGHT = .06f;
+
         public Texture2D TrashcanIcon;
         public Texture2D ConstructionIcon;
         public Texture2D RefreshIcon;
+
+        private GUIStyle style;
 
         public bool AnimationDone { get; set; }
 
@@ -34,6 +41,9 @@ namespace BuildingBlocks.GUI
 
         void OnGUI()
         {
+            setStyle();
+            drawTeamName();
+
             drawTrashcanIcon();
             drawBuildIcon();
 
@@ -106,6 +116,38 @@ namespace BuildingBlocks.GUI
                         Screen.width * PROGRESSBAR_WIDTH,
                         Screen.width * PROGRESSBAR_HEIGHT
                     ), team.Progress);
+            }
+        }
+
+        private void drawTeamName()
+        {
+            ITeam team = Player.Player.LocalPlayer.Team;
+            if (team != null)
+            {
+                if (team.Name == "Team Red")
+                {
+                    UnityEngine.GUI.color = Color.red;
+                }
+                else if (team.Name == "Team Blue")
+                {
+                    UnityEngine.GUI.color = Color.blue;
+                }
+
+                UnityEngine.GUI.Label(new Rect(
+                    TEAMNAME_LEFT * Screen.width, 
+                    TEAMNAME_TOP * Screen.width, 
+                    TEAMNAME_WIDTH * Screen.width, 
+                    TEAMNAME_HEIGHT * Screen.width), team.Name, style);
+            }
+        }
+
+        private void setStyle()
+        {
+            if (style == null)
+            {
+                style = new GUIStyle(UnityEngine.GUI.skin.label);
+                style.alignment = TextAnchor.MiddleLeft;
+                style.fontSize = (int)(Screen.width * TEAMNAME_HEIGHT - 2);
             }
         }
     }
