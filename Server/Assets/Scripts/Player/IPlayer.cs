@@ -15,8 +15,6 @@ namespace BuildingBlocks.Player
         void SetBlock(Block block);
         void GiveBlock();
         bool CombineBlock(IPlayer other);
-        //void SetPlaceableBlock(HalfBlock.HalfBlock block);
-        //void GiveNewInventoryBlock();
         void InstantiateCubeFinger();
     }
 }
