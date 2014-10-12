@@ -1,6 +1,5 @@
 using UnityEngine;
 using BuildingBlocks.Team;
-using BuildingBlocks.HalfBlock;
 using BuildingBlocks.CubeFinger;
 using BuildingBlocks.Blocks;
 
@@ -8,8 +7,6 @@ namespace BuildingBlocks.Player
 {
     public class Player : BuildingBlocksBehaviour, IPlayer
     {
-        private const float FULL_BLOCK_CHANCE = 0.4f;
-
         public ITeam Team { get; set; }
         public INetworkPlayer NetworkPlayer { get; private set; }
         public ICubeFinger CubeFinger { get; private set; }
@@ -27,62 +24,11 @@ namespace BuildingBlocks.Player
             networkView.RPC("SetBlockType", NetworkPlayer, 1, ColorModel.ConvertToVector3(color));
             CubeFinger.Renderer.SetColor(color);
         }
-
-        /*public void SetPlaceableBlock(HalfBlock.HalfBlock block)
-        {
-            this.HalfBlock = block;
-            this.HasPlaceableBlock = true;
-
-            Color color = HalfBlock.CalculateUnityColor();
-            networkView.RPC("SetBlockType", NetworkPlayer, 1, ColorModel.ConvertToVector3(color));
-            CubeFinger.Renderer.SetColor(color);
-        }*/
-
         
         public void GiveBlock()
         {
             SetBlock(new Block());
         }
-        
-
-        /*
-        public void GiveNewInventoryBlock()
-        {
-            HalfBlock = new HalfBlock.HalfBlock(getNewHalfBlockColor());
-            Vector3 color = ColorModel.ConvertToVector3(HalfBlock.CalculateUnityColor());
-            CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
-            if (HalfBlock.wrappedObject.color.isSecondaryColor)
-            {
-                HasPlaceableBlock = false;
-            }
-            else
-            {
-                HasPlaceableBlock = Random.value < FULL_BLOCK_CHANCE;
-            }
-            networkView.RPC("SetBlockType", NetworkPlayer, HasPlaceableBlock ? 1 : 0, color);
-        }
-        */
-
-        /*
-        private AbstractHalfBlockColor getNewHalfBlockColor()
-        {
-            if (HalfBlock != null)
-            {
-                AbstractHalfBlockColor HalfBlockColor = SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor();
-                int colorTries = 1;
-                while (HalfBlock.wrappedObject.color.Equals(HalfBlockColor) && colorTries < 5)
-                {
-                    HalfBlockColor = SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor();
-                    colorTries++;
-                }
-                return HalfBlockColor;
-            }
-            else
-            {
-                return SubtractiveHalfBlockColorBehaviour.RandomPrimaryColor();
-            }
-        }
-        */
 
         public bool CombineBlock(IPlayer other)
         {
@@ -93,13 +39,6 @@ namespace BuildingBlocks.Player
                 return true;
             }
             return false;
-
-            /*if (!this.HasPlaceableBlock && !other.HasPlaceableBlock)
-            {
-                this.HalfBlock.CombineHalfBlock(other.HalfBlock);
-                this.SetPlaceableBlock(this.HalfBlock);
-                other.SetPlaceableBlock(this.HalfBlock);
-            }*/
         }
 
         public void InstantiateCubeFinger()
@@ -114,9 +53,6 @@ namespace BuildingBlocks.Player
 
             GiveBlock();
             CubeFinger.Renderer.SetColor(Block.Color);
-
-            //GiveNewInventoryBlock();
-            //CubeFinger.Renderer.SetColor(HalfBlock.CalculateUnityColor());
         }
 
         public static IPlayer GetPlayer(INetworkPlayer player)

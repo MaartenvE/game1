@@ -63,7 +63,7 @@ namespace BuildingBlocks.Blocks
         public bool PlaceBlock(Vector3 location, Color color)
         {
             Vector3 position = goal.Normalize(location, constructor.Scale);
-            if (current[position] == null)
+            if (current[position] == null && current.IsWithinBounds(position))
             {
                 checkBlock(position, color);
                 constructor.PlaceBlock(location, color);
